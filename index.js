@@ -18,6 +18,7 @@ mongoose.connect(
 app.use(express.json());
 
 app.use("/api/user", require("./routes/auth"));
+app.use("/api/group", require("./routes/group"));
 
 //defining port number
 const port = process.env.PORT || 5000;
