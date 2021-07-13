@@ -13,6 +13,10 @@ const groupSchema = new mongoose.Schema(
 			type: [{ type: mongoose.Schema.Types.ObjectId }],
 			default: [],
 		},
+		memberJoinRequests: {
+			type: [{ type: mongoose.Schema.Types.ObjectId }],
+			default: [],
+		},
 	},
 	{ timeStamps: true }
 );
