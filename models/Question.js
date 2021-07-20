@@ -17,10 +17,6 @@ const questionSchema = new mongoose.Schema(
 			ref: "Group",
 			default: null,
 		},
-		submittedForApproval: {
-			type: Boolean,
-			default: false,
-		},
 		solved: {
 			type: Boolean,
 			default: false,
@@ -28,6 +24,11 @@ const questionSchema = new mongoose.Schema(
 		image: {
 			type: Boolean,
 			default: false,
+		},
+		solution: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Solution",
+			default: null,
 		},
 	},
 	{ timeStamps: true }

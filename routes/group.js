@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const { auth } = require("../middleware/auth");
 const { validateGroup } = require("../validation/group.validation");
@@ -20,7 +21,8 @@ router.post("/create", auth, async (request, response) => {
 	//creating a new group instance
 	const group = new Group({
 		...groupInfo,
-		members: [request.user],
+		owner: request.user,
+		members: [{ _id: request.user, addedBy: null }],
 	});
 
 	try {
@@ -62,10 +64,9 @@ router.post(
 			//getting the group with the given id
 			const group = await Group.findById(request.params.groupID);
 
-			//checking to see if the requesting user is a member of the group
-			//or the owner of the group
+			//checking to see if the requesting user is a member of the group or the owner of the group
 			if (
-				!group.members.find((member) => member == request.user) &&
+				!group.members.find((member) => member._id == request.user) &&
 				group.owner != request.user
 			) {
 				return response
@@ -77,7 +78,7 @@ router.post(
 			const membersToBeAdded = members.filter((member) => {
 				if (
 					group.members.find(
-						(existingMember) => existingMember == member
+						(existingMember) => existingMember._id == member
 					)
 				) {
 					return false;
@@ -88,7 +89,7 @@ router.post(
 
 			membersToBeAdded.forEach((member) => {
 				//adding each of the members to members array of the group
-				group.members.push(member);
+				group.members.push({ _id: member, addedBy: request.user });
 
 				//removing each of the members from memberJoinRequests array of the group
 				group.memberJoinRequests.pull({ _id: member });
@@ -114,14 +115,14 @@ router.post(
 			const group = await Group.findById(request.params.groupID);
 
 			//checking to see if the requesting user is already in the group
-			if (group.members.find((member) => member == request.user)) {
+			if (group.members.find((member) => member._id == request.user)) {
 				return response
 					.status(400)
 					.send({ error: "you already exist in the group" });
 			}
 
 			//adding the requesting user to the members array of the group
-			group.members.push(request.user);
+			group.members.push({ _id: request.user, addedBy: null });
 
 			//removing the requesting user from the memberJoinRequests array of the group
 			group.memberJoinRequests.pull({ _id: request.user });
@@ -148,7 +149,7 @@ router.post(
 			//checking to see if the requesting user has already made a request to join
 			if (
 				group.memberJoinRequests.find(
-					(request) => request == request.user
+					(joinRequest) => joinRequest == request.user
 				)
 			) {
 				return response
@@ -157,7 +158,7 @@ router.post(
 			}
 
 			//checking to see if the requesting user is already a member of the group
-			if (group.members.find((member) => member == request.user)) {
+			if (group.members.find((member) => member._id == request.user)) {
 				return response.status(400).send({ error: "already member" });
 			}
 
@@ -174,7 +175,7 @@ router.post(
 );
 
 //remove a member from a group
-router.patch(
+router.delete(
 	"/:groupID/remove/:userID",
 	auth,
 	validateGroupID,
@@ -183,21 +184,110 @@ router.patch(
 			//getting the group with the given id
 			const group = await Group.findById(request.params.groupID);
 
-			//checking to see if the requesting user is the owner of the group
-			if (group.owner != request.user) {
+			//checking to see of the member to be removed is the owner of the group
+			if (
+				request.params.userID == group.owner &&
+				request.user != group.owner
+			) {
 				return response
 					.status(400)
-					.send({ error: "only owner can remove members" });
+					.send({ error: "unauthorized to remove this member" });
 			}
 
-			//removing the given id from the members array of the group
-			group.members.pull(request.params.userID);
+			//checking to see if the requesting user is the owner of the group or if the requesting user added the member to be removed
+			if (
+				group.owner == request.user ||
+				group.members.find(
+					(member) => member._id == request.params.userID
+				).addedBy == request.user
+			) {
+				//removing the given id from the members array of the group
+				const newMembers = group.members.filter(
+					(member) => member._id != request.params.userID
+				);
+
+				group.members = newMembers;
+
+				await group.save();
+
+				return response.status(200).send({ message: "member removed" });
+			}
+
+			return response
+				.status(400)
+				.send({ error: "unauthorized to remove this member" });
+		} catch (error) {
+			return response.status(500).send({ error: error.message });
+		}
+	}
+);
+
+//leave a group
+router.patch(
+	"/:groupID/leave",
+	auth,
+	validateGroupID,
+	async (request, response) => {
+		try {
+			const group = await Group.findById(request.params.groupID);
+
+			if (!group.members.find((member) => member._id == request.user)) {
+				return response.status(400).send({ error: "not a member" });
+			}
+
+			if (request.user == group.owner) {
+				return response
+					.status(400)
+					.send({ error: "owner cannot leave" });
+			}
+
+			//removing the requesting user from the members array of the group
+			group.members = group.members.filter(
+				(member) => member._id != request.user
+			);
 
 			await group.save();
 
-			response.status(200).send({ message: "member removed" });
+			response.send({ message: "left group" });
 		} catch (error) {
-			return response.status(500).send({ error: error.message });
+			response.status(500).send({ error: error.message });
+		}
+	}
+);
+
+//transfer ownership of the group to another memeber
+router.put(
+	"/:groupID/delegate-ownership/:userID",
+	auth,
+	validateGroupID,
+	async (request, response) => {
+		try {
+			const group = await Group.findById(request.params.groupID);
+
+			//checking to see if the requesting user is the owner of the group
+			if (request.user != group.owner) {
+				return response
+					.status(400)
+					.send({ error: "not authorized to delegate ownership" });
+			}
+
+			//checking to see if the new owner exists in the group
+			if (
+				!group.members.find(
+					(member) => member._id == request.params.userID
+				)
+			) {
+				return response.status(400).send({ error: "member not found" });
+			}
+
+			//making the user with the given id the new owner of the group
+			group.owner = mongoose.Types.ObjectId(request.params.userID);
+
+			await group.save();
+
+			response.status(200).send({ message: "ownership changed" });
+		} catch (error) {
+			response.status(500).send({ error: error.message });
 		}
 	}
 );

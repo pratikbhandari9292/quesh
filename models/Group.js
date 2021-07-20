@@ -6,11 +6,7 @@ const groupSchema = new mongoose.Schema(
 		title: String,
 		owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 		members: {
-			type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-			default: [],
-		},
-		questions: {
-			type: [{ type: mongoose.Schema.Types.ObjectId }],
+			type: Array,
 			default: [],
 		},
 		memberJoinRequests: {
