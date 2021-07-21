@@ -17,10 +17,6 @@ const questionSchema = new mongoose.Schema(
 			ref: "Group",
 			default: null,
 		},
-		solved: {
-			type: Boolean,
-			default: false,
-		},
 		image: {
 			type: Boolean,
 			default: false,
@@ -29,6 +25,10 @@ const questionSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Solution",
 			default: null,
+		},
+		proposedSolutions: {
+			type: Array,
+			default: [],
 		},
 	},
 	{ timeStamps: true }
