@@ -21,6 +21,7 @@ app.use("/api/user", require("./routes/auth"));
 app.use("/api/group", require("./routes/group"));
 app.use("/api/question", require("./routes/question"));
 app.use("/api/solution", require("./routes/solution"));
+app.use("/api/user", require("./routes/user"));
 
 //defining port number
 const port = process.env.PORT || 5000;

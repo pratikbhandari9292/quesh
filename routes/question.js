@@ -35,9 +35,26 @@ router.post("/:groupID", auth, async (request, response) => {
 		//saving the question to the database
 		const savedQuestion = await question.save();
 
-		response.status(201).send({ message: "question created" });
+		response.status(201).send({ question: savedQuestion });
 	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}
 });
+
+//get the details of a question
+router.get("/:questionID", auth, async (request, response) => {
+	try {
+		//checking to see if the question exists
+		const question = await Question.findById(request.params.qestionID);
+
+		if (!question) {
+			return response.status(400).send({ error: "question not found" });
+		}
+
+		response.send({ question });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
+
 module.exports = router;

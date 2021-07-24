@@ -37,6 +37,8 @@ router.post("/:questionID", auth, questionAuth, async (request, response) => {
 		const solution = new Solution({
 			...solutionInfo,
 			author: request.user,
+			approved: true,
+			question: request.params.questionID,
 		});
 
 		//saving the solution to the database
@@ -45,7 +47,7 @@ router.post("/:questionID", auth, questionAuth, async (request, response) => {
 		question.solution = savedSolution._id;
 
 		//saving the question to the database
-		const savedQuestion = await question.save();
+		await question.save();
 
 		response.status(201).send({ message: "solution submitted" });
 	} catch (error) {
@@ -83,16 +85,12 @@ router.post(
 			const solution = new Solution({
 				...solutionInfo,
 				author: request.user,
-				submittedForApproval: true,
+				approved: false,
+				question: request.params.questionID,
 			});
 
 			//saving the solution to the database
 			const savedSolution = await solution.save();
-
-			question.proposedSolutions.push(savedSolution._id);
-
-			//saving the question to the database
-			const savedQuestion = await question.save();
 
 			response.status(201).send({ message: "solution proposed" });
 		} catch (error) {
@@ -117,16 +115,13 @@ router.put(
 			if (request.user != group.owner) {
 				return response
 					.status(400)
-					.send({ error: "not authorized to replace solution" });
+					.send({ error: "not authorized to approve solution" });
 			}
 
-			//checking to see if a proposed solution of the given id exists
-			if (
-				!question.proposedSolutions.find(
-					(proposedSolution) =>
-						proposedSolution == request.params.solutionID
-				)
-			) {
+			//checking to see if the solution to the given id exists
+			const solution = await Solution.findById(request.params.solutionID);
+
+			if (!solution) {
 				return response
 					.status(400)
 					.send({ error: "solution not found" });
@@ -134,26 +129,40 @@ router.put(
 
 			//deleting the existing solution of the question
 			if (question.solution) {
-				await Question.findByIdAndDelete(question.solution);
+				await Solution.findByIdAndDelete(question.solution);
 			}
 
 			question.solution = request.params.solutionID;
 
-			//removing the solution from the proposed solutions array of the question
-			question.proposedSolutions = question.proposedSolutions.filter(
-				(proposedSolution) =>
-					proposedSolution != request.params.solutionID
-			);
+			//updating the solution to be approved
+			solution.approved = true;
 
-			//saving the question to the database
-			const savedQuestion = await question.save();
+			//saving the question and the solution to the database
+			await Promise.all([question.save(), solution.save()]);
 
-			//updating the solution to be an approved solution
-			await Solution.findByIdAndUpdate(request.params.solutionID, {
-				approved: true,
+			response.send({ message: "solution approved" });
+		} catch (error) {
+			response.status(500).send({ error: error.message });
+		}
+	}
+);
+
+//get all the proposed solutions of a question
+router.get(
+	"/proposed/:questionID",
+	auth,
+	questionAuth,
+	async (request, response) => {
+		const question = request.question;
+
+		try {
+			//getting all the solutions whose question is of the given id and not approved
+			const proposedSolutions = await Solution.find({
+				question: request.params.questionID,
+				approved: false,
 			});
 
-			response.status(200).send({ message: "solution approved" });
+			response.send({ proposedSolutions });
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}

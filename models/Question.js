@@ -26,10 +26,6 @@ const questionSchema = new mongoose.Schema(
 			ref: "Solution",
 			default: null,
 		},
-		proposedSolutions: {
-			type: Array,
-			default: [],
-		},
 	},
 	{ timeStamps: true }
 );
