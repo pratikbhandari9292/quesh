@@ -1,0 +1,17 @@
+@import "../../styles/variables.module.scss";
+
+.container {
+	width: fit-content;
+	margin: 1.5rem auto 0 auto;
+	border: 1px solid $color-grey-lightest;
+	padding: 1rem 3rem 1.5rem 3rem;
+	// box-shadow: 0.5rem 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.35),
+	// 	-0.5rem 0 0.5rem 0 rgba(0, 0, 0, 0.2);
+	border-radius: 5px;
+}
+
+.form {
+	& > *:last-child {
+		margin-top: 1.5rem;
+	}
+}

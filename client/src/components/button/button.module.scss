@@ -1,0 +1,61 @@
+@import "../../styles/variables.module.scss";
+
+.buttonPrimary {
+	font-size: 1.7rem;
+	padding: 0.75rem 1.5rem;
+	text-transform: capitalize;
+	cursor: pointer;
+	outline: none;
+	background-color: $color-black;
+	color: white;
+	border: 1px solid $color-black;
+	border-radius: 5px;
+	font-family: inherit;
+	transition: background-color 100ms ease-in, color 100ms ease-in,
+		border 100ms ease-in;
+
+	&:hover {
+		background-color: white;
+		color: $color-black;
+	}
+
+	&:active {
+		background-color: $color-grey-lightest;
+	}
+}
+
+.buttonPrimaryBlue {
+	background-color: $color-blue;
+	border: 1px solid $color-blue;
+
+	&:hover {
+		background-color: white;
+		color: $color-blue;
+	}
+
+	&:active {
+		background-color: $color-grey-lightest;
+	}
+}
+
+.buttonSecondary {
+	background-color: white;
+	border: 1px solid $color-grey-lighter-more;
+	color: $color-grey-light;
+
+	&:hover {
+		border: 1px solid $color-black;
+		color: $color-black;
+	}
+}
+
+.buttonSecondaryBlue {
+	&:hover {
+		border: 1px solid $color-blue;
+		color: $color-blue;
+	}
+}
+
+.buttonFull {
+	width: 100%;
+}

@@ -1,0 +1,29 @@
+@import "./variables.module.scss";
+
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font-family: $font-stack-primary;
+	color: $color-black;
+	font-size: 1.7rem;
+}
+
+h1,
+h2 {
+	font-weight: 500;
+}
+
+a {
+	color: $color-blue;
+	text-decoration: none;
+}
