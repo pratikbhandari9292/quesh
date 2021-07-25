@@ -21,10 +21,10 @@ const InputGroup = ({
 				type={type}
 				placeholder={placeholder}
 				value={value}
-				className={styles.input}
+				className={`${styles.input} ${error && styles.errorInput}`}
 				onChange={handleInputChange}
 			/>
-			<span>{error}</span>
+			<span className={styles.error}>{error}</span>
 		</div>
 	);
 };

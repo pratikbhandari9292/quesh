@@ -19,3 +19,13 @@
 .subheading {
 	color: $color-grey-light;
 }
+
+.link {
+	&:hover {
+		color: darken($color-blue, 20%);
+	}
+
+	&:active {
+		color: darken($color-blue, 50%);
+	}
+}

@@ -6,7 +6,7 @@ const User = require("../models/User");
 
 const {
 	validateUserRegistration,
-	validateUserLogin,
+	validateUserSignIn,
 } = require("../validation/user.validation");
 
 const router = express.Router();
@@ -25,7 +25,9 @@ router.post("/register", async (request, response) => {
 	const userExists = await User.findOne({ email: userInfo.email });
 
 	if (userExists) {
-		return response.status(400).send({ error: "user already exists" });
+		return response
+			.status(400)
+			.send({ error: "user with this email already exists" });
 	}
 
 	//generating a hash for the password
@@ -49,13 +51,13 @@ router.post("/register", async (request, response) => {
 });
 
 //log user in
-router.post("/login", async (request, response) => {
+router.post("/signin", async (request, response) => {
 	const userInfo = request.body;
 
-	const error = validateUserLogin(userInfo);
+	const error = validateUserSignIn(userInfo);
 
 	if (error) {
-		return response.status(400).send(error);
+		return response.status(400).send({ error });
 	}
 
 	//getting a user with the given email
@@ -84,10 +86,12 @@ router.post("/login", async (request, response) => {
 
 	//sending user info along with the token
 	response.send({
-		_id: user._id,
-		username: user.username,
-		email: user.email,
-		token,
+		user: {
+			_id: user._id,
+			username: user.username,
+			email: user.email,
+			token,
+		},
 	});
 });
 

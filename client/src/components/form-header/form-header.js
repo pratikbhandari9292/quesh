@@ -8,7 +8,10 @@ const FormHeader = ({ heading, subheading, link, linkTo }) => {
 		<div className={styles.container}>
 			<h2 className={styles.heading}>{heading}</h2>
 			<p className={styles.subheading}>
-				<span>{subheading}</span> <Link to={`/${linkTo}`}>{link}</Link>
+				<span>{subheading}</span>{" "}
+				<Link to={`/${linkTo}`} className={styles.link}>
+					{link}
+				</Link>
 			</p>
 		</div>
 	);

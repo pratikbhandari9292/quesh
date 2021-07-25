@@ -1,0 +1,24 @@
+@import "../../styles/variables.module.scss";
+
+.spinner {
+	height: 2rem;
+	width: 2rem;
+	border: 2px solid $color-black;
+	border-left-color: transparent;
+	border-radius: 50%;
+	animation: spinnerAnimation 450ms infinite ease-in;
+}
+
+.spinnerWhite {
+	border: 2px solid white;
+	border-left-color: transparent;
+}
+
+@keyframes spinnerAnimation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}

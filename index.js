@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cors = require("cors");
 
 //initializing server
 const app = express();
@@ -16,6 +17,7 @@ mongoose.connect(
 
 //middlewares
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/user", require("./routes/auth"));
 app.use("/api/group", require("./routes/group"));

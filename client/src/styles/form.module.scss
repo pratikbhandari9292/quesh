@@ -1,4 +1,5 @@
 @import "./variables.module.scss";
+@import "../components/spinner/spinner.module.scss";
 
 .container {
 	width: 40rem;
@@ -11,6 +12,20 @@
 
 .form {
 	& > *:last-child {
-		margin-top: 1.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 3rem;
+
+		& > *:last-child {
+			margin-left: 1rem;
+		}
+
+		&:hover {
+			& > *:last-child {
+				border-color: $color-black;
+				border-left-color: transparent;
+			}
+		}
 	}
 }
