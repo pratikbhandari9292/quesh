@@ -1,11 +1,18 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import {
+	BrowserRouter,
+	Switch,
+	Route,
+	Redirect,
+	withRouter,
+} from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
 import { getCurrentUser, setCurrentUser } from "./local-storage/current-user";
 
 import "./styles/globals.scss";
+import styles from "./styles/app.module.scss";
 import wrapperStyles from "./styles/wrapper.module.scss";
 
 import Header from "./components/header/header";
@@ -13,8 +20,10 @@ import Welcome from "./pages/welcome/welcome";
 import SignIn from "./pages/sign-in/sign-in";
 import Register from "./pages/register/register";
 import HomePage from "./pages/home-page/home-page";
+import SideBar from "./components/side-bar/side-bar";
+import Groups from "./pages/groups/groups";
 
-const App = ({ currentUserRedux }) => {
+const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -28,40 +37,67 @@ const App = ({ currentUserRedux }) => {
 		dispatch(setCurrentUserRedux(false));
 	}, []);
 
+	useEffect(() => {
+		if (notInsideApp()) {
+			if (currentUserRedux) {
+				history.push("/groups/me");
+			}
+			return;
+		}
+
+		if (!currentUserRedux) {
+			history.push("/signin");
+		}
+	}, [location, currentUserRedux]);
+
+	const renderSideBar = () => {
+		if (notInsideApp()) {
+			return null;
+		}
+
+		return <SideBar />;
+	};
+
+	const notInsideApp = () => {
+		return (
+			location.pathname.includes("signin") ||
+			location.pathname.includes("register") ||
+			location.pathname === "/"
+		);
+	};
+
+	const currentUser = getCurrentUser();
+	console.log(currentUser);
+
 	return (
-		<React.Fragment>
-			<BrowserRouter>
-				<Header />
+		<div className={styles.app}>
+			<Header />
+			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
+				{renderSideBar()}
 				<Switch>
-					<section className={wrapperStyles.wrapper}>
+					<section
+						className={`${
+							notInsideApp()
+								? wrapperStyles.wrapper
+								: styles.content
+						}`}
+					>
 						<Route path="/" exact>
-							{currentUserRedux ? (
-								<Redirect to="/home" />
-							) : (
-								<Welcome />
-							)}
+							<Welcome />
 						</Route>
 						<Route path="/signin">
-							{currentUserRedux ? (
-								<Redirect to="/home" />
-							) : (
-								<SignIn />
-							)}
+							<SignIn />
 						</Route>
 						<Route path="/register">
-							{currentUserRedux ? (
-								<Redirect to="/home" />
-							) : (
-								<Register />
-							)}
+							<Register />
 						</Route>
-						<Route path="/home">
-							<HomePage />
+						<Route path="/groups/:id">
+							<Groups />
 						</Route>
 					</section>
 				</Switch>
-			</BrowserRouter>
-		</React.Fragment>
+			</div>
+		</div>
 	);
 };
 
@@ -71,4 +107,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(withRouter(App));

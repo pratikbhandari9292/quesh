@@ -15,7 +15,7 @@ const Logo = () => {
 	return (
 		<div className={styles.container} onClick={handleLogoClick}>
 			<LogoIcon className={styles.logoIcon} />{" "}
-			<span className={styles.logoText}>quesh</span>
+			<span className={styles.logoText}>Quesh</span>
 		</div>
 	);
 };

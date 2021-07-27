@@ -1,0 +1,56 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
+
+.container {
+	background-color: $color-grey-lightest;
+}
+
+.navLink {
+	display: flex;
+	align-items: center;
+	padding: 1rem 2.5rem;
+	border-bottom: 1px solid $color-grey-lighter-more;
+	color: $color-grey-light;
+	text-transform: capitalize;
+	cursor: pointer;
+	transition: background-color 100ms ease-in;
+	font-size: 1.75rem;
+
+	&:hover {
+		background-color: $color-grey-lighter-more;
+		color: $color-blue;
+		font-weight: 500;
+
+		svg {
+			path {
+				fill: $color-blue;
+			}
+		}
+	}
+
+	&:active {
+		background-color: darken($color-grey-lighter-more, 5%);
+	}
+
+	svg {
+		@extend .icon;
+
+		path {
+			fill: $color-grey-light;
+		}
+
+		margin-right: 0.75rem;
+	}
+}
+
+.navLinkActive {
+	background-color: $color-grey-lighter-more;
+	color: $color-blue;
+	font-weight: 500;
+
+	svg {
+		path {
+			fill: $color-blue;
+		}
+	}
+}

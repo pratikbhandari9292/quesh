@@ -16,14 +16,24 @@ body {
 	font-family: $font-stack-primary;
 	color: $color-black;
 	font-size: 1.7rem;
+	height: 100vh;
 }
 
 h1,
-h2 {
+h2,
+h3 {
 	font-weight: 500;
 }
 
 a {
 	color: $color-blue;
 	text-decoration: none;
+}
+
+#root {
+	height: 100%;
+
+	& > *:first-child {
+		height: 100%;
+	}
 }

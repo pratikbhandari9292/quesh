@@ -1,5 +1,5 @@
 .wrapper {
-	max-width: 1250px;
-	margin: auto;
-	padding: 0 3rem;
+	@media screen and (max-width: 1500px) {
+		padding: 0 2rem;
+	}
 }

@@ -1,0 +1,22 @@
+@import "./variables.module.scss";
+
+.icon {
+	height: 2rem;
+	width: 2rem;
+
+	path {
+		fill: $color-grey-light;
+	}
+
+	&:hover {
+		path {
+			fill: $color-black;
+		}
+	}
+
+	&:active {
+		path {
+			fill: $color-grey-light;
+		}
+	}
+}

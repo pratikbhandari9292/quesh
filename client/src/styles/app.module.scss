@@ -1,2 +1,19 @@
 .app {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	max-width: 1400px;
+	margin: auto;
+}
+
+.main {
+	display: grid;
+	grid-template-columns: 25rem 1fr;
+}
+
+.mainWhole {
+	grid-template-columns: 1fr;
+}
+
+.content {
+	padding: 1.5rem 2rem;
 }

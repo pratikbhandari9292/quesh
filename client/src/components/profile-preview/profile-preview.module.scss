@@ -1,0 +1,58 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+
+	& > *:not(:first-child) {
+		margin-left: 0.75rem;
+	}
+
+	&:hover {
+		.username {
+			color: $color-black;
+		}
+
+		.icon {
+			path {
+				fill: $color-black;
+			}
+		}
+
+		div {
+			span {
+				color: $color-black;
+			}
+		}
+	}
+
+	&:active {
+		.username {
+			color: $color-grey-light;
+		}
+
+		.icon {
+			path {
+				fill: $color-grey-light;
+			}
+		}
+
+		div {
+			background-color: darken($color-grey-lighter-more, 5%);
+		}
+	}
+}
+
+.username {
+	font-size: 1.75rem;
+	font-weight: 500;
+	color: $color-grey-light;
+	text-transform: capitalize;
+}
+
+.icon {
+	@extend .icon;
+}

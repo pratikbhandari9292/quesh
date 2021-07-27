@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
@@ -6,16 +6,23 @@ import styles from "./header.module.scss";
 import wrapperStyles from "../../styles/wrapper.module.scss";
 
 import { setCurrentUser as setCurrentUserRedux } from "../../redux/current-user/current-user.actions";
-import { setCurrentUser } from "../../local-storage/current-user";
+import {
+	setCurrentUser,
+	getCurrentUser,
+} from "../../local-storage/current-user";
 
 import Logo from "../logo/logo";
 import Button from "../button/button";
+import ProfilePicture from "../profile-picture/profile-picture";
+import ProfilePreview from "../profile-preview/profile-preview";
 
 const Header = ({ currentUserRedux }) => {
 	const history = useHistory();
 	const location = useLocation();
 
 	const dispatch = useDispatch();
+
+	const currentUser = getCurrentUser();
 
 	const renderButtons = () => {
 		if (location.pathname.includes("signin")) {
@@ -60,12 +67,7 @@ const Header = ({ currentUserRedux }) => {
 			<div className={`${wrapperStyles.wrapper} ${styles.wrapper}`}>
 				<Logo />
 				{currentUserRedux ? (
-					<Button
-						clickHandler={handleSignOutButtonClick}
-						type="secondary"
-					>
-						sign out
-					</Button>
+					<ProfilePreview username={currentUser.username} />
 				) : (
 					renderButtons()
 				)}

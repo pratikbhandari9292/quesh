@@ -90,6 +90,7 @@ router.post("/signin", async (request, response) => {
 			_id: user._id,
 			username: user.username,
 			email: user.email,
+			groups: user.groups,
 			token,
 		},
 	});

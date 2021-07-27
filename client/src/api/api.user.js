@@ -13,3 +13,16 @@ export const signInOrRegister = async (type, userInfo) => {
 
 	return data;
 };
+
+export const getUserGroups = async (userID, token) => {
+	const result = await fetch(`${baseURL}/${userID}/groups`, {
+		headers: {
+			"Content-Type": "application/json",
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

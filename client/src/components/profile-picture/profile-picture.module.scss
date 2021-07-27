@@ -1,0 +1,29 @@
+@import "../../styles/variables.module.scss";
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: $color-grey-lighter-more;
+	height: 3.5rem;
+	width: 3.5rem;
+	border-radius: 50%;
+	cursor: pointer;
+
+	&:hover {
+		.text {
+			color: $color-black;
+		}
+	}
+
+	&:active {
+		background-color: darken($color-grey-lighter-more, 5%);
+	}
+}
+
+.text {
+	font-size: 2rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: $color-grey-light;
+}

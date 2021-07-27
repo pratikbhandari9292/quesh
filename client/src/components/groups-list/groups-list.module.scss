@@ -1,0 +1,15 @@
+.container {
+}
+
+.listMain {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(20rem, 25rem));
+	grid-gap: 2rem;
+}
+
+.title {
+	font-size: 2rem;
+	font-weight: 500;
+	text-transform: capitalize;
+	margin-bottom: 1.5rem;
+}
