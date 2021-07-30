@@ -2,6 +2,10 @@
 @import "../../styles/utils.module.scss";
 
 .container {
+	position: relative;
+}
+
+.preview {
 	display: flex;
 	justify-content: center;
 	align-items: center;

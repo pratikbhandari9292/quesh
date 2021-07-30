@@ -58,6 +58,7 @@ const SideBar = () => {
 							className={`${styles.navLink} ${
 								navLink.active && styles.navLinkActive
 							}`}
+							key={navLink.title}
 						>
 							{" "}
 							{navLink.icon} <span>{navLink.title}</span>

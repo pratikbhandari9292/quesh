@@ -3,10 +3,10 @@
 .spinner {
 	height: 2rem;
 	width: 2rem;
-	border: 2px solid $color-black;
+	border: 2px solid $color-grey-light;
 	border-left-color: transparent;
 	border-radius: 50%;
-	animation: spinnerAnimation 450ms infinite ease-in;
+	animation: spinnerAnimation 500ms infinite linear;
 }
 
 .spinnerWhite {

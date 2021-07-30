@@ -7,7 +7,7 @@ const Spinner = ({ color = "black" }) => {
 		<div
 			className={`${styles.spinner} ${
 				color === "white" && styles.spinnerWhite
-			}`}
+			} ${color === "grey" && styles.spinnerGrey}`}
 		></div>
 	);
 };

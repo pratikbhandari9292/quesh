@@ -1,0 +1,10 @@
+@import "../../styles/variables.module.scss";
+
+.menu {
+	position: absolute;
+	right: 0;
+	bottom: -100%;
+	background-color: $color-grey-lightest;
+	border-radius: 5px;
+	box-shadow: 0.2rem 0.2rem 0.5rem 0 rgba(0, 0, 0, 0.35);
+}

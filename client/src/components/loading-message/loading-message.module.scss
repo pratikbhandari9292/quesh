@@ -1,0 +1,18 @@
+@import "../../styles/variables.module.scss";
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.message {
+	font-weight: 500;
+	color: $color-grey-lighter;
+	margin-bottom: 0.75rem;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}

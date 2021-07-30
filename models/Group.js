@@ -9,8 +9,12 @@ const groupSchema = new mongoose.Schema(
 			type: [{ type: mongoose.Schema.Types.ObjectId }],
 			default: [],
 		},
+		joinID: {
+			type: String,
+			default: "",
+		},
 	},
-	{ timeStamps: true }
+	{ timestamps: true }
 );
 
 module.exports = mongoose.model("Group", groupSchema);

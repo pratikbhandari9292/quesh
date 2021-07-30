@@ -3,20 +3,21 @@
 .icon {
 	height: 2rem;
 	width: 2rem;
+	cursor: pointer;
 
 	path {
 		fill: $color-grey-light;
 	}
 
-	&:hover {
-		path {
-			fill: $color-black;
-		}
-	}
+	// &:hover {
+	// 	path {
+	// 		fill: $color-black;
+	// 	}
+	// }
 
-	&:active {
-		path {
-			fill: $color-grey-light;
-		}
-	}
+	// &:active {
+	// 	path {
+	// 		fill: $color-grey-light;
+	// 	}
+	// }
 }

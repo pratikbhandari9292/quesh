@@ -1,0 +1,15 @@
+@import "../../styles/variables.module.scss";
+
+.container {
+	h2 {
+		color: $color-grey-light;
+	}
+
+	button {
+		margin: auto;
+	}
+
+	& > *:not(:last-child) {
+		margin-bottom: 2.5rem;
+	}
+}

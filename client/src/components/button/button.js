@@ -16,6 +16,10 @@ const Button = ({
 			className += ` ${styles.buttonFull}`;
 		}
 
+		if (size === "smaller") {
+			className += `${styles.buttonSmaller}`;
+		}
+
 		if (type === "primary") {
 			if (color === "black") {
 				className += ` ${styles.buttonPrimary}`;

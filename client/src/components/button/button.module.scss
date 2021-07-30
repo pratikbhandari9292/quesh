@@ -1,6 +1,9 @@
 @import "../../styles/variables.module.scss";
 
 .buttonPrimary {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-size: 1.7rem;
 	padding: 0.75rem 1.5rem;
 	text-transform: capitalize;
@@ -14,9 +17,18 @@
 	transition: background-color 100ms ease-in, color 100ms ease-in,
 		border 100ms ease-in;
 
+	div {
+		margin-left: 1rem;
+	}
+
 	&:hover {
 		background-color: white;
 		color: $color-black;
+
+		div {
+			border: 2px solid $color-black;
+			border-left-color: transparent;
+		}
 	}
 
 	&:active {
@@ -31,6 +43,11 @@
 	&:hover {
 		background-color: white;
 		color: $color-blue;
+
+		div {
+			border: 2px solid $color-blue;
+			border-left-color: transparent;
+		}
 	}
 
 	&:active {
@@ -58,4 +75,8 @@
 
 .buttonFull {
 	width: 100%;
+}
+
+.buttonSmaller {
+	padding: 0.5rem 0.75rem;
 }

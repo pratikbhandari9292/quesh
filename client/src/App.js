@@ -22,6 +22,7 @@ import Register from "./pages/register/register";
 import HomePage from "./pages/home-page/home-page";
 import SideBar from "./components/side-bar/side-bar";
 import Groups from "./pages/groups/groups";
+import Modal from "./components/modal/modal";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -72,6 +73,7 @@ const App = ({ currentUserRedux, location, history }) => {
 	return (
 		<div className={styles.app}>
 			<Header />
+			<Modal />
 			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
 				{renderSideBar()}
 				<Switch>

@@ -1,0 +1,44 @@
+@import "../../styles/variables.module.scss";
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dot {
+	height: 2px;
+	width: 2px;
+	background-color: $color-grey-light;
+	border-radius: 50%;
+
+	&:not(:first-of-type) {
+		margin-left: 4px;
+	}
+
+	&:nth-of-type(1) {
+		animation: dotAnimation 500ms infinite linear;
+	}
+
+	&:nth-of-type(2) {
+		animation: dotAnimation 500ms 150ms infinite linear;
+	}
+
+	&:nth-of-type(3) {
+		animation: dotAnimation 500ms 300ms infinite linear;
+	}
+}
+
+@keyframes dotAnimation {
+	0% {
+		transform: translateY(0px);
+	}
+
+	50% {
+		transform: translateY(-3px);
+	}
+
+	100% {
+		transform: translateY(0px);
+	}
+}

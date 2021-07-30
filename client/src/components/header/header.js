@@ -56,18 +56,14 @@ const Header = ({ currentUserRedux }) => {
 		history.push("/register");
 	};
 
-	const handleSignOutButtonClick = () => {
-		setCurrentUser(null);
-		dispatch(setCurrentUserRedux(false));
-		history.push("/signin");
-	};
-
 	return (
 		<div className={styles.container}>
 			<div className={`${wrapperStyles.wrapper} ${styles.wrapper}`}>
 				<Logo />
 				{currentUserRedux ? (
-					<ProfilePreview username={currentUser.username} />
+					<ProfilePreview
+						username={currentUser && currentUser.username}
+					/>
 				) : (
 					renderButtons()
 				)}

@@ -1,0 +1,34 @@
+@import "../../styles/variables.module.scss";
+
+.container {
+	position: relative;
+}
+
+.joinContainer {
+	position: fixed;
+	right: 2rem;
+	bottom: 2rem;
+
+	button {
+		box-shadow: 0.3rem 0.5rem 1rem 0 rgba(0, 0, 0, 0.5);
+
+		&:active {
+			transform: scale(0.97);
+		}
+	}
+}
+
+.text {
+	color: $color-grey-light;
+	font-weight: 500;
+	cursor: pointer;
+	text-transform: capitalize;
+
+	&:hover {
+		color: $color-black;
+	}
+
+	&:active {
+		color: $color-grey-light;
+	}
+}

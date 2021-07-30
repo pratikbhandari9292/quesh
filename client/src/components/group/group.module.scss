@@ -6,6 +6,7 @@
 	box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.2);
 	cursor: pointer;
 	background-color: $color-grey-lightest;
+	height: fit-content;
 	transition: background-color 100ms ease-in, box-shadow 100ms ease-in,
 		color 100ms ease-in;
 
@@ -27,8 +28,33 @@
 .title {
 	color: $color-grey-light;
 	font-size: 2rem;
+	margin-bottom: 0.75rem;
 
 	&::first-letter {
 		text-transform: uppercase;
 	}
+}
+
+.infoContainer {
+	display: flex;
+	align-items: center;
+	color: $color-grey-lighter;
+	margin-bottom: 0.3rem;
+	font-size: 1.55rem;
+}
+
+.infoTitle {
+	display: inline-block;
+
+	// &::first-letter {
+	// 	text-transform: uppercase;
+	// }
+}
+
+.info {
+	font-weight: 500;
+	margin-left: 0.75rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

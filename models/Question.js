@@ -27,7 +27,7 @@ const questionSchema = new mongoose.Schema(
 			default: null,
 		},
 	},
-	{ timeStamps: true }
+	{ timestamps: true }
 );
 
 module.exports = mongoose.model("Question", questionSchema);

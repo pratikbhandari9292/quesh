@@ -35,7 +35,9 @@ router.get("/:userID/groups", auth, async (request, response) => {
 		//getting the groups that the user is a member of
 		const groups = await Group.find({
 			_id: { $in: user.groups.map((group) => group._id) },
-		});
+		})
+			.sort({ createdAt: -1 })
+			.populate("owner");
 
 		response.send({ groups });
 	} catch (error) {

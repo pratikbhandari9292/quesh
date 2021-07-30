@@ -6,6 +6,7 @@ const { validateGroup } = require("../validation/group.validation");
 const Group = require("../models/Group");
 const Question = require("../models/Question");
 const User = require("../models/User");
+const uniqid = require("uniqid");
 
 const router = express.Router();
 
@@ -20,10 +21,13 @@ router.post("/create", auth, async (request, response) => {
 		return response.status(400).send({ error });
 	}
 
+	const joinID = uniqid();
+
 	//creating a new group instance
 	const group = new Group({
 		...groupInfo,
 		owner: request.user,
+		joinID,
 	});
 
 	try {
@@ -55,11 +59,33 @@ router.get("/:groupID", auth, async (request, response) => {
 			return response.status(400).send({ error: "group not found" });
 		}
 
-		return response.send(group);
+		response.send(group);
 	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}
 });
+
+//get the number of members and the number of unsolved questions of a group
+router.get(
+	"/:groupID/mem-ques",
+	auth,
+	validateGroupID,
+	async (request, response) => {
+		try {
+			const [members, questions] = await Promise.all([
+				User.find({ "groups._id": request.params.groupID }, "_id"),
+				Question.find({ group: request.params.groupID }, "_id"),
+			]);
+
+			response.send({
+				memNumber: members.length,
+				quesNumber: questions.length,
+			});
+		} catch (error) {
+			response.status(500).send({ error: error.message });
+		}
+	}
+);
 
 //add members to a group
 router.post(
@@ -142,50 +168,56 @@ router.post(
 );
 
 //join a group
-router.post(
-	"/:groupID/join",
-	auth,
-	validateGroupID,
-	async (request, response) => {
-		try {
-			//getting the group with the given id and the requesting user
-			const [group, requestingUser] = await Promise.all([
-				Group.findById(request.params.groupID),
-				User.findById(request.user),
-			]);
+router.post("/join/:joinID", auth, async (request, response) => {
+	try {
+		//getting the group with the given join id and the requesting user
+		const [groups, requestingUser] = await Promise.all([
+			Group.find({ joinID: request.params.joinID }),
+			User.findById(request.user),
+		]);
 
-			//checking to see if the requesting user is already in the group
-			if (
-				requestingUser.groups.find(
-					(group) => group._id == request.params.groupID
-				)
-			) {
-				return response
-					.status(400)
-					.send({ error: "already in the group" });
-			}
+		const group = groups[0];
 
-			//updating the user so that they are a member of the group
-			requestingUser.groups.push({
-				_id: request.params.groupID,
-				addedBy: null,
-				role: "member",
-			});
-
-			//removing the requesting user from the memberJoinRequests array of the group
-			group.memberJoinRequests = group.memberJoinRequests.filter(
-				(requests) => requests != request.member
-			);
-
-			//saving the group and the requesting user to the database
-			await Promise.all([group.save(), requestingUser.save()]);
-
-			response.status(201).send({ message: "joined group" });
-		} catch (error) {
-			response.status(500).send({ error: error.message });
+		//checking to see if the group exists
+		if (!group) {
+			return response.status(400).send({ error: "group does not exist" });
 		}
+
+		//checking to see if the requesting user is already in the group
+		if (
+			requestingUser.groups.find(
+				(groupInner) => groupInner._id == group._id
+			)
+		) {
+			return response.status(400).send({ error: "already in the group" });
+		}
+
+		//updating the user so that they are a member of the group
+		requestingUser.groups.push({
+			_id: group._id,
+			addedBy: null,
+			role: "member",
+		});
+
+		//removing the requesting user from the memberJoinRequests array of the group
+		group.memberJoinRequests = group.memberJoinRequests.filter(
+			(requests) => requests != request.member
+		);
+
+		//saving the group and the requesting user to the database
+		const [savedGroup, savedUser] = await Promise.all([
+			group.save(),
+			requestingUser.save(),
+		]);
+
+		//getting the updated group
+		const updatedGroup = await Group.findById(group._id).populate("owner");
+
+		response.status(201).send({ group: updatedGroup });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
 	}
-);
+});
 
 //request to join a group
 router.post(

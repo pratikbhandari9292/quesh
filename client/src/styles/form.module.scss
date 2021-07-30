@@ -12,20 +12,13 @@
 
 .form {
 	& > *:last-child {
-		display: flex;
-		justify-content: center;
-		align-items: center;
 		margin-top: 3rem;
 
-		& > *:last-child {
-			margin-left: 1rem;
-		}
-
-		&:hover {
-			& > *:last-child {
-				border-color: $color-black;
-				border-left-color: transparent;
-			}
-		}
+		// &:hover {
+		// 	& > *:last-child {
+		// 		border-color: $color-black;
+		// 		border-left-color: transparent;
+		// 	}
+		// }
 	}
 }
