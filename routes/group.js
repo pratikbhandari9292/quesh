@@ -415,12 +415,41 @@ router.get(
 				"groups._id": request.params.groupID,
 			});
 
-			response.status(200).send({ members });
+			response.send({ members });
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}
 	}
 );
+
+//search for groups
+router.get("/search/:searchTerm", auth, async (request, response) => {
+	const searchRegularExpression = new RegExp(request.params.searchTerm, "i");
+
+	try {
+		const [titleResults, aboutResults] = await Promise.all([
+			Group.find({
+				title: { $regex: searchRegularExpression },
+			}),
+			Group.find({
+				about: { $regex: searchRegularExpression },
+			}),
+		]);
+
+		const groups = [...titleResults, ...aboutResults];
+
+		// const groups = await Group.find({
+		// 	$or: [
+		// 		{ title: { $regex: searchRegularExpression } },
+		// 		{ about: { $regex: searchRegularExpression } },
+		// 	],
+		// });
+
+		response.send({ groups });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
 
 //middlewares
 async function validateGroupID(request, response, next) {

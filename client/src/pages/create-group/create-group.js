@@ -42,9 +42,9 @@ const CreateGroup = () => {
 
 		try {
 			const result = await createGroup(currentUser.token, {
-				title,
-				about,
-				description,
+				title: title.trim(),
+				about: about.trim(),
+				description: description.trim(),
 			});
 
 			dispatch(setModalInfo(false, ""));

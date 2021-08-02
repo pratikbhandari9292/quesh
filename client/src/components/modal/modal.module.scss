@@ -38,20 +38,9 @@
 }
 
 .icon {
-	@extend .icon;
+	@extend .iconSecondary;
 
 	position: absolute;
 	right: 0.5rem;
 	top: 0.5rem;
-	padding: 0.5rem;
-	box-sizing: content-box;
-	border-radius: 50%;
-
-	&:hover {
-		background-color: $color-grey-lighter-more;
-	}
-
-	&:active {
-		background-color: darken($color-grey-lighter-more, 5%);
-	}
 }

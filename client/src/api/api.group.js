@@ -72,3 +72,17 @@ export const requestGroupJoin = async (groupID, token) => {
 
 	return data;
 };
+
+export const searchGroup = async (searchTerm, token) => {
+	const result = await fetch(`${baseURL}/search/${searchTerm}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

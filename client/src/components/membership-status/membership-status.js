@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import styles from "./membership-status.module.scss";
 
 import { displayAlert } from "../../redux/alert/alert.actions";
+import { addGroup } from "../../redux/groups/groups.actions";
 
 import { requestGroupJoin, joinGroup } from "../../api/api.group";
 
@@ -17,10 +19,12 @@ const MembershipStatus = ({ member, groupID, token }) => {
 	const [joinID, setJoinID] = useState("");
 	const [error, setError] = useState("");
 	const [requesting, setRequesting] = useState(false);
-	const [joining, setJoining] = useState(false);
 	const [requested, setRequested] = useState(false);
+	const [joining, setJoining] = useState(false);
 
 	const dispatch = useDispatch();
+
+	const history = useHistory();
 
 	const handleRequestButtonClick = async (event) => {
 		event.preventDefault();
@@ -34,14 +38,15 @@ const MembershipStatus = ({ member, groupID, token }) => {
 		try {
 			const result = await requestGroupJoin(groupID, token);
 
-			if (result.message === "request sent") {
-				setRequested(true);
-				dispatch(displayAlert("request has been sent"));
+			if (result.error) {
+				return dispatch(displayAlert(result.error));
 			}
 
-			console.log(result);
+			setRequested(true);
+			dispatch(displayAlert("request has been sent"));
 		} catch (error) {
 			console.log(error);
+			dispatch(displayAlert("something went wrong, try again"));
 		} finally {
 			setRequesting(false);
 		}
@@ -70,7 +75,10 @@ const MembershipStatus = ({ member, groupID, token }) => {
 			}
 
 			dispatch(displayAlert("you have joined the group"));
+			dispatch(addGroup(result.group));
+			history.push("/groups/me");
 		} catch (error) {
+			dispatch(displayAlert("something went wrong, try again"));
 			console.log(error);
 		} finally {
 			setJoining(false);

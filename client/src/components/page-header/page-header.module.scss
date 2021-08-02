@@ -7,6 +7,10 @@
 	margin-bottom: 2rem;
 }
 
+.containerCentered {
+	justify-content: center;
+}
+
 .marginSmaller {
 	@extend .container;
 
@@ -14,7 +18,7 @@
 }
 
 .title {
-	font-size: 2.3rem;
+	font-size: 2rem;
 	font-weight: 500;
 	text-transform: capitalize;
 }
@@ -29,9 +33,22 @@
 	}
 }
 
+.titleLarger {
+	font-size: 2.3rem;
+}
+
+.titleMuted {
+	color: $color-grey-lighter;
+}
+
 .info {
 	color: $color-grey-lighter;
 	font-size: 1.55rem;
 	font-family: sans-serif;
+	margin-left: 0.5rem;
+}
+
+.term {
+	color: $color-grey-light;
 	margin-left: 0.5rem;
 }

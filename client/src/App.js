@@ -25,6 +25,7 @@ import Modal from "./components/modal/modal";
 import CreateGroup from "./pages/create-group/create-group";
 import Alert from "./components/alert/alert";
 import GroupDetails from "./pages/group-details/group-details";
+import SearchResults from "./pages/search-results/search-results";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -101,6 +102,9 @@ const App = ({ currentUserRedux, location, history }) => {
 						</Route>
 						<Route path="/group/details/:id">
 							<GroupDetails />
+						</Route>
+						<Route path="/search">
+							<SearchResults />
 						</Route>
 					</section>
 				</Switch>

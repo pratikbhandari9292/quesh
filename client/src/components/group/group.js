@@ -17,16 +17,20 @@ const Group = ({
 	title,
 	owner,
 	memberJoinRequests,
-	groupsMemNum,
 	createdAt,
+	groupsMemNum,
 }) => {
-	const dispatch = useDispatch();
-
 	const history = useHistory();
+
+	const dispatch = useDispatch();
 
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
+		if (getMemNumber()) {
+			return;
+		}
+
 		fetchMemNum();
 	}, []);
 

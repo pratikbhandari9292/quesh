@@ -5,7 +5,7 @@
 	border: 1px solid $color-grey-lightest;
 	padding: 1.5rem;
 	border-radius: 5px;
-	width: 40rem;
+	height: fit-content;
 
 	svg {
 		@extend .icon;

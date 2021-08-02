@@ -21,3 +21,19 @@
 	// 	}
 	// }
 }
+
+.iconSecondary {
+	@extend .icon;
+
+	box-sizing: content-box;
+	padding: 0.5rem;
+	border-radius: 50%;
+
+	&:hover {
+		background-color: $color-grey-lighter-more;
+	}
+
+	&:active {
+		background-color: darken($color-grey-lighter-more, 5%);
+	}
+}

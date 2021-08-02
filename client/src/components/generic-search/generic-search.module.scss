@@ -1,0 +1,64 @@
+@import "../../styles/utils.module.scss";
+
+.search {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid $color-grey-lighter-more;
+	border-radius: 5px;
+	padding: 0 0.75rem;
+	width: 25rem;
+
+	::-webkit-input-placeholder {
+		letter-spacing: 1px;
+	}
+
+	svg {
+		@extend .icon;
+
+		height: 1.8rem;
+		width: 1.8rem;
+		margin-left: 0.5rem;
+
+		path {
+			fill: $color-grey-lighter;
+		}
+
+		&:hover {
+			path {
+				fill: $color-grey-light;
+			}
+		}
+
+		&:active {
+			path {
+				fill: $color-grey-lighter;
+			}
+		}
+	}
+
+	button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: none;
+		outline: none;
+		background-color: transparent;
+	}
+}
+
+.searchFocused {
+	@extend .search;
+
+	border: 1px solid $color-blue;
+}
+
+.input {
+	height: 3rem;
+	flex: 1 1 auto;
+	outline: none;
+	border: none;
+	font-size: 1.55rem;
+	color: $color-grey-light;
+	font-family: inherit;
+}

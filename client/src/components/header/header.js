@@ -15,6 +15,7 @@ import Logo from "../logo/logo";
 import Button from "../button/button";
 import ProfilePicture from "../profile-picture/profile-picture";
 import ProfilePreview from "../profile-preview/profile-preview";
+import GroupSearch from "../group-search/group-search";
 
 const Header = ({ currentUserRedux }) => {
 	const history = useHistory();
@@ -61,9 +62,12 @@ const Header = ({ currentUserRedux }) => {
 			<div className={`${wrapperStyles.wrapper} ${styles.wrapper}`}>
 				<Logo />
 				{currentUserRedux ? (
-					<ProfilePreview
-						username={currentUser && currentUser.username}
-					/>
+					<div className={styles.headerContent}>
+						<GroupSearch />
+						<ProfilePreview
+							username={currentUser && currentUser.username}
+						/>
+					</div>
 				) : (
 					renderButtons()
 				)}

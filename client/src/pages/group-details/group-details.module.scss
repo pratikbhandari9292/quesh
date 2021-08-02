@@ -1,14 +1,12 @@
 @import "../../styles/variables.module.scss";
 
 .container {
-	& > *:not(:first-child) {
-		margin-bottom: 2rem;
-	}
 }
 
-.groupDetails {
+.groupDetailsGrid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+	grid-template-columns: 35rem 40rem;
+	grid-gap: 2rem;
 }
 
 .infoTag {

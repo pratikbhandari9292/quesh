@@ -6,6 +6,7 @@ import styles from "./group-details.module.scss";
 import { getGroupDetails, getMemNum } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
 import { getDate } from "../../utils/utils.date-time";
+import { capitalizeFirstLetter } from "../../utils/utils.strings";
 
 import StatusMessage from "../../components/status-message/status-message";
 import PageHeader from "../../components/page-header/page-header";
@@ -32,6 +33,8 @@ const GroupDetails = () => {
 
 	useEffect(() => {
 		if (groupDetails) {
+			document.title = capitalizeFirstLetter(groupDetails.title);
+
 			fetchMemNum();
 
 			if (
@@ -88,41 +91,45 @@ const GroupDetails = () => {
 		<div className={styles.container}>
 			<PageHeader
 				title={groupDetails.title}
-				bottomMargin="smaller"
 				capitalize={false}
+				size="larger"
 			/>
 
-			<MembershipStatus
-				member={member}
-				groupID={groupDetails._id}
-				token={currentUser.token}
-			/>
+			<div className={styles.groupDetailsGrid}>
+				<div>
+					<GroupInfo title="group description">
+						{groupDetails.description}
+					</GroupInfo>
 
-			<GroupInfo title="group description">
-				{groupDetails.description}
-			</GroupInfo>
+					{groupDetails.about && (
+						<GroupInfo title="this group is about">
+							{getAbout(groupDetails.description)}
+						</GroupInfo>
+					)}
 
-			{groupDetails.about && (
-				<GroupInfo title="this group is about">
-					{getAbout(groupDetails.description)}
-				</GroupInfo>
-			)}
+					<GroupInfo title="owner of the group">
+						{groupDetails.owner.username}
+					</GroupInfo>
 
-			<GroupInfo title="owner of the group">
-				{groupDetails.owner.username}
-			</GroupInfo>
+					<GroupInfo title="created on">
+						{getDate(groupDetails.createdAt)}
+					</GroupInfo>
 
-			<GroupInfo title="created on">
-				{getDate(groupDetails.createdAt)}
-			</GroupInfo>
+					<GroupInfo title="join requests">
+						{groupDetails.memberJoinRequests.length}
+					</GroupInfo>
 
-			<GroupInfo title="join requests">
-				{groupDetails.memberJoinRequests.length}
-			</GroupInfo>
+					<GroupInfo title="members">
+						{memNum !== null ? memNum : <DotIndicator />}
+					</GroupInfo>
+				</div>
 
-			<GroupInfo title="members">
-				{memNum !== null ? memNum : <DotIndicator />}
-			</GroupInfo>
+				<MembershipStatus
+					member={member}
+					groupID={groupDetails._id}
+					token={currentUser.token}
+				/>
+			</div>
 		</div>
 	);
 };

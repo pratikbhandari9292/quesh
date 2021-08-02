@@ -12,13 +12,17 @@ export const groupsReducer = (state = INITIAL_STATE, action) => {
 		case "SET_MEM_NUM":
 			return {
 				...state,
-				groupsMemNum: [
-					...state.groupsMemNum,
-					{
-						id: action.payload.groupID,
-						memNum: action.payload.memNum,
-					},
-				],
+				groupsMemNum: state.groupsMemNum.find(
+					(group) => group.id === action.payload.groupID
+				)
+					? state.groupsMemNum
+					: [
+							...state.groupsMemNum,
+							{
+								id: action.payload.groupID,
+								memNum: action.payload.memNum,
+							},
+					  ],
 			};
 		default:
 			return state;

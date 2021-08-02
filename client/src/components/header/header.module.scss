@@ -5,8 +5,15 @@
 	border-bottom: 1px solid $color-grey-lightest;
 }
 
+.headerContent,
 .wrapper {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.headerContent {
+	& > *:not(:first-child) {
+		margin-left: 9rem;
+	}
 }
