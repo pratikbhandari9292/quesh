@@ -7,14 +7,31 @@
 	margin-bottom: 2rem;
 }
 
+.marginSmaller {
+	@extend .container;
+
+	margin-bottom: 1rem;
+}
+
 .title {
-	font-size: 2rem;
+	font-size: 2.3rem;
 	font-weight: 500;
 	text-transform: capitalize;
+}
+
+.nonCapitalized {
+	@extend .title;
+
+	text-transform: lowercase;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
 }
 
 .info {
 	color: $color-grey-lighter;
 	font-size: 1.55rem;
 	font-family: sans-serif;
+	margin-left: 0.5rem;
 }

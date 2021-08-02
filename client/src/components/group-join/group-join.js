@@ -3,8 +3,9 @@ import { useDispatch } from "react-redux";
 
 import styles from "./group-join.module.scss";
 
-import { setModalInfo } from "../../redux/modal/modal.actions";
+import { setModalInfo, setClosable } from "../../redux/modal/modal.actions";
 import { addGroup } from "../../redux/groups/groups.actions";
+import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { joinGroup } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -34,10 +35,10 @@ const GroupJoin = () => {
 
 		setJoining(true);
 
+		dispatch(setClosable(false));
+
 		try {
 			const result = await joinGroup(joinID, currentUser.token);
-
-			setJoining(false);
 
 			if (result.error) {
 				return setError(result.error);
@@ -45,10 +46,13 @@ const GroupJoin = () => {
 
 			dispatch(setModalInfo(false, ""));
 			dispatch(addGroup(result.group));
+			dispatch(displayAlert("you have joined the group"));
 		} catch (error) {
 			console.log(error);
-			setJoining(false);
 			setError("something went wrong");
+		} finally {
+			setJoining(false);
+			dispatch(setClosable(true));
 		}
 	};
 

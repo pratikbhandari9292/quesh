@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import styles from "./welcome.module.scss";
@@ -7,6 +7,10 @@ import Button from "../../components/button/button";
 
 const Welcome = () => {
 	const history = useHistory();
+
+	useEffect(() => {
+		document.title = "Welcome";
+	}, []);
 
 	return (
 		<div className={styles.container}>

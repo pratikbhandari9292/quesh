@@ -37,7 +37,10 @@ router.post("/create", auth, async (request, response) => {
 		//updating the requesting user and making them a member of the group
 		await User.findByIdAndUpdate(request.user, {
 			$push: {
-				groups: { _id: savedGroup._id, addedBy: null, role: "owner" },
+				groups: {
+					_id: String(savedGroup._id),
+					addedBy: null,
+				},
 			},
 		});
 
@@ -59,7 +62,7 @@ router.get("/:groupID", auth, async (request, response) => {
 			return response.status(400).send({ error: "group not found" });
 		}
 
-		response.send(group);
+		response.send({ group });
 	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}
@@ -67,19 +70,18 @@ router.get("/:groupID", auth, async (request, response) => {
 
 //get the number of members and the number of unsolved questions of a group
 router.get(
-	"/:groupID/mem-ques",
+	"/:groupID/mem-num",
 	auth,
 	validateGroupID,
 	async (request, response) => {
 		try {
-			const [members, questions] = await Promise.all([
-				User.find({ "groups._id": request.params.groupID }, "_id"),
-				Question.find({ group: request.params.groupID }, "_id"),
-			]);
+			const members = await User.find(
+				{ "groups._id": request.params.groupID },
+				"_id"
+			);
 
 			response.send({
-				memNumber: members.length,
-				quesNumber: questions.length,
+				memNum: members.length,
 			});
 		} catch (error) {
 			response.status(500).send({ error: error.message });
@@ -125,7 +127,7 @@ router.post(
 						groups: {
 							_id: request.params.groupID,
 							addedBy: request.user,
-							role: "member",
+							joinedAt: Date.now(),
 						},
 					},
 				}
@@ -138,27 +140,6 @@ router.post(
 
 			//saving the group to the database
 			await group.save();
-
-			// //filtering out the members that already exist
-			// const membersToBeAdded = members.filter((member) => {
-			// 	if (
-			// 		group.members.find(
-			// 			(existingMember) => existingMember._id == member
-			// 		)
-			// 	) {
-			// 		return false;
-			// 	}
-
-			// 	return true;
-			// });
-
-			// membersToBeAdded.forEach((member) => {
-			// 	//adding each of the members to members array of the group
-			// 	group.members.push({ _id: member, addedBy: request.user });
-
-			// 	//removing each of the members from memberJoinRequests array of the group
-			// 	group.memberJoinRequests.pull({ _id: member });
-			// });
 
 			response.status(201).send({ message: "members added" });
 		} catch (error) {
@@ -180,7 +161,7 @@ router.post("/join/:joinID", auth, async (request, response) => {
 
 		//checking to see if the group exists
 		if (!group) {
-			return response.status(400).send({ error: "group does not exist" });
+			return response.status(400).send({ error: "invalid join id" });
 		}
 
 		//checking to see if the requesting user is already in the group
@@ -194,9 +175,9 @@ router.post("/join/:joinID", auth, async (request, response) => {
 
 		//updating the user so that they are a member of the group
 		requestingUser.groups.push({
-			_id: group._id,
+			_id: String(group._id),
 			addedBy: null,
-			role: "member",
+			joinedAt: Date.now(),
 		});
 
 		//removing the requesting user from the memberJoinRequests array of the group

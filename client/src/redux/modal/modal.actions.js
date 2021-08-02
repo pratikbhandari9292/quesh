@@ -4,3 +4,10 @@ export const setModalInfo = (showModal, modalTitle, modalChildren) => {
 		payload: { showModal, modalTitle, modalChildren },
 	};
 };
+
+export const setClosable = (closable) => {
+	return {
+		type: "SET_CLOSABLE",
+		payload: closable,
+	};
+};

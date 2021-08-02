@@ -2,6 +2,9 @@
 @import "../../styles/utils.module.scss";
 
 .wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -12,26 +15,34 @@
 }
 
 .container {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
 	border-radius: 5px;
 	padding: 1.5rem;
 	background-color: white;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
 	min-width: 35rem;
 	box-shadow: 0 0 3rem 0 rgba(0, 0, 0, 0.25);
+	position: relative;
 }
 
 .title {
+	color: $color-grey-light;
+	text-align: center;
+	margin-bottom: 1.5rem;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
 }
 
 .icon {
 	@extend .icon;
 
 	position: absolute;
-	right: 1rem;
-	top: 1rem;
+	right: 0.5rem;
+	top: 0.5rem;
 	padding: 0.5rem;
 	box-sizing: content-box;
 	border-radius: 50%;

@@ -6,7 +6,6 @@
 
 .input {
 	display: block;
-	height: 3.5rem;
 	width: 100%;
 	outline: none;
 	border: 1px solid $color-grey-lighter-more;
@@ -26,6 +25,16 @@
 	}
 }
 
+.inputField {
+	height: 3.5rem;
+}
+
+.textarea {
+	height: 15rem;
+	resize: none;
+	padding: 0.5rem;
+}
+
 .errorInput {
 	border: 1px solid $color-red;
 }
@@ -39,6 +48,12 @@
 	&::first-letter {
 		text-transform: uppercase;
 	}
+}
+
+.labelInfo {
+	color: $color-grey-lighter;
+	font-size: 1.55rem;
+	margin-left: 0.75rem;
 }
 
 .error {

@@ -4,6 +4,7 @@ const INITIAL_STATE = {
 		modalTitle: "",
 		modalChildren: null,
 	},
+	closable: true,
 };
 
 export const modalReducer = (state = INITIAL_STATE, action) => {
@@ -12,6 +13,11 @@ export const modalReducer = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				modalInfo: { ...state.modalInfo, ...action.payload },
+			};
+		case "SET_CLOSABLE":
+			return {
+				...state,
+				closable: action.payload,
 			};
 		default:
 			return state;

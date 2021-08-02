@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 import styles from "./side-bar.module.scss";
 
@@ -12,7 +12,7 @@ const SideBar = () => {
 	const [navLinks, setNavLinks] = useState([
 		{
 			title: "groups",
-			linkTo: "/groups",
+			linkTo: "/groups/me",
 			icon: <GroupIcon />,
 			active: false,
 		},
@@ -37,6 +37,7 @@ const SideBar = () => {
 	]);
 
 	const location = useLocation();
+	const history = useHistory();
 
 	useEffect(() => {
 		setNavLinks(
@@ -59,8 +60,10 @@ const SideBar = () => {
 								navLink.active && styles.navLinkActive
 							}`}
 							key={navLink.title}
+							onClick={() => {
+								history.push(navLink.linkTo);
+							}}
 						>
-							{" "}
 							{navLink.icon} <span>{navLink.title}</span>
 						</li>
 					);

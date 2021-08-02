@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "./loading-message.module.scss";
+import styles from "./status-message.module.scss";
 
 import Spinner from "../spinner/spinner";
 

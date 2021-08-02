@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import formStyles from "../../styles/form.module.scss";
@@ -22,6 +22,10 @@ const Register = () => {
 	const [registering, setRegistering] = useState(false);
 
 	const history = useHistory();
+
+	useEffect(() => {
+		document.title = "Create an account with quesh";
+	}, []);
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();

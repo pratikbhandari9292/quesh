@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
 
 import formStyles from "../../styles/form.module.scss";
 
 import { setCurrentUser as setCurrentUserRedux } from "../../redux/current-user/current-user.actions";
+import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { signInOrRegister } from "../../api/api.user";
 import { setCurrentUser } from "../../local-storage/current-user";
@@ -20,9 +21,11 @@ const SignIn = ({ currentUser }) => {
 	const [passwordError, setPasswordError] = useState("");
 	const [signingIn, setSigningIn] = useState(false);
 
-	console.log(currentUser);
-
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		document.title = "Sign in to quesh";
+	}, []);
 
 	const handleFormSubmit = async (error) => {
 		error.preventDefault();
@@ -45,6 +48,7 @@ const SignIn = ({ currentUser }) => {
 
 			setCurrentUser(validationResult.user);
 			dispatch(setCurrentUserRedux(true));
+			dispatch(displayAlert("you are signed in"));
 		} catch (error) {
 			setSigningIn(false);
 		}

@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const groupSchema = new mongoose.Schema(
 	{
 		title: String,
+		about: { type: String, default: "" },
+		description: String,
 		owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 		memberJoinRequests: {
 			type: [{ type: mongoose.Schema.Types.ObjectId }],

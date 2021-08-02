@@ -1,57 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import styles from "./group.module.scss";
 
-import { setMemQues } from "../../redux/groups/groups.actions";
+import { setMemNum } from "../../redux/groups/groups.actions";
 
-import { getMemQuesNumber } from "../../api/api.group";
+import { getMemNum } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
+import { getHowLongAgo } from "../../utils/utils.date-time";
 
 import DotIndicator from "../dot-indicator/dot-indicator";
 
-const Group = ({ id, title, owner, memberJoinRequests, groupsMemQues }) => {
+const Group = ({
+	id,
+	title,
+	owner,
+	memberJoinRequests,
+	groupsMemNum,
+	createdAt,
+}) => {
 	const dispatch = useDispatch();
+
+	const history = useHistory();
 
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
-		fetchMemQuesNumber();
+		fetchMemNum();
 	}, []);
 
-	const fetchMemQuesNumber = async () => {
+	const fetchMemNum = async () => {
 		try {
-			const result = await getMemQuesNumber(id, currentUser.token);
+			const result = await getMemNum(id, currentUser.token);
 
-			dispatch(setMemQues(id, result.memNumber, result.quesNumber));
+			dispatch(setMemNum(id, result.memNum));
 		} catch (error) {
 			console.log(error);
-			dispatch(setMemQues(id, "none", "none"));
+			dispatch(setMemNum(id, "none"));
 		}
 	};
 
-	const getMemQues = (type) => {
-		const item = groupsMemQues.find((group) => group.id === id);
+	const getMemNumber = () => {
+		const item = groupsMemNum.find((group) => group.id === id);
 
-		if (type === "member") {
-			if (item) {
-				return item.membersNumber;
-			}
-
-			return null;
+		if (item) {
+			return item.memNum;
 		}
 
-		if (type === "question") {
-			if (item) {
-				return item.unsolvedQuestionsNumber;
-			}
+		return null;
+	};
 
-			return null;
-		}
+	const handleGroupClick = () => {
+		history.push(`/group/details/${id}`);
 	};
 
 	return (
-		<div className={styles.container}>
+		<div className={styles.container} onClick={handleGroupClick}>
 			<h3 className={styles.title}>{title}</h3>
 
 			<div className={styles.infoContainer}>
@@ -69,8 +74,8 @@ const Group = ({ id, title, owner, memberJoinRequests, groupsMemQues }) => {
 			<div className={styles.infoContainer}>
 				<span className={styles.infoTitle}>members</span>
 				<span className={styles.info}>
-					{getMemQues("member") !== null ? (
-						getMemQues("member")
+					{getMemNumber() !== null ? (
+						getMemNumber()
 					) : (
 						<DotIndicator />
 					)}
@@ -78,14 +83,8 @@ const Group = ({ id, title, owner, memberJoinRequests, groupsMemQues }) => {
 			</div>
 
 			<div className={styles.infoContainer}>
-				<span className={styles.infoTitle}>unsolved questions</span>
-				<span className={styles.info}>
-					{getMemQues("question") !== null ? (
-						getMemQues("question")
-					) : (
-						<DotIndicator />
-					)}
-				</span>
+				<span className={styles.infoTitle}>created</span>
+				<span className={styles.info}>{getHowLongAgo(createdAt)}</span>
 			</div>
 		</div>
 	);
@@ -93,7 +92,7 @@ const Group = ({ id, title, owner, memberJoinRequests, groupsMemQues }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		groupsMemQues: state.groups.groupsMemQues,
+		groupsMemNum: state.groups.groupsMemNum,
 	};
 };
 

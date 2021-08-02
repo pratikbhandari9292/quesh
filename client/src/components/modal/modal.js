@@ -7,7 +7,7 @@ import { setModalInfo } from "../../redux/modal/modal.actions";
 
 import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
 
-const Modal = ({ modalInfo }) => {
+const Modal = ({ modalInfo, closable }) => {
 	const { showModal, modalTitle, modalChildren } = modalInfo;
 
 	const dispatch = useDispatch();
@@ -23,7 +23,9 @@ const Modal = ({ modalInfo }) => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
-				<CrossIcon className={styles.icon} onClick={closeModal} />
+				{closable && (
+					<CrossIcon className={styles.icon} onClick={closeModal} />
+				)}
 				{modalTitle && <h3 className={styles.title}> {modalTitle} </h3>}
 				{modalChildren}
 			</div>
@@ -34,6 +36,7 @@ const Modal = ({ modalInfo }) => {
 const mapStateToProps = (state) => {
 	return {
 		modalInfo: state.modal.modalInfo,
+		closable: state.modal.closable,
 	};
 };
 

@@ -1,0 +1,36 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/box-shadows.module.scss";
+
+.container {
+	width: fit-content;
+	border: 1px solid $color-grey-lightest;
+	border-radius: 5px;
+	color: $color-grey-light;
+	max-width: 35rem;
+}
+
+.title {
+	font-weight: 500;
+	color: $color-grey-lighter;
+	border-bottom: 1px solid $color-grey-lightest;
+	background-color: $color-grey-lightest;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+	padding: 0.5rem;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.info {
+	display: flex;
+	flex-wrap: wrap;
+	border-radius: 5px;
+	padding: 0.75rem;
+	// background-color: lighten($color-grey-lightest, 2%);
+}
+
+.title,
+.info {
+}

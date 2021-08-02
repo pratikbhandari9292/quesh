@@ -2,12 +2,22 @@ import React from "react";
 
 import styles from "./page-header.module.scss";
 
-const PageHeader = ({ title, info, children }) => {
+const PageHeader = ({
+	title,
+	info,
+	bottomMargin,
+	capitalize = true,
+	children,
+}) => {
 	return (
-		<div className={styles.container}>
-			<p className={styles.title}>
-				{" "}
-				{title} <span className={styles.info}>({info})</span>{" "}
+		<div
+			className={!bottomMargin ? styles.container : styles.marginSmaller}
+		>
+			<p className={capitalize ? styles.title : styles.nonCapitalized}>
+				{title}
+				{info !== undefined && (
+					<span className={styles.info}>({info})</span>
+				)}
 			</p>
 			{children}
 		</div>

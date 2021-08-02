@@ -19,10 +19,12 @@ import Header from "./components/header/header";
 import Welcome from "./pages/welcome/welcome";
 import SignIn from "./pages/sign-in/sign-in";
 import Register from "./pages/register/register";
-import HomePage from "./pages/home-page/home-page";
 import SideBar from "./components/side-bar/side-bar";
 import Groups from "./pages/groups/groups";
 import Modal from "./components/modal/modal";
+import CreateGroup from "./pages/create-group/create-group";
+import Alert from "./components/alert/alert";
+import GroupDetails from "./pages/group-details/group-details";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -67,13 +69,11 @@ const App = ({ currentUserRedux, location, history }) => {
 		);
 	};
 
-	const currentUser = getCurrentUser();
-	console.log(currentUser);
-
 	return (
 		<div className={styles.app}>
 			<Header />
 			<Modal />
+			<Alert />
 			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
 				{renderSideBar()}
 				<Switch>
@@ -95,6 +95,12 @@ const App = ({ currentUserRedux, location, history }) => {
 						</Route>
 						<Route path="/groups/:id">
 							<Groups />
+						</Route>
+						<Route path="/group/create" exact>
+							<CreateGroup />
+						</Route>
+						<Route path="/group/details/:id">
+							<GroupDetails />
 						</Route>
 					</section>
 				</Switch>

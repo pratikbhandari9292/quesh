@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import styles from "./groups-list.module.scss";
 
@@ -9,7 +10,7 @@ import { getCurrentUser } from "../../local-storage/current-user";
 import { getUserGroups } from "../../api/api.user";
 
 import Group from "../group/group";
-import LoadingMessage from "../loading-message/loading-message";
+import StatusMessage from "../../components/status-message/status-message";
 import PageHeader from "../../components/page-header/page-header";
 import Button from "../button/button";
 
@@ -19,6 +20,8 @@ const GroupsList = ({ groups }) => {
 	const [groupsError, setGroupsError] = useState(false);
 
 	const dispatch = useDispatch();
+
+	const history = useHistory();
 
 	useEffect(() => {
 		fetchUserGroups();
@@ -36,8 +39,6 @@ const GroupsList = ({ groups }) => {
 				currentUser.token
 			);
 
-			setLoadingGroups(false);
-
 			if (result.groups) {
 				return result.groups.length > 0
 					? dispatch(setGroups(result.groups))
@@ -45,16 +46,23 @@ const GroupsList = ({ groups }) => {
 			}
 		} catch (error) {
 			setGroupsError(true);
-			setLoadingGroups(false);
-			setGroupsMessage("unable to get groups");
+			setGroupsMessage(
+				"something went wrong, maybe some network problem."
+			);
 			console.log(error);
+		} finally {
+			setLoadingGroups(false);
 		}
 	};
 
 	return (
 		<div className={styles.container}>
 			<PageHeader title="your groups" info={groups.length}>
-				<Button type="secondary" size="smaller">
+				<Button
+					type="secondary"
+					size="smaller"
+					clickHandler={() => history.push("/group/create")}
+				>
 					create group
 				</Button>
 			</PageHeader>
@@ -73,7 +81,7 @@ const GroupsList = ({ groups }) => {
 						);
 					})
 				) : (
-					<LoadingMessage
+					<StatusMessage
 						message={groupsMessage}
 						spinner={loadingGroups}
 					/>

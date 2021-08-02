@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
 	groups: [],
-	groupsMemQues: [],
+	groupsMemNum: [],
 };
 
 export const groupsReducer = (state = INITIAL_STATE, action) => {
@@ -9,15 +9,14 @@ export const groupsReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, groups: action.payload };
 		case "ADD_GROUP":
 			return { ...state, groups: [action.payload, ...state.groups] };
-		case "SET_MEM_QUES":
+		case "SET_MEM_NUM":
 			return {
 				...state,
-				groupsMemQues: [
-					...state.groupsMemQues,
+				groupsMemNum: [
+					...state.groupsMemNum,
 					{
 						id: action.payload.groupID,
-						membersNumber: action.payload.memNum,
-						unsolvedQuestionsNumber: action.payload.quesNum,
+						memNum: action.payload.memNum,
 					},
 				],
 			};

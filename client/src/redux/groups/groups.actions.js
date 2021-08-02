@@ -12,9 +12,9 @@ export const addGroup = (group) => {
 	};
 };
 
-export const setMemQues = (groupID, memNum, quesNum) => {
+export const setMemNum = (groupID, memNum) => {
 	return {
-		type: "SET_MEM_QUES",
-		payload: { groupID, memNum, quesNum },
+		type: "SET_MEM_NUM",
+		payload: { groupID, memNum },
 	};
 };
