@@ -1,0 +1,56 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
+
+.container {
+	position: relative;
+	border: 1px solid $color-grey-lighter-more;
+	border-radius: 5px;
+	padding: 0.3rem 1rem;
+	cursor: pointer;
+	transition: background-color 100ms ease-in;
+
+	&:hover {
+		border: 1px solid $color-grey-lighter;
+
+		.type {
+			color: $color-black;
+		}
+
+		svg {
+			path {
+				fill: $color-black;
+			}
+		}
+	}
+
+	&:active {
+		background-color: $color-grey-lightest;
+
+		.type {
+			color: $color-grey-light;
+		}
+
+		svg {
+			path {
+				fill: $color-black;
+			}
+		}
+	}
+}
+
+.toggleBigger {
+	padding: 0.5rem 1.5rem;
+}
+
+.type {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: $color-grey-light;
+
+	svg {
+		@extend .icon;
+		padding: 0;
+		margin-left: 0.5rem;
+	}
+}

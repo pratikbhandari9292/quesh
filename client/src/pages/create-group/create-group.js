@@ -4,12 +4,12 @@ import { useHistory } from "react-router-dom";
 
 import styles from "./create-group.module.scss";
 
-import { setModalInfo } from "../../redux/modal/modal.actions";
+import { setModalInfo, setClosable } from "../../redux/modal/modal.actions";
 import { addGroup } from "../../redux/groups/groups.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { createGroup } from "../../api/api.group";
-import { getCurrentUser } from "../../local-storage/current-user";
+import { getCurrentUser, addUserGroup } from "../../local-storage/current-user";
 
 import FormHeader from "../../components/form-header/form-header";
 import InputGroup from "../../components/input-group/input-group";
@@ -39,6 +39,7 @@ const CreateGroup = () => {
 		clearFieldErrors();
 
 		dispatch(setModalInfo(true, "creating group...", <Spinner />, false));
+		dispatch(setClosable(false));
 
 		try {
 			const result = await createGroup(currentUser.token, {
@@ -47,19 +48,20 @@ const CreateGroup = () => {
 				description: description.trim(),
 			});
 
-			dispatch(setModalInfo(false, ""));
-
 			if (result.error) {
 				console.log(result.error);
 				return setFieldErrors(result.error);
 			}
 
+			addUserGroup(result.group);
 			dispatch(addGroup(result.group));
 			dispatch(displayAlert("group has been created"));
 			history.push("/groups/me");
 		} catch (error) {
 			console.log(error);
+		} finally {
 			dispatch(setModalInfo(false, ""));
+			dispatch(setClosable(true));
 		}
 	};
 

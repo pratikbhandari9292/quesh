@@ -1,5 +1,14 @@
 const localStorage = window.localStorage;
 
+export const addUserGroup = (group) => {
+	const currentUser = getCurrentUser();
+
+	setCurrentUser({
+		...currentUser,
+		groups: [...currentUser.groups, group],
+	});
+};
+
 export const getCurrentUser = () => {
 	const currentUser = localStorage.getItem("queshUser");
 

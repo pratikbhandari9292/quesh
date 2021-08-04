@@ -1,0 +1,42 @@
+@import "../../styles/utils.module.scss";
+
+.container {
+	justify-content: space-between;
+	margin-top: -0.5rem;
+}
+
+.title {
+	font-size: 2rem;
+	color: $color-black;
+	max-width: 25rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 500;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.controls {
+	& > * {
+		margin-left: 1.5rem;
+	}
+
+	& > *:first-child {
+		margin-right: 2rem;
+	}
+}
+
+.icon {
+	@extend .iconSecondary;
+	height: 1.85rem;
+	width: 1.85rem;
+}
+
+.container,
+.controls {
+	display: flex;
+	align-items: center;
+}

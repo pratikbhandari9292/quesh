@@ -40,6 +40,7 @@ router.post("/create", auth, async (request, response) => {
 				groups: {
 					_id: String(savedGroup._id),
 					addedBy: null,
+					joinedAt: Date.now(),
 				},
 			},
 		});
@@ -430,10 +431,10 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 		const [titleResults, aboutResults] = await Promise.all([
 			Group.find({
 				title: { $regex: searchRegularExpression },
-			}),
+			}).populate("owner"),
 			Group.find({
 				about: { $regex: searchRegularExpression },
-			}),
+			}).populate("owner"),
 		]);
 
 		const groups = [...titleResults, ...aboutResults];

@@ -8,4 +8,17 @@
 	background-color: $color-grey-lightest;
 	border-radius: 5px;
 	box-shadow: $box-shadow-one;
+	z-index: 1;
+}
+
+.pointer {
+	position: absolute;
+	left: 50%;
+	top: -0.75rem;
+	transform: translateX(-50%) rotate(45deg);
+	display: inline-block;
+	height: 1.5rem;
+	width: 1.5rem;
+	background-color: $color-grey-lightest;
+	pointer-events: none;
 }

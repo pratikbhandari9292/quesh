@@ -66,6 +66,7 @@ const Header = ({ currentUserRedux }) => {
 						<GroupSearch />
 						<ProfilePreview
 							username={currentUser && currentUser.username}
+							email={currentUser && currentUser.email}
 						/>
 					</div>
 				) : (

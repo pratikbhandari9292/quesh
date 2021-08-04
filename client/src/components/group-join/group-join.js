@@ -8,7 +8,7 @@ import { addGroup } from "../../redux/groups/groups.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { joinGroup } from "../../api/api.group";
-import { getCurrentUser } from "../../local-storage/current-user";
+import { getCurrentUser, addUserGroup } from "../../local-storage/current-user";
 
 import InputGroup from "../input-group/input-group";
 import Button from "../button/button";
@@ -44,6 +44,7 @@ const GroupJoin = () => {
 				return setError(result.error);
 			}
 
+			addUserGroup(result.group);
 			dispatch(setModalInfo(false, ""));
 			dispatch(addGroup(result.group));
 			dispatch(displayAlert("you have joined the group"));

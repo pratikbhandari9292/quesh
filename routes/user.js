@@ -39,6 +39,15 @@ router.get("/:userID/groups", auth, async (request, response) => {
 			.sort({ createdAt: -1 })
 			.populate("owner");
 
+		// const groupsWithJoinedDate = groups.map((group) => {
+		// 	return {
+		// 		...group.toObject(),
+		// 		joinedAt: user.groups.find(
+		// 			(userGroup) => userGroup._id == group._id
+		// 		).joinedAt,
+		// 	};
+		// });
+
 		response.send({ groups });
 	} catch (error) {
 		response.status(500).send({ error: error.message });

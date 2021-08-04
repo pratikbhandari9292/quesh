@@ -1,0 +1,16 @@
+@import "../../styles/utils.module.scss";
+
+.container {
+	position: relative;
+}
+
+.optionsToggle {
+	position: absolute;
+	top: 4rem;
+	right: 0;
+	width: fit-content;
+}
+
+.askContainer {
+	@extend .cornerButton;
+}

@@ -57,6 +57,15 @@
 	text-transform: capitalize;
 }
 
+.email {
+	max-width: 15rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 1.55rem;
+	text-transform: lowercase;
+	padding: 2rem 0;
+}
+
 .icon {
 	@extend .icon;
 }

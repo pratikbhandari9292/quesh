@@ -11,7 +11,7 @@ import { ReactComponent as SettingsIcon } from "../../assets/icons/settings.svg"
 const SideBar = () => {
 	const [navLinks, setNavLinks] = useState([
 		{
-			title: "groups",
+			title: "group",
 			linkTo: "/groups/me",
 			icon: <GroupIcon />,
 			active: false,
@@ -45,7 +45,7 @@ const SideBar = () => {
 				if (location.pathname.includes(navLink.title)) {
 					return { ...navLink, active: true };
 				}
-				return navLink;
+				return { ...navLink, active: false };
 			})
 		);
 	}, [location]);

@@ -56,7 +56,11 @@ const Group = ({
 	};
 
 	const handleGroupClick = () => {
-		history.push(`/group/details/${id}`);
+		if (currentUser.groups.find((group) => group._id === id)) {
+			return history.push(`/group/explore/${id}`);
+		}
+
+		return history.push(`/group/details/${id}`);
 	};
 
 	return (

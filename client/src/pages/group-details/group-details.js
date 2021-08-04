@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 
 import styles from "./group-details.module.scss";
 
@@ -14,12 +15,11 @@ import GroupInfo from "../../components/group-info/group-info";
 import DotIndicator from "../../components/dot-indicator/dot-indicator";
 import MembershipStatus from "../../components/membership-status/membership-status";
 
-const GroupDetails = () => {
+const GroupDetails = ({ groups, searchResults }) => {
 	const [groupDetails, setGroupDetails] = useState(null);
 	const [loadingDetails, setLoadingDetails] = useState(false);
 	const [detailsMessage, setDetailsMessage] = useState("");
 	const [memNum, setMemNum] = useState(null);
-	const [member, setMember] = useState(false);
 
 	const params = useParams();
 
@@ -28,6 +28,20 @@ const GroupDetails = () => {
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
+		// const foundInGroups = groups.find((group) => group._id === groupID);
+
+		// if (foundInGroups) {
+		// 	return setGroupDetails(foundInGroups);
+		// }
+
+		// const foundInSearchResults = searchResults.find(
+		// 	(group) => group._id === groupID
+		// );
+
+		// if (foundInSearchResults) {
+		// 	return setGroupDetails(foundInSearchResults);
+		// }
+
 		fetchGroupDetails();
 	}, []);
 
@@ -36,14 +50,6 @@ const GroupDetails = () => {
 			document.title = capitalizeFirstLetter(groupDetails.title);
 
 			fetchMemNum();
-
-			if (
-				currentUser.groups.find(
-					(group) => group._id === groupDetails._id
-				)
-			) {
-				setMember(true);
-			}
 		}
 	}, [groupDetails]);
 
@@ -103,7 +109,8 @@ const GroupDetails = () => {
 
 					{groupDetails.about && (
 						<GroupInfo title="this group is about">
-							{getAbout(groupDetails.description)}
+							{/* {getAbout(groupDetails.description)} */}
+							{groupDetails.about}
 						</GroupInfo>
 					)}
 
@@ -125,13 +132,18 @@ const GroupDetails = () => {
 				</div>
 
 				<MembershipStatus
-					member={member}
-					groupID={groupDetails._id}
-					token={currentUser.token}
+					memberJoinRequests={groupDetails.memberJoinRequests}
 				/>
 			</div>
 		</div>
 	);
 };
 
-export default GroupDetails;
+const mapStateToProps = (state) => {
+	return {
+		groups: state.groups.groups,
+		searchResults: state.search.searchResults,
+	};
+};
+
+export default connect(mapStateToProps)(GroupDetails);
