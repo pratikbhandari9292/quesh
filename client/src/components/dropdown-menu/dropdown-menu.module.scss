@@ -4,21 +4,21 @@
 .menu {
 	position: absolute;
 	right: 0;
-	top: 4rem;
+	top: 4.35rem;
 	background-color: $color-grey-lightest;
 	border-radius: 5px;
 	box-shadow: $box-shadow-one;
-	z-index: 1;
+	z-index: 2;
 }
 
-.pointer {
+.indicator {
 	position: absolute;
 	left: 50%;
-	top: -0.75rem;
+	top: -0.5rem;
 	transform: translateX(-50%) rotate(45deg);
-	display: inline-block;
 	height: 1.5rem;
 	width: 1.5rem;
 	background-color: $color-grey-lightest;
 	pointer-events: none;
+	z-index: -1;
 }

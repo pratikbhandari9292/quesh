@@ -10,6 +10,7 @@
 	cursor: pointer;
 	white-space: nowrap;
 	color: $color-grey-light;
+	text-transform: capitalize;
 
 	svg {
 		@extend .icon;
@@ -21,7 +22,7 @@
 		text-transform: uppercase;
 	}
 
-	&:first-child {
+	&:nth-child(2) {
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 	}
@@ -29,6 +30,10 @@
 	&:last-child {
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
+	}
+
+	&:not(:first-child):not(:last-child) {
+		border-bottom: 1px solid darken($color-grey-lighter-more, 5%);
 	}
 
 	&:hover {
@@ -45,4 +50,9 @@
 	&:active {
 		background-color: darken($color-grey-lighter-more, 5%);
 	}
+}
+
+.activeItem {
+	background-color: $color-grey-lighter-more;
+	color: $color-black;
 }

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect, useDispatch } from "react-redux";
 
 import styles from "./modal.module.scss";
 
-import { setModalInfo } from "../../redux/modal/modal.actions";
+import { setModal } from "../../redux/modal/modal.actions";
 
 import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
 
@@ -13,7 +13,17 @@ const Modal = ({ modalInfo, closable }) => {
 	const dispatch = useDispatch();
 
 	const closeModal = () => {
-		dispatch(setModalInfo(false, ""));
+		dispatch(setModal(false, ""));
+	};
+
+	const handleWrapperClick = (event) => {
+		if (!closable) {
+			return;
+		}
+
+		if (event.target.id === "wrapper") {
+			closeModal();
+		}
 	};
 
 	if (!showModal) {
@@ -21,7 +31,11 @@ const Modal = ({ modalInfo, closable }) => {
 	}
 
 	return (
-		<div className={styles.wrapper}>
+		<div
+			className={styles.wrapper}
+			id="wrapper"
+			onClick={handleWrapperClick}
+		>
 			<div className={styles.container}>
 				{closable && (
 					<CrossIcon className={styles.icon} onClick={closeModal} />

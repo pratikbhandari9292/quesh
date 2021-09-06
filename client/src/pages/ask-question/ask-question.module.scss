@@ -1,0 +1,9 @@
+@import "../../styles/form.module.scss";
+
+.formContainer {
+	@extend .container;
+}
+
+.form {
+	@extend .form;
+}

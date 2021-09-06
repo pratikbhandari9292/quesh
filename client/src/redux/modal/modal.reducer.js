@@ -9,7 +9,7 @@ const INITIAL_STATE = {
 
 export const modalReducer = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case "SET_MODAL_INFO":
+		case "SET_MODAL":
 			return {
 				...state,
 				modalInfo: { ...state.modalInfo, ...action.payload },

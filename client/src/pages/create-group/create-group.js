@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import styles from "./create-group.module.scss";
 
-import { setModalInfo, setClosable } from "../../redux/modal/modal.actions";
+import { setModal, setClosable } from "../../redux/modal/modal.actions";
 import { addGroup } from "../../redux/groups/groups.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 
@@ -38,8 +38,7 @@ const CreateGroup = () => {
 
 		clearFieldErrors();
 
-		dispatch(setModalInfo(true, "creating group...", <Spinner />, false));
-		dispatch(setClosable(false));
+		dispatch(setModal(true, "creating group...", <Spinner />, false));
 
 		try {
 			const result = await createGroup(currentUser.token, {
@@ -60,7 +59,7 @@ const CreateGroup = () => {
 		} catch (error) {
 			console.log(error);
 		} finally {
-			dispatch(setModalInfo(false, ""));
+			dispatch(setModal(false, ""));
 			dispatch(setClosable(true));
 		}
 	};

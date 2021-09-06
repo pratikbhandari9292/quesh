@@ -17,15 +17,17 @@
 	&::first-letter {
 		text-transform: uppercase;
 	}
+
+	svg {
+		margin-right: 0.75rem;
+		width: 1.75rem;
+		height: 1.75rem;
+	}
 }
 
 .controls {
 	& > * {
 		margin-left: 1.5rem;
-	}
-
-	& > *:first-child {
-		margin-right: 2rem;
 	}
 }
 
@@ -36,7 +38,8 @@
 }
 
 .container,
-.controls {
+.controls,
+.title {
 	display: flex;
 	align-items: center;
 }

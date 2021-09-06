@@ -19,6 +19,7 @@ const Group = ({
 	memberJoinRequests,
 	createdAt,
 	groupsMemNum,
+	noOfMembers,
 }) => {
 	const history = useHistory();
 
@@ -82,11 +83,12 @@ const Group = ({
 			<div className={styles.infoContainer}>
 				<span className={styles.infoTitle}>members</span>
 				<span className={styles.info}>
-					{getMemNumber() !== null ? (
+					{/* {getMemNumber() !== null ? (
 						getMemNumber()
 					) : (
 						<DotIndicator />
-					)}
+					)} */}
+					{noOfMembers}
 				</span>
 			</div>
 

@@ -1,6 +1,9 @@
 const Joi = require("joi");
 
-const { checkForErrors } = require("./validation.utils");
+const { checkForErrors, getErrorMessage } = require("./validation.utils");
+
+//defining the fields for question
+const fields = [{ name: "description" }];
 
 //creating a question validation schema
 const questionValidationSchema = Joi.object({
@@ -10,7 +13,12 @@ const questionValidationSchema = Joi.object({
 const validateQuestion = (question) => {
 	const validationResult = questionValidationSchema.validate(question);
 	const error = checkForErrors(validationResult);
-	return error;
+
+	if (error) {
+		return getErrorMessage(error, fields);
+	}
+
+	return null;
 };
 
 module.exports = { validateQuestion };

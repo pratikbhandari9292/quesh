@@ -1,0 +1,66 @@
+@import "../groups-list/groups-list.module.scss";
+@import "../group/group.module.scss";
+@import "../../styles/variables.module.scss";
+
+.skeletonContainer {
+	@extend .listMain;
+
+	grid-auto-rows: 12rem;
+	padding-bottom: 1rem;
+}
+
+.skeleton {
+	@extend .cardStyles;
+
+	// animation: skeletonAnimation 1000ms ease-in infinite alternate;
+	padding: 1rem;
+	height: auto;
+}
+
+.title,
+.subInfo {
+	animation: textAnimation 1000ms ease-in infinite alternate;
+	// background-color: darken($color-grey-lighter-more, 5%);
+	border-radius: 3px;
+}
+
+.title {
+	width: 95%;
+	height: 1.75rem;
+	margin-bottom: 1.5rem;
+}
+
+.subInfo {
+	width: 75%;
+	height: 1.3rem;
+
+	&:nth-child(3) {
+		width: 55%;
+	}
+
+	&:nth-child(4) {
+		width: 70%;
+	}
+
+	&:not(:last-child) {
+		margin-bottom: 1rem;
+	}
+}
+
+@keyframes skeletonAnimation {
+	from {
+		background-color: $color-grey-lightest;
+	}
+	to {
+		background-color: $color-grey-lighter-more;
+	}
+}
+
+@keyframes textAnimation {
+	from {
+		background-color: darken($color-grey-lighter-more, 7%);
+	}
+	to {
+		background-color: $color-grey-lighter-more;
+	}
+}

@@ -1,15 +1,9 @@
 import React, { useEffect } from "react";
-import {
-	BrowserRouter,
-	Switch,
-	Route,
-	Redirect,
-	withRouter,
-} from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
-import { getCurrentUser, setCurrentUser } from "./local-storage/current-user";
+import { getCurrentUser } from "./local-storage/current-user";
 
 import "./styles/globals.scss";
 import styles from "./styles/app.module.scss";
@@ -27,6 +21,7 @@ import Alert from "./components/alert/alert";
 import GroupDetails from "./pages/group-details/group-details";
 import SearchResults from "./pages/search-results/search-results";
 import GroupExplore from "./pages/group-explore/group-explore";
+import AskQuestion from "./pages/ask-question/ask-question";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -96,7 +91,11 @@ const App = ({ currentUserRedux, location, history }) => {
 							<Register />
 						</Route>
 						<Route path="/groups/:id">
-							<Groups />
+							{currentUserRedux ? (
+								<Groups />
+							) : (
+								<Redirect to="/signin" />
+							)}
 						</Route>
 						<Route path="/group/create" exact>
 							<CreateGroup />
@@ -109,6 +108,9 @@ const App = ({ currentUserRedux, location, history }) => {
 						</Route>
 						<Route path="/search">
 							<SearchResults />
+						</Route>
+						<Route path="/group/:id/ask">
+							<AskQuestion />
 						</Route>
 					</section>
 				</Switch>

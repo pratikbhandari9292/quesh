@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import styles from "./group-join.module.scss";
 
-import { setModalInfo, setClosable } from "../../redux/modal/modal.actions";
+import { setModal, setClosable } from "../../redux/modal/modal.actions";
 import { addGroup } from "../../redux/groups/groups.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 
@@ -34,7 +34,7 @@ const GroupJoin = () => {
 		}
 
 		setJoining(true);
-
+		//cannot close modal hereafter until processing is done
 		dispatch(setClosable(false));
 
 		try {
@@ -45,15 +45,16 @@ const GroupJoin = () => {
 			}
 
 			addUserGroup(result.group);
-			dispatch(setModalInfo(false, ""));
+			dispatch(setModal(false, ""));
 			dispatch(addGroup(result.group));
 			dispatch(displayAlert("you have joined the group"));
 		} catch (error) {
 			console.log(error);
 			setError("something went wrong");
 		} finally {
-			setJoining(false);
+			//can close modal in case of errors, if joined successfully, modal will automatically close
 			dispatch(setClosable(true));
+			setJoining(false);
 		}
 	};
 

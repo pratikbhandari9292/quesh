@@ -1,5 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
+
+import { setSearchTerm } from "../../redux/search/search.actions";
 
 import PageHeader from "../../components/page-header/page-header";
 import GroupsList from "../../components/groups-list/groups-list";
@@ -10,7 +12,13 @@ const SearchResults = ({
 	searchMessage,
 	searchResults,
 }) => {
-	console.log(searchMessage);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		return () => {
+			dispatch(setSearchTerm(""));
+		};
+	}, []);
 
 	return (
 		<div>

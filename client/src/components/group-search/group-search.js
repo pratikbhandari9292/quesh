@@ -29,11 +29,11 @@ const GroupSearch = ({ searchTermRedux }) => {
 			return;
 		}
 
-		if (location.pathname.includes("search")) {
-			if (searchTerm.toLowerCase().trim() === searchTermRedux) {
-				return;
-			}
-		}
+		// if (location.pathname.includes("search")) {
+		// 	if (searchTerm.toLowerCase().trim() === searchTermRedux) {
+		// 		return;
+		// 	}
+		// }
 
 		dispatch(setSearchTermRedux(searchTerm.toLowerCase().trim()));
 		dispatch(setSearching(true));
@@ -49,6 +49,8 @@ const GroupSearch = ({ searchTermRedux }) => {
 		try {
 			const result = await searchGroup(searchTerm, currentUser.token);
 
+			dispatch(setSearchMessage(""));
+
 			if (result.error) {
 				return;
 			}
@@ -58,7 +60,7 @@ const GroupSearch = ({ searchTermRedux }) => {
 					return dispatch(setSearchResults(result.groups));
 				}
 
-				dispatch(setSearchMessage("no group found"));
+				return dispatch(setSearchMessage("no group found"));
 			}
 		} catch (error) {
 			console.log(error);

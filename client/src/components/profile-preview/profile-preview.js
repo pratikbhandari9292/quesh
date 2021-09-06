@@ -42,6 +42,7 @@ const ProfilePreview = ({ username, email }) => {
 				<span className={styles.username}>{username}</span>
 				<ChevronDownIcon className={styles.icon} />
 			</div>
+
 			<DropdownMenu show={showDropdown} clickHandler={toggleDropdown}>
 				<DropdownItem clickHandler={handleSignOutButtonClick}>
 					<SignOutIcon /> sign out

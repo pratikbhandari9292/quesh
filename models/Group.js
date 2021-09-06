@@ -15,6 +15,7 @@ const groupSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
+		noOfMembers: { type: Number, default: 0 },
 	},
 	{ timestamps: true }
 );

@@ -28,6 +28,7 @@ router.post("/create", auth, async (request, response) => {
 		...groupInfo,
 		owner: request.user,
 		joinID,
+		noOfMembers: 1,
 	});
 
 	try {
@@ -186,6 +187,9 @@ router.post("/join/:joinID", auth, async (request, response) => {
 			(requests) => requests != request.member
 		);
 
+		//incrementing the number of members in the group
+		group.noOfMembers = group.noOfMembers + 1;
+
 		//saving the group and the requesting user to the database
 		const [savedGroup, savedUser] = await Promise.all([
 			group.save(),
@@ -285,8 +289,11 @@ router.delete(
 					(group) => group._id != request.params.groupID
 				);
 
-				//saving the user to the database
-				await member.save();
+				//decrementing the number of members of the group
+				group.noOfMembers = group.noOfMembers - 1;
+
+				//saving the user and the group to the database
+				await Promise.all([member.save(), group.save()]);
 
 				return response.status(200).send({ message: "member removed" });
 			}
@@ -332,6 +339,9 @@ router.patch(
 			requestingUser.groups = requestingUser.groups.filter(
 				(group) => group._id != request.params.groupID
 			);
+
+			//decrementing the number of members of the group
+			group.noOfMembers = group.noOfMembers - 1;
 
 			//saving the group and the requesting user to the database
 			await Promise.all([group.save(), requestingUser.save()]);
@@ -438,13 +448,6 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 		]);
 
 		const groups = [...titleResults, ...aboutResults];
-
-		// const groups = await Group.find({
-		// 	$or: [
-		// 		{ title: { $regex: searchRegularExpression } },
-		// 		{ about: { $regex: searchRegularExpression } },
-		// 	],
-		// });
 
 		response.send({ groups });
 	} catch (error) {

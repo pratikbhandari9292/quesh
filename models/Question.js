@@ -8,6 +8,10 @@ const questionSchema = new mongoose.Schema(
 			type: Array,
 			default: [],
 		},
+		title: {
+			type: String,
+			default: "",
+		},
 		author: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",

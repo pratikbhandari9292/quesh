@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import styles from "./groups.module.scss";
 
-import { setModalInfo } from "../../redux/modal/modal.actions";
+import { setModal } from "../../redux/modal/modal.actions";
 import { setGroups } from "../../redux/groups/groups.actions";
 
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -24,6 +24,8 @@ const Groups = ({ groups }) => {
 
 	const history = useHistory();
 
+	const currentUser = getCurrentUser();
+
 	useEffect(() => {
 		document.title = "Groups";
 
@@ -31,20 +33,24 @@ const Groups = ({ groups }) => {
 	}, []);
 
 	const handleJoinGroupButtonClick = () => {
-		dispatch(setModalInfo(true, "", <GroupJoin />));
+		dispatch(setModal(true, "", <GroupJoin />));
 	};
 
 	const fetchUserGroups = async () => {
+		if (groups.length > 0) {
+			return;
+		}
+
 		setLoadingGroups(true);
 		setGroupsMessage("loading your groups...");
-
-		const currentUser = getCurrentUser();
 
 		try {
 			const result = await getUserGroups(
 				currentUser._id,
 				currentUser.token
 			);
+
+			setGroupsMessage("");
 
 			if (result.groups) {
 				return result.groups.length > 0
@@ -64,7 +70,7 @@ const Groups = ({ groups }) => {
 
 	return (
 		<div>
-			<PageHeader title="your groups" info={groups.length}>
+			<PageHeader title="your groups" info={currentUser.groups.length}>
 				<Button
 					type="secondary"
 					size="smaller"

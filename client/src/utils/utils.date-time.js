@@ -39,7 +39,7 @@ export const getHowLongAgo = (fullDate) => {
 	} else if (differenceInSeconds < 604800) {
 		return `${Math.round(differenceInSeconds / 86400)}d ago`;
 	} else {
-		return `${Math.round(differenceInSeconds) / 604800}w ago`;
+		return `${Math.round(differenceInSeconds / 604800)}w ago`;
 	}
 };
 

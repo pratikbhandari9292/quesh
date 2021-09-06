@@ -7,12 +7,14 @@
 	border-radius: 5px;
 	padding: 0.3rem 1rem;
 	cursor: pointer;
-	transition: background-color 100ms ease-in;
+	transition: background-color 100ms ease-in, color 100ms ease-in,
+		border 100ms ease-in;
 
 	&:hover {
 		border: 1px solid $color-grey-lighter;
+		background-color: $color-grey-lightest;
 
-		.type {
+		.optionSelected {
 			color: $color-black;
 		}
 
@@ -24,16 +26,47 @@
 	}
 
 	&:active {
-		background-color: $color-grey-lightest;
+		background-color: $color-grey-lighter-more;
 
-		.type {
+		.optionSelected {
 			color: $color-grey-light;
 		}
 
 		svg {
 			path {
-				fill: $color-black;
+				fill: $color-grey-light;
 			}
+		}
+	}
+}
+
+.containerSort {
+	border: none;
+
+	&:hover {
+		border: none;
+	}
+}
+
+.containerActive {
+	@extend .activeStyles;
+	border: 1px solid $color-grey-lighter;
+}
+
+.containerSortActive {
+	@extend .activeStyles;
+}
+
+.activeStyles {
+	background-color: $color-grey-lighter-more;
+
+	.optionSelected {
+		color: $color-black;
+	}
+
+	svg {
+		path {
+			fill: $color-black;
 		}
 	}
 }
@@ -42,7 +75,7 @@
 	padding: 0.5rem 1.5rem;
 }
 
-.type {
+.optionSelected {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -52,5 +85,11 @@
 		@extend .icon;
 		padding: 0;
 		margin-left: 0.5rem;
+	}
+}
+
+.text {
+	&::first-letter {
+		text-transform: uppercase;
 	}
 }
