@@ -401,11 +401,15 @@ router.get(
 	auth,
 	validateGroupID,
 	async (request, response) => {
+		const sortBy = request.query.sortBy;
+
 		try {
 			//getting the questions belonging to the group of the given id
 			const questions = await Question.find({
 				group: request.params.groupID,
-			});
+			})
+				.populate("author")
+				.sort({ [sortBy]: "desc" });
 
 			response.status(200).send({ questions });
 		} catch (error) {

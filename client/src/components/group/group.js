@@ -32,19 +32,19 @@ const Group = ({
 			return;
 		}
 
-		fetchMemNum();
+		// fetchMemNum();
 	}, []);
 
-	const fetchMemNum = async () => {
-		try {
-			const result = await getMemNum(id, currentUser.token);
+	// const fetchMemNum = async () => {
+	// 	try {
+	// 		const result = await getMemNum(id, currentUser.token);
 
-			dispatch(setMemNum(id, result.memNum));
-		} catch (error) {
-			console.log(error);
-			dispatch(setMemNum(id, "none"));
-		}
-	};
+	// 		dispatch(setMemNum(id, result.memNum));
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		dispatch(setMemNum(id, "none"));
+	// 	}
+	// };
 
 	const getMemNumber = () => {
 		const item = groupsMemNum.find((group) => group.id === id);
@@ -94,7 +94,9 @@ const Group = ({
 
 			<div className={styles.infoContainer}>
 				<span className={styles.infoTitle}>created</span>
-				<span className={styles.info}>{getHowLongAgo(createdAt)}</span>
+				<span className={styles.info}>
+					{getHowLongAgo(createdAt)} ago
+				</span>
 			</div>
 		</div>
 	);

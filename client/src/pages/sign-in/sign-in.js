@@ -4,7 +4,6 @@ import { useDispatch, connect } from "react-redux";
 import formStyles from "../../styles/form.module.scss";
 
 import { setCurrentUser as setCurrentUserRedux } from "../../redux/current-user/current-user.actions";
-import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { signInOrRegister } from "../../api/api.user";
 import { setCurrentUser } from "../../local-storage/current-user";
@@ -12,7 +11,6 @@ import { setCurrentUser } from "../../local-storage/current-user";
 import InputGroup from "../../components/input-group/input-group";
 import FormHeader from "../../components/form-header/form-header";
 import Button from "../../components/button/button";
-import Spinner from "../../components/spinner/spinner";
 
 const SignIn = ({ currentUser }) => {
 	const [email, setEmail] = useState("");
@@ -31,7 +29,6 @@ const SignIn = ({ currentUser }) => {
 		error.preventDefault();
 
 		setSigningIn(true);
-
 		clearFieldErrors();
 
 		try {
@@ -40,16 +37,14 @@ const SignIn = ({ currentUser }) => {
 				password,
 			});
 
-			setSigningIn(false);
-
 			if (validationResult.error) {
 				return setFieldErrors(validationResult.error);
 			}
 
 			setCurrentUser(validationResult.user);
 			dispatch(setCurrentUserRedux(true));
-			dispatch(displayAlert("you are signed in"));
 		} catch (error) {
+		} finally {
 			setSigningIn(false);
 		}
 	};
@@ -95,14 +90,8 @@ const SignIn = ({ currentUser }) => {
 					error={passwordError}
 					changeHandler={setPassword}
 				/>
-				<Button size="full">
-					{signingIn ? (
-						<React.Fragment>
-							signing in <Spinner color="white" />{" "}
-						</React.Fragment>
-					) : (
-						"sign in"
-					)}
+				<Button size="full" loading={signingIn}>
+					{signingIn ? "signing in" : "sign in"}
 				</Button>
 			</form>
 		</div>

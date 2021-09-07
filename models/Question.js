@@ -30,6 +30,8 @@ const questionSchema = new mongoose.Schema(
 			ref: "Solution",
 			default: null,
 		},
+		votes: { type: Array, default: [] },
+		votesNumber: { type: Number, default: 0 },
 	},
 	{ timestamps: true }
 );

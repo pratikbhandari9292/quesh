@@ -1,4 +1,7 @@
+import { getCurrentUser } from "../local-storage/current-user";
+
 const baseURL = "http://localhost:5000/api/group";
+const currentUser = getCurrentUser();
 
 export const getMemNum = async (groupID, token) => {
 	const result = await fetch(`${baseURL}/${groupID}/mem-num`, {
@@ -81,6 +84,23 @@ export const searchGroup = async (searchTerm, token) => {
 			"auth-token": token,
 		},
 	});
+
+	const data = await result.json();
+
+	return data;
+};
+
+export const getGroupQuestions = async (groupID, sortBy, token) => {
+	const result = await fetch(
+		`${baseURL}/${groupID}/questions/?sortBy=${
+			sortBy === "time" ? "createdAt" : "votesNumber"
+		}`,
+		{
+			headers: {
+				"auth-token": token,
+			},
+		}
+	);
 
 	const data = await result.json();
 

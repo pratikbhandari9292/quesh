@@ -17,12 +17,14 @@
 	transition: background-color 100ms ease-in, color 100ms ease-in,
 		border 100ms ease-in;
 
-	div {
-		margin-left: 1rem;
-	}
-
+	div,
 	svg {
 		margin-left: 0.75rem;
+	}
+
+	div {
+		border-color: white;
+		border-left-color: transparent;
 	}
 
 	&:hover {

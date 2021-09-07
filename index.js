@@ -28,6 +28,16 @@ app.use("/api/user", require("./routes/user"));
 //defining port number
 const port = process.env.PORT || 5000;
 
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static("client/build"));
+
+	app.get("*", (request, response) => {
+		response.sendFile(
+			path.resolve(__dirname, "client", "build", "index.html")
+		);
+	});
+}
+
 app.listen(port, () => {
 	console.log(`the server is listening at the port ${port}`);
 });

@@ -13,7 +13,6 @@ import { getCurrentUser, addUserGroup } from "../../local-storage/current-user";
 import InputGroup from "../input-group/input-group";
 import Button from "../button/button";
 import FormHeader from "../form-header/form-header";
-import Spinner from "../spinner/spinner";
 
 const GroupJoin = () => {
 	const [joinID, setJoinID] = useState("");
@@ -71,14 +70,8 @@ const GroupJoin = () => {
 					value={joinID}
 					error={error}
 				/>
-				<Button color="blue">
-					{joining ? (
-						<React.Fragment>
-							joining group <Spinner color="white" />
-						</React.Fragment>
-					) : (
-						"join group"
-					)}
+				<Button color="blue" loading={joining}>
+					{joining ? "joining group" : "join group"}
 				</Button>
 			</form>
 		</div>

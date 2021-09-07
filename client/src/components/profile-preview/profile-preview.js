@@ -28,9 +28,8 @@ const ProfilePreview = ({ username, email }) => {
 	};
 
 	const handleSignOutButtonClick = () => {
-		dispatch(setCurrentUserRedux(false));
 		dispatch(setGroups([]));
-		dispatch(setMemNum([]));
+		dispatch(setCurrentUserRedux(false));
 		setCurrentUser(null);
 		history.push("/signin");
 	};

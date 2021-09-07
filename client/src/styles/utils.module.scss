@@ -26,6 +26,28 @@
 	}
 }
 
+.iconActive {
+	@extend .icon;
+
+	path {
+		fill: $color-blue;
+	}
+
+	@extend .iconDisabled;
+}
+
+.iconDisabled {
+	cursor: auto;
+
+	&:hover {
+		background-color: transparent;
+	}
+
+	&:active {
+		background-color: transparent;
+	}
+}
+
 .cornerButton {
 	position: fixed;
 	right: 2rem;

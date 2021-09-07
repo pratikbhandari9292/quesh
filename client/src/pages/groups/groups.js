@@ -10,7 +10,7 @@ import { setGroups } from "../../redux/groups/groups.actions";
 import { getCurrentUser } from "../../local-storage/current-user";
 import { getUserGroups } from "../../api/api.user";
 
-import GroupsList from "../../components/groups-list/groups-list";
+import CardsList from "../../components/cards-list/cards-list";
 import Button from "../../components/button/button";
 import GroupJoin from "../../components/group-join/group-join";
 import PageHeader from "../../components/page-header/page-header";
@@ -80,10 +80,10 @@ const Groups = ({ groups }) => {
 				</Button>
 			</PageHeader>
 
-			<GroupsList
-				groups={groups}
-				groupsMessage={groupsMessage}
-				loadingGroups={loadingGroups}
+			<CardsList
+				list={groups}
+				listMessage={groupsMessage}
+				loadingList={loadingGroups}
 			/>
 
 			<div className={styles.joinContainer}>

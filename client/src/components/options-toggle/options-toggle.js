@@ -8,7 +8,7 @@ import { ReactComponent as SortIcon } from "../../assets/icons/sort.svg";
 import DropdownMenu from "../dropdown-menu/dropdown-menu";
 import DropdownItem from "../dropdown-item/dropdown-item";
 
-const OptionsToggle = ({ options, setOptions, type = "display", size }) => {
+const OptionsToggle = ({ options, selectHandler, type = "display", size }) => {
 	const [showDropdown, setShowDropdown] = useState(false);
 
 	const getActiveOption = () => {
@@ -17,18 +17,6 @@ const OptionsToggle = ({ options, setOptions, type = "display", size }) => {
 
 	const handleToggleClick = () => {
 		setShowDropdown(!showDropdown);
-	};
-
-	const selectOption = (option) => {
-		setOptions(
-			options.map((optionItem) => {
-				if (optionItem.option === option) {
-					return { ...optionItem, active: true };
-				}
-
-				return { ...optionItem, active: false };
-			})
-		);
 	};
 
 	return (
@@ -50,14 +38,14 @@ const OptionsToggle = ({ options, setOptions, type = "display", size }) => {
 						<DropdownItem
 							key={option.option}
 							active={option.active}
-							clickHandler={() => selectOption(option.option)}
+							clickHandler={() => selectHandler(option.option)}
 						>
 							{option.title}
 						</DropdownItem>
 					);
 				})}
 			</DropdownMenu>
-			<p className={styles.optionSelected}>
+			<div className={styles.optionSelected}>
 				{type === "display" ? (
 					<React.Fragment>
 						<p className={styles.text}>{getActiveOption()}</p>
@@ -68,7 +56,7 @@ const OptionsToggle = ({ options, setOptions, type = "display", size }) => {
 						<p className={styles.text}>sort by</p> <SortIcon />
 					</React.Fragment>
 				)}
-			</p>
+			</div>
 		</div>
 	);
 };

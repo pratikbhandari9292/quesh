@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styles from "./ask-question.module.scss";
+
+import { addGroupQuestion } from "../../redux/group-questions/group-questions.actions";
+import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { askQuestion } from "../../api/api.question";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -15,8 +19,13 @@ const AskQuestion = () => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [about, setAbout] = useState("");
+	const [descriptionError, setDescriptionError] = useState("");
+	const [asking, setAsking] = useState(false);
 
 	const params = useParams();
+	const history = useHistory();
+
+	const dispatch = useDispatch();
 
 	const groupID = params.id;
 
@@ -24,6 +33,13 @@ const AskQuestion = () => {
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
+
+		if (asking) {
+			return;
+		}
+
+		clearFieldErrors();
+		setAsking(true);
 
 		try {
 			const result = await askQuestion(
@@ -35,8 +51,28 @@ const AskQuestion = () => {
 				groupID,
 				currentUser.token
 			);
-			console.log(result);
-		} catch (error) {}
+
+			if (result.error) {
+				return setFieldErrors(result.error);
+			}
+
+			history.goBack();
+			dispatch(displayAlert("question asked"));
+			dispatch(addGroupQuestion(result.question));
+		} catch (error) {
+		} finally {
+			setAsking(false);
+		}
+	};
+
+	const setFieldErrors = (error) => {
+		if (error.includes("description")) {
+			return setDescriptionError(error);
+		}
+	};
+
+	const clearFieldErrors = () => {
+		setDescriptionError("");
 	};
 
 	return (
@@ -53,16 +89,19 @@ const AskQuestion = () => {
 					/>
 					<InputGroup
 						label="description"
-						placeholder="describe the question"
+						placeholder="decribe the problem in maximum 150 characters"
 						displayType="textarea"
 						changeHandler={setDescription}
+						error={descriptionError}
 					/>
-					<InputGroup
+					{/* <InputGroup
 						label="about"
 						placeholder="optional"
 						changeHandler={setAbout}
-					/>
-					<Button size="full">ask question</Button>
+					/> */}
+					<Button size="full" loading={asking}>
+						{asking ? "asking question" : "ask question"}
+					</Button>
 				</form>
 			</div>
 		</div>

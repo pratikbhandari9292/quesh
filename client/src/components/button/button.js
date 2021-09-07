@@ -2,11 +2,14 @@ import React from "react";
 
 import styles from "./button.module.scss";
 
+import Spinner from "../spinner/spinner";
+
 const Button = ({
 	children,
 	type = "primary",
 	color = "black",
 	size,
+	loading,
 	clickHandler,
 }) => {
 	const getClassName = () => {
@@ -41,7 +44,7 @@ const Button = ({
 
 	return (
 		<button className={getClassName()} onClick={clickHandler}>
-			{children}
+			{children} {loading && <Spinner />}
 		</button>
 	);
 };

@@ -17,14 +17,6 @@ body {
 	color: $color-black;
 	font-size: 1.7rem;
 	height: 100vh;
-
-	&::-webkit-scrollbar {
-		width: 0.7rem;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background-color: $color-grey-lighter-more;
-	}
 }
 
 h1,

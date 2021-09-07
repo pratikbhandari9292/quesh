@@ -3,11 +3,11 @@ const Joi = require("joi");
 const { checkForErrors, getErrorMessage } = require("./validation.utils");
 
 //defining the fields for question
-const fields = [{ name: "description" }];
+const fields = [{ name: "description", max: 150 }];
 
 //creating a question validation schema
 const questionValidationSchema = Joi.object({
-	description: Joi.string().required(),
+	description: Joi.string().required().max(150),
 });
 
 const validateQuestion = (question) => {

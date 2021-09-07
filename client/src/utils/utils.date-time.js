@@ -30,17 +30,21 @@ export const getHowLongAgo = (fullDate) => {
 	const difference = millisecondsNow - createdTimeMilliseconds;
 	const differenceInSeconds = Math.round(difference / 1000);
 
+	let howLongAgo = "";
+
 	if (differenceInSeconds < 60) {
-		return "few moments ago";
+		howLongAgo += "few moments";
 	} else if (differenceInSeconds < 3600) {
-		return `${Math.round(differenceInSeconds / 60)} min ago`;
+		howLongAgo += `${Math.round(differenceInSeconds / 60)} min`;
 	} else if (differenceInSeconds < 86400) {
-		return `${Math.round(differenceInSeconds / 3600)} hr ago`;
+		howLongAgo += `${Math.round(differenceInSeconds / 3600)} hr`;
 	} else if (differenceInSeconds < 604800) {
-		return `${Math.round(differenceInSeconds / 86400)}d ago`;
+		howLongAgo += `${Math.round(differenceInSeconds / 86400)}d`;
 	} else {
-		return `${Math.round(differenceInSeconds / 604800)}w ago`;
+		howLongAgo += `${Math.round(differenceInSeconds / 604800)}w`;
 	}
+
+	return howLongAgo;
 };
 
 export const getDate = (fullDate) => {

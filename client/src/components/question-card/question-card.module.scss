@@ -1,0 +1,121 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/box-shadows.module.scss";
+@import "../../styles/card.styles.scss";
+@import "../../styles/utils.module.scss";
+
+.container {
+	position: relative;
+	width: fit-content;
+}
+
+.question {
+	@extend .cardStyles;
+
+	width: 45rem;
+	box-shadow: $box-shadow-three;
+	padding: 0.75rem 1.5rem;
+
+	&:hover {
+		background-color: $color-grey-lighter-more;
+
+		.header {
+			border-bottom: 1px solid darken($color-grey-lighter-more, 5%);
+
+			& > *:first-child {
+				& > *:first-child {
+					transition: background-color 100ms ease-in;
+					background-color: darken($color-grey-lighter-more, 5%);
+				}
+			}
+		}
+
+		.body {
+			color: $color-black;
+		}
+	}
+
+	&:active {
+		background-color: darken($color-grey-lighter-more, 5%);
+
+		.header {
+			border-bottom: 1px solid $color-grey-lighter-more;
+		}
+	}
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid $color-grey-lighter-more;
+}
+
+.body {
+	padding-top: 0.75rem;
+	overflow: hidden;
+	color: $color-grey-light;
+}
+
+.title,
+.description {
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.title {
+	font-weight: 500;
+	margin-bottom: 0.5rem;
+}
+
+.description {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-height: 12rem;
+	color: inherit;
+	line-height: 1.35;
+	white-space: pre-wrap;
+}
+
+.date {
+	font-size: 1.5rem;
+	color: $color-grey-light;
+}
+
+.voteContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	right: -3rem;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.iconStyles {
+	height: 1.7rem;
+	width: 1.7rem;
+}
+
+.icon {
+	@extend .iconSecondary;
+	@extend .iconStyles;
+}
+
+.iconActive {
+	@extend .iconActive;
+	@extend .iconStyles;
+}
+
+.iconDeactivated {
+	@extend .iconStyles;
+	@extend .iconDisabled;
+}
+
+.votes {
+}
+
+.votesActive {
+	font-weight: 500;
+}

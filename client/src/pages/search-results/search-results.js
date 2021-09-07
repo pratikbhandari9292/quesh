@@ -4,7 +4,7 @@ import { connect, useDispatch } from "react-redux";
 import { setSearchTerm } from "../../redux/search/search.actions";
 
 import PageHeader from "../../components/page-header/page-header";
-import GroupsList from "../../components/groups-list/groups-list";
+import CardsList from "../../components/cards-list/cards-list";
 
 const SearchResults = ({
 	searchTerm,
@@ -30,10 +30,10 @@ const SearchResults = ({
 				color="muted"
 			/>
 
-			<GroupsList
-				groups={searchResults}
-				groupsMessage={searchMessage}
-				loadingGroups={searching}
+			<CardsList
+				list={searchResults}
+				listMessage={searchMessage}
+				loadingList={searching}
 			/>
 		</div>
 	);

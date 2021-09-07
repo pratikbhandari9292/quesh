@@ -8,7 +8,6 @@ import { signInOrRegister } from "../../api/api.user";
 import FormHeader from "../../components/form-header/form-header";
 import InputGroup from "../../components/input-group/input-group";
 import Button from "../../components/button/button";
-import Spinner from "../../components/spinner/spinner";
 
 const Register = () => {
 	const [username, setUsername] = useState("");
@@ -47,16 +46,15 @@ const Register = () => {
 				password,
 			});
 
-			setRegistering(false);
-
 			if (validationResult.error) {
 				return setFieldErrors(validationResult.error);
 			}
 
 			history.push("/signin");
 		} catch (error) {
-			setRegistering(false);
 			console.log(error);
+		} finally {
+			setRegistering(false);
 		}
 	};
 
@@ -118,14 +116,8 @@ const Register = () => {
 					error={repeatedPasswordError}
 					changeHandler={setRepeatedPassword}
 				/>
-				<Button size="full">
-					{registering ? (
-						<React.Fragment>
-							registering <Spinner color="white" />{" "}
-						</React.Fragment>
-					) : (
-						"register"
-					)}
+				<Button size="full" loading={registering}>
+					{registering ? "registering" : "register"}
 				</Button>
 			</form>
 		</div>

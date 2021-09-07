@@ -8,6 +8,7 @@ import { getCurrentUser } from "../../local-storage/current-user";
 import GroupHeader from "../../components/group-header/group-header";
 import OptionsToggle from "../../components/options-toggle/options-toggle";
 import Button from "../../components/button/button";
+import GroupQuestions from "../../components/group-questions/group-questions";
 
 const GroupExplore = () => {
 	const [toggleOptions, setToggleOptions] = useState([
@@ -42,12 +43,16 @@ const GroupExplore = () => {
 	return (
 		<div className={styles.container}>
 			<GroupHeader />
+
 			<div className={styles.optionsToggle}>
 				<OptionsToggle
 					options={toggleOptions}
 					setOptions={setToggleOptions}
 				/>
 			</div>
+
+			<GroupQuestions />
+
 			<div className={styles.askContainer}>
 				<Button color="blue" clickHandler={handleAskButtonClick}>
 					Ask Question

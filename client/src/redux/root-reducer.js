@@ -5,6 +5,7 @@ import { groupsReducer } from "./groups/groups.reducer";
 import { modalReducer } from "./modal/modal.reducer";
 import { alertReducer } from "./alert/alert.reducer";
 import { searchReducer } from "./search/search.reducer";
+import { groupQuestionsReducer } from "./group-questions/group-questions.reducer";
 
 export default combineReducers({
 	currentUser: currentUserReducer,
@@ -12,4 +13,5 @@ export default combineReducers({
 	modal: modalReducer,
 	alert: alertReducer,
 	search: searchReducer,
+	groupQuestions: groupQuestionsReducer,
 });
