@@ -1,4 +1,5 @@
-const baseURL = "http://localhost:5000/api/user";
+// const baseURL = "http://localhost:5000/api/user";
+const baseURL = "/api/user";
 
 export const signInOrRegister = async (type, userInfo) => {
 	const result = await fetch(`${baseURL}/${type}`, {

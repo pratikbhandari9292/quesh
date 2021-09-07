@@ -1,6 +1,7 @@
 import { getCurrentUser } from "../local-storage/current-user";
 
-const baseURL = "http://localhost:5000/api/group";
+// const baseURL = "http://localhost:5000/api/group";
+const baseURL = "/api/group";
 const currentUser = getCurrentUser();
 
 export const getMemNum = async (groupID, token) => {
