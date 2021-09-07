@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 require("dotenv").config();
 const cors = require("cors");
 
@@ -25,9 +26,6 @@ app.use("/api/question", require("./routes/question"));
 app.use("/api/solution", require("./routes/solution"));
 app.use("/api/user", require("./routes/user"));
 
-//defining port number
-const port = process.env.PORT || 5000;
-
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static("client/build"));
 
@@ -37,6 +35,9 @@ if (process.env.NODE_ENV === "production") {
 		);
 	});
 }
+
+//defining port number
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
 	console.log(`the server is listening at the port ${port}`);
