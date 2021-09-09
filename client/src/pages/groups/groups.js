@@ -5,21 +5,22 @@ import { useHistory } from "react-router-dom";
 import styles from "./groups.module.scss";
 
 import { setModal } from "../../redux/modal/modal.actions";
-import { setGroups } from "../../redux/groups/groups.actions";
+import {
+	setGroups,
+	setLoadingGroups,
+	setGroupsMessage,
+	setNeedToFetch,
+} from "../../redux/groups/groups.actions";
 
 import { getCurrentUser } from "../../local-storage/current-user";
-import { getUserGroups } from "../../api/api.user";
+import { getUserGroups } from "../../api/api.group";
 
 import CardsList from "../../components/cards-list/cards-list";
 import Button from "../../components/button/button";
 import GroupJoin from "../../components/group-join/group-join";
 import PageHeader from "../../components/page-header/page-header";
 
-const Groups = ({ groups }) => {
-	const [loadingGroups, setLoadingGroups] = useState(false);
-	const [groupsMessage, setGroupsMessage] = useState("");
-	const [groupsError, setGroupsError] = useState(false);
-
+const Groups = ({ groups, loadingGroups, groupsMessage, needToFetch }) => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
@@ -37,12 +38,12 @@ const Groups = ({ groups }) => {
 	};
 
 	const fetchUserGroups = async () => {
-		if (groups.length > 0) {
+		if (!needToFetch) {
 			return;
 		}
 
-		setLoadingGroups(true);
-		setGroupsMessage("loading your groups...");
+		dispatch(setLoadingGroups(true));
+		dispatch(setGroupsMessage("loading your groups..."));
 
 		try {
 			const result = await getUserGroups(
@@ -50,21 +51,27 @@ const Groups = ({ groups }) => {
 				currentUser.token
 			);
 
-			setGroupsMessage("");
+			dispatch(setGroupsMessage(""));
 
 			if (result.groups) {
+				dispatch(setNeedToFetch(false));
 				return result.groups.length > 0
 					? dispatch(setGroups(result.groups))
-					: setGroupsMessage("you are not a member of any group");
+					: dispatch(
+							setGroupsMessage(
+								"you are not a member of any group"
+							)
+					  );
 			}
 		} catch (error) {
-			setGroupsError(true);
-			setGroupsMessage(
-				"something went wrong, maybe some network problem."
+			dispatch(
+				setGroupsMessage(
+					"something went wrong, maybe some network problem."
+				)
 			);
 			console.log(error);
 		} finally {
-			setLoadingGroups(false);
+			dispatch(setLoadingGroups(false));
 		}
 	};
 
@@ -98,6 +105,9 @@ const Groups = ({ groups }) => {
 const mapStateToProps = (state) => {
 	return {
 		groups: state.groups.groups,
+		loadingGroups: state.groups.loadingGroups,
+		groupsMessage: state.groups.groupsMessage,
+		needToFetch: state.groups.needToFetch,
 	};
 };
 

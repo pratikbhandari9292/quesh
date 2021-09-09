@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 
 import styles from "./group-details.module.scss";
 
-import { getGroupDetails, getMemNum } from "../../api/api.group";
+import { getGroupDetails } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
 import { getDate } from "../../utils/utils.date-time";
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
@@ -28,28 +28,12 @@ const GroupDetails = ({ groups, searchResults }) => {
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
-		// const foundInGroups = groups.find((group) => group._id === groupID);
-
-		// if (foundInGroups) {
-		// 	return setGroupDetails(foundInGroups);
-		// }
-
-		// const foundInSearchResults = searchResults.find(
-		// 	(group) => group._id === groupID
-		// );
-
-		// if (foundInSearchResults) {
-		// 	return setGroupDetails(foundInSearchResults);
-		// }
-
 		fetchGroupDetails();
 	}, []);
 
 	useEffect(() => {
 		if (groupDetails) {
 			document.title = capitalizeFirstLetter(groupDetails.title);
-
-			fetchMemNum();
 		}
 	}, [groupDetails]);
 
@@ -67,17 +51,6 @@ const GroupDetails = ({ groups, searchResults }) => {
 			setGroupDetails(result.group);
 		} catch (error) {
 			console.log(error);
-		}
-	};
-
-	const fetchMemNum = async () => {
-		try {
-			const result = await getMemNum(groupDetails._id, currentUser.token);
-
-			setMemNum(result.memNum);
-		} catch (error) {
-			console.log(error);
-			setMemNum("none");
 		}
 	};
 

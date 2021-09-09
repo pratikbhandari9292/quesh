@@ -1,6 +1,8 @@
 const INITIAL_STATE = {
 	groups: [],
-	groupsMemNum: [],
+	loadingGroups: false,
+	groupsMessage: "",
+	needToFetch: true,
 };
 
 export const groupsReducer = (state = INITIAL_STATE, action) => {
@@ -9,21 +11,23 @@ export const groupsReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, groups: action.payload };
 		case "ADD_GROUP":
 			return { ...state, groups: [action.payload, ...state.groups] };
-		case "SET_MEM_NUM":
+		case "UPDATE_GROUP":
 			return {
 				...state,
-				groupsMemNum: state.groupsMemNum.find(
-					(group) => group.id === action.payload.groupID
-				)
-					? state.groupsMemNum
-					: [
-							...state.groupsMemNum,
-							{
-								id: action.payload.groupID,
-								memNum: action.payload.memNum,
-							},
-					  ],
+				groups: state.groups.map((group) => {
+					if (group._id === action.payload.groupID) {
+						return { ...group, ...action.payload.updateInfo };
+					}
+
+					return group;
+				}),
 			};
+		case "SET_LOADING_GROUPS":
+			return { ...state, loadingGroups: action.payload };
+		case "SET_GROUPS_MESSAGE":
+			return { ...state, groupsMessage: action.payload };
+		case "SET_NEED_TO_FETCH":
+			return { ...state, needToFetch: action.payload };
 		default:
 			return state;
 	}

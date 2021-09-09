@@ -23,7 +23,6 @@
 
 			& > *:first-child {
 				& > *:first-child {
-					transition: background-color 100ms ease-in;
 					background-color: darken($color-grey-lighter-more, 5%);
 				}
 			}

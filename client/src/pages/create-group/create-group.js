@@ -89,7 +89,7 @@ const CreateGroup = () => {
 
 	return (
 		<div className={styles.container}>
-			<FormHeader heading="create a new group" />
+			<FormHeader heading="create a new group" backArrow={true} />
 			<form className={styles.form} onSubmit={handleFormSubmit}>
 				<InputGroup
 					label="title"

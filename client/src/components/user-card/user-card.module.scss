@@ -1,0 +1,55 @@
+@import "../../styles/card.styles.scss";
+@import "../../styles/variables.module.scss";
+
+.userCard {
+	@extend .cardStyles;
+
+	max-width: 40rem;
+
+	&:hover {
+		background-color: $color-grey-lightest;
+		// .username {
+		// 	color: $color-black;
+		// }
+
+		// & > *:first-child {
+		// 	background-color: darken($color-grey-lighter-more, 5%);
+		// }
+	}
+}
+
+.user,
+.controls {
+	display: flex;
+	align-items: center;
+}
+
+.userInfo {
+	margin-left: 0.75rem;
+}
+
+.username,
+.email {
+	color: $color-grey-light;
+}
+
+.username {
+	font-size: 1.75rem;
+	font-weight: 500;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.email {
+}
+
+.controls {
+	margin-top: 1.5rem;
+	padding-left: 1.5rem;
+
+	& > *:first-child {
+		margin-right: 1.5rem;
+	}
+}

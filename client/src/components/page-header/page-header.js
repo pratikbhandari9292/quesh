@@ -30,7 +30,7 @@ const PageHeader = ({
 				{info !== undefined && (
 					<span className={styles.info}>({info})</span>
 				)}
-				{term && <span className={styles.term}>{term}</span>}
+				{term && <p className={styles.term}>{term}</p>}
 			</p>
 			{children}
 		</div>

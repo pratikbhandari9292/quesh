@@ -25,12 +25,6 @@
 				fill: $color-black;
 			}
 		}
-
-		div {
-			span {
-				color: $color-black;
-			}
-		}
 	}
 
 	&:active {
@@ -42,10 +36,6 @@
 			path {
 				fill: $color-grey-light;
 			}
-		}
-
-		div {
-			background-color: darken($color-grey-lighter-more, 5%);
 		}
 	}
 }

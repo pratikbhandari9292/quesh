@@ -1,8 +1,18 @@
-import { getCurrentUser } from "../local-storage/current-user";
+const baseURL = "http://localhost:5000/api/group";
+// const baseURL = "/api/group";
 
-// const baseURL = "http://localhost:5000/api/group";
-const baseURL = "/api/group";
-const currentUser = getCurrentUser();
+export const getUserGroups = async (userID, token) => {
+	const result = await fetch(`${baseURL}/${userID}/groups`, {
+		headers: {
+			"Content-Type": "application/json",
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};
 
 export const getMemNum = async (groupID, token) => {
 	const result = await fetch(`${baseURL}/${groupID}/mem-num`, {
@@ -97,6 +107,27 @@ export const getGroupQuestions = async (groupID, sortBy, token) => {
 			sortBy === "time" ? "createdAt" : "votesNumber"
 		}`,
 		{
+			headers: {
+				"auth-token": token,
+			},
+		}
+	);
+
+	const data = await result.json();
+
+	return data;
+};
+
+export const acceptOrRejectJoinRequest = async (
+	groupID,
+	action,
+	requestUserID,
+	token
+) => {
+	const result = await fetch(
+		`${baseURL}/${groupID}/request/?action=${action}&requestUserID=${requestUserID}`,
+		{
+			method: "PATCH",
 			headers: {
 				"auth-token": token,
 			},

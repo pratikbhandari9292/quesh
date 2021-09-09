@@ -9,16 +9,7 @@
 	width: 3.5rem;
 	border-radius: 50%;
 	cursor: pointer;
-
-	&:hover {
-		.text {
-			color: $color-black;
-		}
-	}
-
-	&:active {
-		background-color: darken($color-grey-lighter-more, 5%);
-	}
+	transition: background-color 100ms ease-in;
 }
 
 .containerSmaller {

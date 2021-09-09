@@ -22,6 +22,8 @@ import GroupDetails from "./pages/group-details/group-details";
 import SearchResults from "./pages/search-results/search-results";
 import GroupExplore from "./pages/group-explore/group-explore";
 import AskQuestion from "./pages/ask-question/ask-question";
+import GroupHeader from "./components/group-header/group-header";
+import JoinRequests from "./pages/join-requests/join-requests";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -100,10 +102,16 @@ const App = ({ currentUserRedux, location, history }) => {
 						<Route path="/group/create" exact>
 							<CreateGroup />
 						</Route>
-						<Route path="/group/details/:id">
+						<Route path="/group/:id/details">
 							<GroupDetails />
 						</Route>
-						<Route path="/group/explore/:id">
+						<Route path="/group/:id/">
+							{!location.pathname.includes("details") &&
+								!location.pathname.includes("create") && (
+									<GroupHeader />
+								)}
+						</Route>
+						<Route path="/group/:id/explore">
 							<GroupExplore />
 						</Route>
 						<Route path="/search">
@@ -111,6 +119,13 @@ const App = ({ currentUserRedux, location, history }) => {
 						</Route>
 						<Route path="/group/:id/ask">
 							<AskQuestion />
+						</Route>
+						<Route path="/group/:id/join-requests">
+							{currentUserRedux ? (
+								<JoinRequests />
+							) : (
+								<Redirect to="/signin" />
+							)}
 						</Route>
 					</section>
 				</Switch>

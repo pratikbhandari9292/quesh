@@ -9,11 +9,12 @@
 .title {
 	font-size: 2rem;
 	color: $color-black;
-	max-width: 25rem;
+	max-width: 35rem;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-weight: 500;
+	color: $color-grey-light;
 
 	&::first-letter {
 		text-transform: uppercase;

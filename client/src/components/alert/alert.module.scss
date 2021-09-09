@@ -1,7 +1,11 @@
 @import "../../styles/variables.module.scss";
 @import "../../styles/box-shadows.module.scss";
+@import "../../styles/utils.module.scss";
 
 .alert {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: fixed;
 	left: 50%;
 	top: 1rem;
@@ -15,10 +19,25 @@
 	&::first-letter {
 		text-transform: uppercase;
 	}
+
+	svg {
+		@extend .icon;
+
+		margin-right: 0.75rem;
+	}
 }
 
 .alertFailure {
 	@extend .alert;
 
 	background-color: $color-red;
+
+	svg {
+		height: 1.75rem;
+		width: 1.75rem;
+
+		path {
+			fill: $color-black;
+		}
+	}
 }

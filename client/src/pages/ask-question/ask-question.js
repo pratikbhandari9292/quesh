@@ -10,7 +10,6 @@ import { displayAlert } from "../../redux/alert/alert.actions";
 import { askQuestion } from "../../api/api.question";
 import { getCurrentUser } from "../../local-storage/current-user";
 
-import GroupHeader from "../../components/group-header/group-header";
 import FormHeader from "../../components/form-header/form-header";
 import InputGroup from "../../components/input-group/input-group";
 import Button from "../../components/button/button";
@@ -77,8 +76,6 @@ const AskQuestion = () => {
 
 	return (
 		<div>
-			<GroupHeader />
-
 			<div className={styles.formContainer}>
 				<FormHeader heading="ask a question" />
 				<form className={styles.form} onSubmit={handleFormSubmit}>

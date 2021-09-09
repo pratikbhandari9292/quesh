@@ -1,39 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useDispatch, connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import styles from "./group.module.scss";
+import styles from "./group-card.module.scss";
 
-import { setMemNum } from "../../redux/groups/groups.actions";
-
-import { getMemNum } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
 import { getHowLongAgo } from "../../utils/utils.date-time";
 
-import DotIndicator from "../dot-indicator/dot-indicator";
+const GroupCard = (props) => {
+	const {
+		groupID,
+		title,
+		owner,
+		memberJoinRequests,
+		createdAt,
+		noOfMembers,
+	} = props;
 
-const Group = ({
-	id,
-	title,
-	owner,
-	memberJoinRequests,
-	createdAt,
-	groupsMemNum,
-	noOfMembers,
-}) => {
 	const history = useHistory();
 
 	const dispatch = useDispatch();
 
 	const currentUser = getCurrentUser();
-
-	useEffect(() => {
-		if (getMemNumber()) {
-			return;
-		}
-
-		// fetchMemNum();
-	}, []);
 
 	// const fetchMemNum = async () => {
 	// 	try {
@@ -46,22 +34,12 @@ const Group = ({
 	// 	}
 	// };
 
-	const getMemNumber = () => {
-		const item = groupsMemNum.find((group) => group.id === id);
-
-		if (item) {
-			return item.memNum;
-		}
-
-		return null;
-	};
-
 	const handleGroupClick = () => {
-		if (currentUser.groups.find((group) => group._id === id)) {
-			return history.push(`/group/explore/${id}`);
+		if (currentUser.groups.find((group) => group._id === groupID)) {
+			return history.push(`/group/${groupID}/explore`);
 		}
 
-		return history.push(`/group/details/${id}`);
+		return history.push(`/group/${groupID}/details`);
 	};
 
 	return (
@@ -108,4 +86,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(Group);
+export default connect(mapStateToProps)(GroupCard);

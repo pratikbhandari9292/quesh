@@ -2,12 +2,19 @@ import React from "react";
 
 import styles from "./cards-list.module.scss";
 
-import Group from "../group/group";
+import GroupCard from "../group-card/group-card";
 import StatusMessage from "../status-message/status-message";
 import CardsSkeleton from "../cards-skeleton/cards-skeleton";
 import QuestionCard from "../question-card/question-card";
+import UserCard from "../user-card/user-card";
 
-const CardsList = ({ list, listMessage, loadingList, type = "group" }) => {
+const CardsList = ({
+	list,
+	listMessage,
+	loadingList,
+	type = "group",
+	userCardType,
+}) => {
 	if (loadingList) {
 		return <CardsSkeleton type={type} />;
 	}
@@ -28,25 +35,43 @@ const CardsList = ({ list, listMessage, loadingList, type = "group" }) => {
 		return type === "group" ? styles.groupsList : styles.questionsList;
 	};
 
-	return (
-		<div className={styles.container}>
-			<div className={getClassName()}>
-				{list.map((listItem) => {
-					return type === "group" ? (
-						<Group
+	const renderCards = () => {
+		return list.map((listItem) => {
+			switch (type) {
+				case "group":
+					return (
+						<GroupCard
 							{...listItem}
-							id={listItem._id}
+							groupID={listItem._id}
 							key={listItem._id}
 						/>
-					) : (
+					);
+				case "question":
+					return (
 						<QuestionCard
 							{...listItem}
 							questionID={listItem._id}
 							key={listItem._id}
 						/>
 					);
-				})}
-			</div>
+				case "user":
+					return (
+						<UserCard
+							{...listItem}
+							userID={listItem._id}
+							key={listItem._id}
+							type={userCardType}
+						/>
+					);
+				default:
+					return null;
+			}
+		});
+	};
+
+	return (
+		<div className={styles.container}>
+			<div className={getClassName()}>{renderCards()}</div>
 		</div>
 	);
 };

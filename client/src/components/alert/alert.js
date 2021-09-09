@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 
 import styles from "./alert.module.scss";
 
+import { ReactComponent as TickIcon } from "../../assets/icons/tick.svg";
+import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
+
 const Alert = ({ alertInfo }) => {
 	const { showAlert, alertText, success } = alertInfo;
-
-	console.log(showAlert);
 
 	if (!showAlert) {
 		return null;
@@ -14,7 +15,7 @@ const Alert = ({ alertInfo }) => {
 
 	return (
 		<div className={success ? styles.alert : styles.alertFailure}>
-			{alertText}
+			{success ? <TickIcon /> : <CrossIcon />} {alertText}
 		</div>
 	);
 };

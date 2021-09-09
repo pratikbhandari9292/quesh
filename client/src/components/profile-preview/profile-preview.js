@@ -5,7 +5,11 @@ import { useHistory } from "react-router-dom";
 import styles from "./profile-preview.module.scss";
 
 import { setCurrentUser as setCurrentUserRedux } from "../../redux/current-user/current-user.actions";
-import { setGroups, setMemNum } from "../../redux/groups/groups.actions";
+import {
+	setGroups,
+	setMemNum,
+	setNeedToFetch,
+} from "../../redux/groups/groups.actions";
 
 import { setCurrentUser } from "../../local-storage/current-user";
 
@@ -29,6 +33,7 @@ const ProfilePreview = ({ username, email }) => {
 
 	const handleSignOutButtonClick = () => {
 		dispatch(setGroups([]));
+		dispatch(setNeedToFetch(true));
 		dispatch(setCurrentUserRedux(false));
 		setCurrentUser(null);
 		history.push("/signin");

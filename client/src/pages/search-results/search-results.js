@@ -1,24 +1,64 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 
-import { setSearchTerm } from "../../redux/search/search.actions";
+import { setGroups, setNeedToFetch } from "../../redux/groups/groups.actions";
+
+import {
+	setSearching,
+	setSearchMessage,
+	setSearchTerm,
+} from "../../redux/search/search.actions";
+
+import { searchGroup } from "../../api/api.group";
+import { getCurrentUser } from "../../local-storage/current-user";
 
 import PageHeader from "../../components/page-header/page-header";
 import CardsList from "../../components/cards-list/cards-list";
 
-const SearchResults = ({
-	searchTerm,
-	searching,
-	searchMessage,
-	searchResults,
-}) => {
+const SearchResults = ({ groups, searching, searchMessage, searchTerm }) => {
+	const [searchResults, setSearchResults] = useState([]);
+
 	const dispatch = useDispatch();
+
+	const currentUser = getCurrentUser();
+
+	useEffect(() => {
+		fetchSearchResults();
+	}, [searchTerm]);
 
 	useEffect(() => {
 		return () => {
 			dispatch(setSearchTerm(""));
 		};
 	}, []);
+
+	const fetchSearchResults = async () => {
+		dispatch(setSearching(true));
+
+		try {
+			const result = await searchGroup(searchTerm, currentUser.token);
+
+			dispatch(setSearchMessage(""));
+
+			if (result.error) {
+				return;
+			}
+
+			if (result.groups) {
+				if (result.groups.length > 0) {
+					setSearchResults(result.groups);
+					dispatch(setNeedToFetch(true));
+					return dispatch(setGroups(result.groups));
+				}
+
+				return dispatch(setSearchMessage("no group found"));
+			}
+		} catch (error) {
+			dispatch(setSearchMessage("something went wrong"));
+		} finally {
+			dispatch(setSearching(false));
+		}
+	};
 
 	return (
 		<div>
@@ -41,10 +81,10 @@ const SearchResults = ({
 
 const mapStateToProps = (state) => {
 	return {
-		searchTerm: state.search.searchTerm,
+		groups: state.groups.groups,
 		searching: state.search.searching,
 		searchMessage: state.search.searchMessage,
-		searchResults: state.search.searchResults,
+		searchTerm: state.search.searchTerm,
 	};
 };
 

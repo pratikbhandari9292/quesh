@@ -70,6 +70,39 @@ router.get("/:groupID", auth, async (request, response) => {
 	}
 });
 
+//get the groups of a user
+router.get("/:userID/groups", auth, async (request, response) => {
+	try {
+		//checking to see if the user exists
+		const user = await User.findById(request.params.userID);
+
+		if (!user) {
+			return response.status(400).send({ error: "user not found" });
+		}
+
+		//getting the groups that the user is a member of
+		const groups = await Group.find({
+			_id: { $in: user.groups.map((group) => group._id) },
+		})
+			.sort({ createdAt: -1 })
+			.populate("owner")
+			.populate("memberJoinRequests", { _id: 1, username: 1, email: 1 });
+
+		// const groupsWithJoinedDate = groups.map((group) => {
+		// 	return {
+		// 		...group.toObject(),
+		// 		joinedAt: user.groups.find(
+		// 			(userGroup) => userGroup._id == group._id
+		// 		).joinedAt,
+		// 	};
+		// });
+
+		response.send({ groups });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
+
 //get the number of members and the number of unsolved questions of a group
 router.get(
 	"/:groupID/mem-num",
@@ -247,6 +280,56 @@ router.post(
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}
+	}
+);
+
+//accept or reject a join request
+router.patch(
+	"/:groupID/request",
+	auth,
+	validateGroupID,
+	async (request, response) => {
+		const action = request.query.action;
+		const group = request.group;
+		const requestUserID = request.query.requestUserID;
+		let requestUser = null;
+
+		if (action === "accept") {
+			//getting the user that sent the join request
+			requestUser = await User.findById(requestUserID);
+
+			if (!requestUser) {
+				return response.send({ error: "user not found" });
+			}
+
+			if (
+				requestUser.groups.find(
+					(groupInner) => groupInner._id == group._id
+				)
+			) {
+				return response.send({ error: "already a member" });
+			}
+
+			requestUser.groups.push({
+				_id: String(group._id),
+				addedBy: request.user,
+				joinedAt: Date.now(),
+			});
+
+			group.noOfMembers = group.noOfMembers + 1;
+		}
+
+		group.memberJoinRequests = group.memberJoinRequests.filter(
+			(joinRequest) => joinRequest._id != requestUserID
+		);
+
+		//saving the user and the group to the database
+		const [savedGroup, savedUser] = await Promise.all([
+			group.save(),
+			requestUser ? requestUser.save() : null,
+		]);
+
+		response.send({ group: savedGroup });
 	}
 );
 
@@ -467,6 +550,8 @@ async function validateGroupID(request, response, next) {
 	if (!group) {
 		return response.status(400).send({ error: "group does not exist" });
 	}
+
+	request.group = group;
 
 	next();
 }
