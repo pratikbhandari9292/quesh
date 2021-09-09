@@ -81,6 +81,14 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 		if (pathname.includes("notifications")) {
 			return setGroupSubtitle("notifications");
 		}
+
+		if (pathname.includes("select")) {
+			return setGroupSubtitle("select users");
+		}
+
+		if (pathname.includes("finalize")) {
+			return setGroupSubtitle("finalize users");
+		}
 	}, [location]);
 
 	const handleBackClick = () => {
@@ -93,13 +101,15 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 
 	return (
 		<div className={styles.container}>
-			<p className={styles.title}>
-				<ArrowLeftIcon
-					className={styles.icon}
-					onClick={handleBackClick}
-				/>
+			<div className={styles.title}>
+				<div className={styles.iconContainer}>
+					<ArrowLeftIcon
+						className={styles.icon}
+						onClick={handleBackClick}
+					/>
+				</div>
 				{`${capitalizeFirstLetter(groupTitle)} - ${groupSubtitle}`}
-			</p>
+			</div>
 			<div className={styles.controls}>
 				{!location.pathname.includes("ask") && (
 					<OptionsToggle
@@ -116,7 +126,14 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 						return history.push(`/group/${groupID}/join-requests`);
 					}}
 				/>
-				<UserAddIcon className={styles.icon} />
+				<UserAddIcon
+					className={styles.icon}
+					onClick={() => {
+						return history.push(
+							`/group/${groupID}/add-members/select`
+						);
+					}}
+				/>
 			</div>
 		</div>
 	);

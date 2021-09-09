@@ -2,8 +2,8 @@
 
 .container {
 	justify-content: space-between;
-	height: 3rem;
-	padding-bottom: 1.5rem;
+	height: 4rem;
+	padding-bottom: 2.5rem;
 }
 
 .title {
@@ -19,6 +19,11 @@
 	&::first-letter {
 		text-transform: uppercase;
 	}
+}
+
+.iconContainer {
+	display: flex;
+	align-items: center;
 
 	svg {
 		margin-right: 0.75rem;

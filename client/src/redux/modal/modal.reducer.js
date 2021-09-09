@@ -13,6 +13,7 @@ export const modalReducer = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				modalInfo: { ...state.modalInfo, ...action.payload },
+				closable: action.payload.closable,
 			};
 		case "SET_CLOSABLE":
 			return {

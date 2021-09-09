@@ -48,6 +48,13 @@
 	}
 }
 
+.iconSmaller {
+	@extend .icon;
+
+	height: 1.75rem;
+	width: 1.75rem;
+}
+
 .cornerButton {
 	position: fixed;
 	right: 2rem;

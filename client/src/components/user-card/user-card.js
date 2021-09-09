@@ -1,90 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import styles from "./user-card.module.scss";
 
-import { displayAlert } from "../../redux/alert/alert.actions";
-import { updateGroup } from "../../redux/groups/groups.actions";
-
-import { acceptOrRejectJoinRequest } from "../../api/api.group";
-import { getCurrentUser } from "../../local-storage/current-user";
-
 import ProfilePicture from "../profile-picture/profile-picture";
-import Button from "../button/button";
+import RequestControls from "./request-controls/request-controls";
+import SelectControl from "./select-control/select-control";
 
-const UserCard = ({ userID, username, email, type }) => {
-	const [accepting, setAccepting] = useState(false);
-	const [rejecting, setRejecting] = useState(false);
-
+const UserCard = ({ userID, username, email, groups, type }) => {
 	const params = useParams();
 
 	const groupID = params.id;
 
-	const currentUser = getCurrentUser();
-
-	const dispatch = useDispatch();
-
 	const renderUserControls = () => {
 		switch (type) {
 			case "join-request":
+				return <RequestControls userID={userID} />;
+			case "select":
 				return (
-					<React.Fragment>
-						<Button
-							color="blue"
-							size="smaller"
-							loading={accepting}
-							clickHandler={() => {
-								handleAcceptOrRejectClick("accept");
-							}}
-						>
-							{accepting ? "accepting" : "accept"}
-						</Button>
-						<Button
-							size="smaller"
-							loading={rejecting}
-							clickHandler={() => {
-								handleAcceptOrRejectClick("reject");
-							}}
-						>
-							{rejecting ? "rejecting" : "reject"}
-						</Button>
-					</React.Fragment>
+					<SelectControl
+						user={{ userID, username, email, groups }}
+						groupID={groupID}
+					/>
 				);
 			default:
 				return null;
-		}
-	};
-
-	const handleAcceptOrRejectClick = async (action) => {
-		if (accepting || rejecting) {
-			return;
-		}
-
-		if (action === "accept") {
-			setAccepting(true);
-		} else {
-			setRejecting(true);
-		}
-
-		try {
-			const result = await acceptOrRejectJoinRequest(
-				groupID,
-				action,
-				userID,
-				currentUser.token
-			);
-
-			if (result.error) {
-				return;
-			}
-
-			dispatch(updateGroup(groupID, result.group));
-			dispatch(displayAlert(`request ${action}ed`));
-		} catch (error) {
-		} finally {
-			setAccepting(false);
-			setRejecting(false);
 		}
 	};
 
@@ -97,7 +37,9 @@ const UserCard = ({ userID, username, email, type }) => {
 					<p className={styles.email}>{email}</p>
 				</div>
 			</div>
-			<div className={styles.controls}>{renderUserControls()}</div>
+			{type && (
+				<div className={styles.controls}>{renderUserControls()}</div>
+			)}
 		</div>
 	);
 };

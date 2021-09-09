@@ -1,0 +1,43 @@
+@import "../../../styles/variables.module.scss";
+@import "../../../styles/utils.module.scss";
+
+.container {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1.5rem;
+
+	& > *:not(:last-child) {
+		margin-right: 1.5rem;
+	}
+}
+
+.selectInfo,
+.clearAll {
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.selectInfo {
+	color: $color-grey-light;
+}
+
+.clearAll {
+	color: $color-red;
+	cursor: pointer;
+	transition: color 100ms ease-in, border 100ms ease-in;
+
+	&:hover {
+		border-bottom: 1px solid $color-red;
+	}
+
+	&:active {
+		color: $color-grey-light;
+		border-bottom: 1px solid $color-grey-light;
+	}
+}
+
+.icon {
+	@extend .iconSecondary;
+	@extend .iconSmaller;
+}

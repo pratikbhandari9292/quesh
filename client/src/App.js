@@ -24,6 +24,8 @@ import GroupExplore from "./pages/group-explore/group-explore";
 import AskQuestion from "./pages/ask-question/ask-question";
 import GroupHeader from "./components/group-header/group-header";
 import JoinRequests from "./pages/join-requests/join-requests";
+import SelectUsers from "./pages/add-members/select-users/select-users";
+import FinalizeSelect from "./pages/add-members/finalize-select/finalize-select";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -126,6 +128,12 @@ const App = ({ currentUserRedux, location, history }) => {
 							) : (
 								<Redirect to="/signin" />
 							)}
+						</Route>
+						<Route path="/group/:id/add-members/select">
+							<SelectUsers />
+						</Route>
+						<Route path="/group/:id/add-members/finalize">
+							<FinalizeSelect />
 						</Route>
 					</section>
 				</Switch>

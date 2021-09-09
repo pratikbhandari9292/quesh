@@ -5,16 +5,10 @@
 	@extend .cardStyles;
 
 	max-width: 40rem;
+	cursor: auto;
 
 	&:hover {
 		background-color: $color-grey-lightest;
-		// .username {
-		// 	color: $color-black;
-		// }
-
-		// & > *:first-child {
-		// 	background-color: darken($color-grey-lighter-more, 5%);
-		// }
 	}
 }
 

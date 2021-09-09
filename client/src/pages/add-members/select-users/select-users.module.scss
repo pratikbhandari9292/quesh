@@ -1,0 +1,11 @@
+@import "../../../styles/variables.module.scss";
+
+.container {
+	& > *:first-child {
+		margin-bottom: 1.5rem;
+	}
+}
+
+.divider {
+	margin-bottom: 1.5rem;
+}

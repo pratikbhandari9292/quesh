@@ -1,5 +1,5 @@
-const baseURL = "http://localhost:5000/api/question";
-// const baseURL = "/api/question";
+// const baseURL = "http://localhost:5000/api/question";
+const baseURL = "/api/question";
 
 export const askQuestion = async (questionInfo, groupID, token) => {
 	const result = await fetch(`${baseURL}/${groupID}`, {

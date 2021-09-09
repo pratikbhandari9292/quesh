@@ -14,7 +14,14 @@
 
 .questionsList {
 	@extend .listMain;
+
 	grid-template-columns: 1fr;
+}
+
+.usersList {
+	@extend .questionsList;
+
+	grid-gap: 1.5rem;
 }
 
 .listMainSecondary {

@@ -14,6 +14,7 @@ const CardsList = ({
 	loadingList,
 	type = "group",
 	userCardType,
+	messageAlign,
 }) => {
 	if (loadingList) {
 		return <CardsSkeleton type={type} />;
@@ -22,7 +23,11 @@ const CardsList = ({
 	if (listMessage) {
 		return (
 			<div className={styles.listMainSecondary}>
-				<StatusMessage message={listMessage} spinner={loadingList} />
+				<StatusMessage
+					message={listMessage}
+					spinner={loadingList}
+					align={messageAlign}
+				/>
 			</div>
 		);
 	}
@@ -32,7 +37,16 @@ const CardsList = ({
 			return styles.listMainSecondary;
 		}
 
-		return type === "group" ? styles.groupsList : styles.questionsList;
+		switch (type) {
+			case "group":
+				return styles.groupsList;
+			case "question":
+				return styles.questionsList;
+			case "user":
+				return styles.usersList;
+			default:
+				return null;
+		}
 	};
 
 	const renderCards = () => {
@@ -58,8 +72,8 @@ const CardsList = ({
 					return (
 						<UserCard
 							{...listItem}
-							userID={listItem._id}
-							key={listItem._id}
+							userID={listItem._id || listItem.userID}
+							key={listItem._id || listItem.userID}
 							type={userCardType}
 						/>
 					);

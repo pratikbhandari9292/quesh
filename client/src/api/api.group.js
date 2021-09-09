@@ -1,5 +1,8 @@
-const baseURL = "http://localhost:5000/api/group";
-// const baseURL = "/api/group";
+import { getCurrentUser } from "../local-storage/current-user";
+
+// const baseURL = "http://localhost:5000/api/group";
+const baseURL = "/api/group";
+const currentUser = getCurrentUser();
 
 export const getUserGroups = async (userID, token) => {
 	const result = await fetch(`${baseURL}/${userID}/groups`, {
@@ -135,6 +138,21 @@ export const acceptOrRejectJoinRequest = async (
 	);
 
 	const data = await result.json();
+
+	return data;
+};
+
+export const addGroupMembers = async (groupID, members) => {
+	const result = await fetch(`${baseURL}/${groupID}/add`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"auth-token": currentUser.token,
+		},
+		body: JSON.stringify({ members }),
+	});
+
+	const data = result.json();
 
 	return data;
 };

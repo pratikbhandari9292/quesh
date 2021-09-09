@@ -10,6 +10,7 @@ const Button = ({
 	color = "black",
 	size,
 	loading,
+	disabled,
 	clickHandler,
 }) => {
 	const getClassName = () => {
@@ -37,6 +38,10 @@ const Button = ({
 			} else {
 				className += ` ${styles.buttonPrimary} ${styles.buttonSecondary} ${styles.buttonSecondaryBlue}`;
 			}
+		}
+
+		if (disabled) {
+			className = `${styles.buttonDisabled}`;
 		}
 
 		return className;

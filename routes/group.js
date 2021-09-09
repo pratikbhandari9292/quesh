@@ -173,10 +173,12 @@ router.post(
 				(request) => !members.find((member) => member == request)
 			);
 
-			//saving the group to the database
-			await group.save();
+			group.noOfMembers = group.noOfMembers + members.length;
 
-			response.status(201).send({ message: "members added" });
+			//saving the group to the database
+			const savedGroup = await group.save();
+
+			response.status(201).send({ group: savedGroup });
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}
@@ -485,6 +487,7 @@ router.get(
 	validateGroupID,
 	async (request, response) => {
 		const sortBy = request.query.sortBy;
+		const order = sortBy === "createdAt" ? "asc" : "desc";
 
 		try {
 			//getting the questions belonging to the group of the given id
@@ -492,7 +495,7 @@ router.get(
 				group: request.params.groupID,
 			})
 				.populate("author")
-				.sort({ [sortBy]: "desc" });
+				.sort({ [sortBy]: order });
 
 			response.status(200).send({ questions });
 		} catch (error) {
