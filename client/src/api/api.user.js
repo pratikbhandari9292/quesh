@@ -1,8 +1,5 @@
-import { getCurrentUser } from "../local-storage/current-user";
-
 // const baseURL = "http://localhost:5000/api/user";
 const baseURL = "/api/user";
-const currentUser = getCurrentUser();
 
 export const signInOrRegister = async (type, userInfo) => {
 	const result = await fetch(`${baseURL}/${type}`, {
@@ -18,11 +15,11 @@ export const signInOrRegister = async (type, userInfo) => {
 	return data;
 };
 
-export const searchUser = async (searchTerm) => {
+export const searchUser = async (searchTerm, token) => {
 	const result = await fetch(`${baseURL}/search/${searchTerm}`, {
 		headers: {
 			"Content-Type": "application/json",
-			"auth-token": currentUser.token,
+			"auth-token": token,
 		},
 	});
 

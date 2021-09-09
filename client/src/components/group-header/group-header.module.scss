@@ -7,21 +7,21 @@
 }
 
 .title {
-	font-size: 2rem;
+	font-size: 1.85rem;
 	color: $color-black;
 	max-width: 35rem;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-weight: 500;
 	color: $color-grey-light;
+	font-weight: 500;
 
 	&::first-letter {
 		text-transform: uppercase;
 	}
 }
 
-.iconContainer {
+.titleIconContainer {
 	display: flex;
 	align-items: center;
 
@@ -42,6 +42,15 @@
 	@extend .iconSecondary;
 	height: 1.85rem;
 	width: 1.85rem;
+}
+
+.iconContainer {
+}
+
+.iconContainerActive {
+	svg {
+		background-color: $color-grey-lightest;
+	}
 }
 
 .container,

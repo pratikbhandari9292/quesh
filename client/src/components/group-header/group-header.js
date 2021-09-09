@@ -33,11 +33,58 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 	const [groupTitle, setGroupTitle] = useState("");
 	const [groupSubtitle, setGroupSubtitle] = useState("");
 
-	const history = useHistory();
 	const params = useParams();
-	const location = useLocation();
-
 	const groupID = params.id;
+
+	const [icons, setIcons] = useState([
+		{
+			icon: <NotificationOutlineIcon className={styles.icon} />,
+			linkTo: null,
+			active: false,
+			activeLinks: ["notifications"],
+			title: "notifications",
+		},
+		{
+			icon: <SearchIcon className={styles.icon} />,
+			linkTo: null,
+			active: false,
+			activeLinks: ["search"],
+			title: "search",
+		},
+		{
+			icon: (
+				<UsersIcon
+					className={styles.icon}
+					onClick={() => {
+						return history.push(`/group/${groupID}/join-requests`);
+					}}
+				/>
+			),
+			linkTo: `/group/${groupID}/join-requests`,
+			active: false,
+			activeLinks: ["join-requests"],
+			title: "join-requests",
+		},
+		{
+			icon: (
+				<UserAddIcon
+					className={styles.icon}
+					onClick={() => {
+						return history.push(
+							`/group/${groupID}/add-members/select`
+						);
+					}}
+				/>
+			),
+			linkTo: `/group/${groupID}/add-members/select`,
+			active: false,
+			activeLinks: ["select", "finalize"],
+			title: "add-members",
+		},
+	]);
+
+	const history = useHistory();
+	const location = useLocation();
 
 	const dispatch = useDispatch();
 
@@ -91,6 +138,22 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 		}
 	}, [location]);
 
+	useEffect(() => {
+		setIcons(
+			icons.map((icon) => {
+				if (
+					icon.activeLinks.find((activeLink) =>
+						location.pathname.includes(activeLink)
+					)
+				) {
+					return { ...icon, active: true };
+				}
+
+				return { ...icon, active: false };
+			})
+		);
+	}, [location]);
+
 	const handleBackClick = () => {
 		history.goBack();
 	};
@@ -102,7 +165,7 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.title}>
-				<div className={styles.iconContainer}>
+				<div className={styles.titleIconContainer}>
 					<ArrowLeftIcon
 						className={styles.icon}
 						onClick={handleBackClick}
@@ -111,29 +174,29 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 				{`${capitalizeFirstLetter(groupTitle)} - ${groupSubtitle}`}
 			</div>
 			<div className={styles.controls}>
-				{!location.pathname.includes("ask") && (
+				{location.pathname.includes("explore") && (
 					<OptionsToggle
 						options={sortOptions}
 						selectHandler={sortOptionSelectHandler}
 						type="sort"
 					/>
 				)}
-				<NotificationOutlineIcon className={styles.icon} />
-				<SearchIcon className={styles.icon} />
-				<UsersIcon
-					className={styles.icon}
-					onClick={() => {
-						return history.push(`/group/${groupID}/join-requests`);
-					}}
-				/>
-				<UserAddIcon
-					className={styles.icon}
-					onClick={() => {
-						return history.push(
-							`/group/${groupID}/add-members/select`
-						);
-					}}
-				/>
+
+				{icons.map((icon) => {
+					return (
+						<div
+							className={`${styles.iconContainer} ${
+								icon.active && styles.iconContainerActive
+							}`}
+							key={icon.title}
+							onClick={() => {
+								icon.linkTo && history.push(icon.linkTo);
+							}}
+						>
+							{icon.icon}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

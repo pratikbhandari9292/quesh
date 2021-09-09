@@ -10,6 +10,7 @@ import {
 } from "../../../redux/add-members/add-members.actions";
 
 import { searchUser } from "../../../api/api.user";
+import { getCurrentUser } from "../../../local-storage/current-user";
 
 import GenericSearch from "../../../components/generic-search/generic-search";
 import CardsList from "../../../components/cards-list/cards-list";
@@ -27,6 +28,8 @@ const SelectUsers = ({
 
 	const dispatch = useDispatch();
 
+	const currentUser = getCurrentUser();
+
 	useEffect(() => {
 		setSearchTerm(searchTermRedux);
 	}, []);
@@ -43,7 +46,7 @@ const SelectUsers = ({
 			setUsersMessage("");
 			dispatch(setSearchTermRedux(searchTerm));
 
-			const result = await searchUser(searchTerm);
+			const result = await searchUser(searchTerm, currentUser.token);
 
 			if (result.error) {
 				return;
@@ -54,6 +57,7 @@ const SelectUsers = ({
 			}
 			setUsersMessage("no user found");
 		} catch (error) {
+			console.log(error);
 		} finally {
 			setSearching(false);
 		}
