@@ -156,3 +156,15 @@ export const addGroupMembers = async (groupID, members) => {
 
 	return data;
 };
+
+export const getGroupMembers = async (groupID, token) => {
+	const result = await fetch(`${baseURL}/${groupID}/members`, {
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = result.json();
+
+	return data;
+};

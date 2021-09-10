@@ -24,7 +24,10 @@ router.get("/:userID", auth, async (request, response) => {
 
 //search user
 router.get("/search/:searchTerm", auth, async (request, response) => {
-	const searchRegularExpression = new RegExp(request.params.searchTerm, "i");
+	const searchRegularExpression = new RegExp(
+		request.params.searchTerm.trim(),
+		"i"
+	);
 
 	try {
 		const users = await User.find({

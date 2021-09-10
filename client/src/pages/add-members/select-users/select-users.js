@@ -15,6 +15,7 @@ import { getCurrentUser } from "../../../local-storage/current-user";
 import GenericSearch from "../../../components/generic-search/generic-search";
 import CardsList from "../../../components/cards-list/cards-list";
 import AddControls from "../add-controls/add-controls";
+import StatusMessage from "../../../components/status-message/status-message";
 
 const SelectUsers = ({
 	selectedUsers,
@@ -68,6 +69,7 @@ const SelectUsers = ({
 			<GenericSearch
 				placeholder="username or email"
 				value={searchTerm}
+				size="bigger"
 				changeHandler={setSearchTerm}
 				submitHandler={handleFormSubmit}
 			/>
@@ -76,7 +78,7 @@ const SelectUsers = ({
 
 			<div className={styles.divider}></div>
 
-			{showUsers && (
+			{showUsers ? (
 				<CardsList
 					list={searchedUsers}
 					listMessage={usersMessage}
@@ -84,6 +86,12 @@ const SelectUsers = ({
 					type="user"
 					userCardType="select"
 					messageAlign="left"
+				/>
+			) : (
+				<StatusMessage
+					message="users will appear here"
+					spinner={false}
+					align="left"
 				/>
 			)}
 		</div>

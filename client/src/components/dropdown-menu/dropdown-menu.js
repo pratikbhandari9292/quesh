@@ -9,7 +9,11 @@ const DropdownMenu = ({ show, indicator = "top", children, clickHandler }) => {
 
 	return (
 		<div className={styles.menu} onClick={clickHandler}>
-			<span className={styles.indicator}></span>
+			<span
+				className={`${styles.indicator} ${
+					indicator === "right" && styles.indicatorRight
+				}`}
+			></span>
 			{children}
 		</div>
 	);

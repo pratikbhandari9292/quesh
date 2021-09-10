@@ -26,6 +26,8 @@
 	align-items: center;
 
 	svg {
+		@extend .iconSecondary;
+
 		margin-right: 0.75rem;
 		width: 1.75rem;
 		height: 1.75rem;
@@ -38,13 +40,14 @@
 	}
 }
 
-.icon {
-	@extend .iconSecondary;
-	height: 1.85rem;
-	width: 1.85rem;
-}
-
 .iconContainer {
+	position: relative;
+
+	svg {
+		@extend .iconSecondary;
+		height: 1.85rem;
+		width: 1.85rem;
+	}
 }
 
 .iconContainerActive {

@@ -23,17 +23,6 @@ const GroupCard = (props) => {
 
 	const currentUser = getCurrentUser();
 
-	// const fetchMemNum = async () => {
-	// 	try {
-	// 		const result = await getMemNum(id, currentUser.token);
-
-	// 		dispatch(setMemNum(id, result.memNum));
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 		dispatch(setMemNum(id, "none"));
-	// 	}
-	// };
-
 	const handleGroupClick = () => {
 		if (currentUser.groups.find((group) => group._id === groupID)) {
 			return history.push(`/group/${groupID}/explore`);
@@ -60,14 +49,7 @@ const GroupCard = (props) => {
 
 			<div className={styles.infoContainer}>
 				<span className={styles.infoTitle}>members</span>
-				<span className={styles.info}>
-					{/* {getMemNumber() !== null ? (
-						getMemNumber()
-					) : (
-						<DotIndicator />
-					)} */}
-					{noOfMembers}
-				</span>
+				<span className={styles.info}>{noOfMembers}</span>
 			</div>
 
 			<div className={styles.infoContainer}>

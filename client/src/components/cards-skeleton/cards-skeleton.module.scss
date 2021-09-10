@@ -11,14 +11,11 @@
 
 .groupSkeletonContainer {
 	@extend .skeletonContainer;
-
-	grid-auto-rows: 12.5rem;
 }
 
 .questionSkeletonContainer {
 	@extend .skeletonContainer;
 
-	grid-auto-rows: 12.5rem;
 	grid-template-columns: 1fr;
 }
 

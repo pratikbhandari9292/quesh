@@ -8,6 +8,7 @@ import {
 	setGroupID,
 	setGroupQuestions,
 } from "../../redux/group-questions/group-questions.actions";
+import { setActiveGroupID } from "../../redux/groups/groups.actions";
 
 import { getGroupQuestions } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -35,6 +36,7 @@ const GroupQuestions = ({ questions, groupID, sortBy }) => {
 
 		setLoadingQuestions(true);
 		dispatch(setGroupID(params.id));
+		dispatch(setActiveGroupID(params.id));
 
 		try {
 			const result = await getGroupQuestions(

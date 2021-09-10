@@ -26,6 +26,7 @@ import GroupHeader from "./components/group-header/group-header";
 import JoinRequests from "./pages/join-requests/join-requests";
 import SelectUsers from "./pages/add-members/select-users/select-users";
 import FinalizeSelect from "./pages/add-members/finalize-select/finalize-select";
+import GroupMembers from "./pages/group-members/group-members";
 
 const App = ({ currentUserRedux, location, history }) => {
 	const dispatch = useDispatch();
@@ -134,6 +135,9 @@ const App = ({ currentUserRedux, location, history }) => {
 						</Route>
 						<Route path="/group/:id/add-members/finalize">
 							<FinalizeSelect />
+						</Route>
+						<Route path="/group/:id/members">
+							<GroupMembers />
 						</Route>
 					</section>
 				</Switch>

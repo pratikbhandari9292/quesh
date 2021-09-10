@@ -438,7 +438,7 @@ router.patch(
 	}
 );
 
-//transfer ownership of the group to another memeber
+//transfer ownership of the group to another member
 router.put(
 	"/:groupID/delegate-ownership/:userID",
 	auth,
@@ -528,16 +528,12 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 	const searchRegularExpression = new RegExp(request.params.searchTerm, "i");
 
 	try {
-		const [titleResults, aboutResults] = await Promise.all([
-			Group.find({
-				title: { $regex: searchRegularExpression },
-			}).populate("owner"),
-			Group.find({
-				about: { $regex: searchRegularExpression },
-			}).populate("owner"),
-		]);
-
-		const groups = [...titleResults, ...aboutResults];
+		const groups = await Group.find({
+			$or: [
+				{ title: { $regex: searchRegularExpression } },
+				{ about: { $regex: searchRegularExpression } },
+			],
+		});
 
 		response.send({ groups });
 	} catch (error) {

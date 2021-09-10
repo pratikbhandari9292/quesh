@@ -33,16 +33,16 @@ export const setGroupsMessage = (message) => {
 	};
 };
 
-export const setMemNum = (groupID, memNum) => {
-	return {
-		type: "SET_MEM_NUM",
-		payload: { groupID, memNum },
-	};
-};
-
 export const setNeedToFetch = (needToFetch) => {
 	return {
 		type: "SET_NEED_TO_FETCH",
 		payload: needToFetch,
+	};
+};
+
+export const setActiveGroupID = (groupID) => {
+	return {
+		type: "SET_ACTIVE_GROUP_ID",
+		payload: groupID,
 	};
 };

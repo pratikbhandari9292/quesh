@@ -7,6 +7,7 @@ import { ReactComponent as SearchIcon } from "../../assets/icons/search.svg";
 const GenericSearch = ({
 	placeholder,
 	value,
+	size,
 	changeHandler,
 	submitHandler,
 }) => {
@@ -28,7 +29,11 @@ const GenericSearch = ({
 
 	return (
 		<form onSubmit={handleFormSubmit}>
-			<div className={focused ? styles.searchFocused : styles.search}>
+			<div
+				className={`${focused ? styles.searchFocused : styles.search} ${
+					size === "bigger" && styles.searchBigger
+				}`}
+			>
 				<input
 					type="text"
 					placeholder={placeholder}

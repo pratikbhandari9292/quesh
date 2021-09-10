@@ -7,6 +7,7 @@ import styles from "./group-header.module.scss";
 import { setSortType } from "../../redux/group-questions/group-questions.actions";
 
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
+import { activateOption } from "../../utils/utils.options-toggle";
 
 import { ReactComponent as SearchIcon } from "../../assets/icons/search-secondary.svg";
 import { ReactComponent as UsersIcon } from "../../assets/icons/users.svg";
@@ -15,7 +16,7 @@ import { ReactComponent as UserAddIcon } from "../../assets/icons/user-add.svg";
 import { ReactComponent as ArrowLeftIcon } from "../../assets/icons/arrow-left.svg";
 
 import OptionsToggle from "../options-toggle/options-toggle";
-import { activateOption } from "../../utils/utils.options-toggle";
+import GroupMenu from "./group-menu/group-menu";
 
 const GroupHeader = ({ groups, searchResults, sortBy }) => {
 	const [sortOptions, setSortOptions] = useState([
@@ -38,14 +39,14 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 
 	const [icons, setIcons] = useState([
 		{
-			icon: <NotificationOutlineIcon className={styles.icon} />,
+			icon: <NotificationOutlineIcon />,
 			linkTo: null,
 			active: false,
 			activeLinks: ["notifications"],
 			title: "notifications",
 		},
 		{
-			icon: <SearchIcon className={styles.icon} />,
+			icon: <SearchIcon />,
 			linkTo: null,
 			active: false,
 			activeLinks: ["search"],
@@ -54,7 +55,6 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 		{
 			icon: (
 				<UsersIcon
-					className={styles.icon}
 					onClick={() => {
 						return history.push(`/group/${groupID}/join-requests`);
 					}}
@@ -68,7 +68,6 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 		{
 			icon: (
 				<UserAddIcon
-					className={styles.icon}
 					onClick={() => {
 						return history.push(
 							`/group/${groupID}/add-members/select`
@@ -136,6 +135,10 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 		if (pathname.includes("finalize")) {
 			return setGroupSubtitle("finalize users");
 		}
+
+		if (pathname.includes("members")) {
+			return setGroupSubtitle("members");
+		}
 	}, [location]);
 
 	useEffect(() => {
@@ -197,6 +200,8 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 						</div>
 					);
 				})}
+
+				<GroupMenu />
 			</div>
 		</div>
 	);

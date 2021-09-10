@@ -22,3 +22,9 @@
 	pointer-events: none;
 	z-index: -1;
 }
+
+.indicatorRight {
+	@extend .indicator;
+
+	left: 90%;
+}
