@@ -11,6 +11,12 @@
 	z-index: 2;
 }
 
+.menuCenter {
+	right: auto;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
 .indicator {
 	position: absolute;
 	left: 50%;
@@ -24,7 +30,5 @@
 }
 
 .indicatorRight {
-	@extend .indicator;
-
 	left: 90%;
 }

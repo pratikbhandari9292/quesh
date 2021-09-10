@@ -2,13 +2,26 @@ import React from "react";
 
 import styles from "./dropdown-menu.module.scss";
 
-const DropdownMenu = ({ show, indicator = "top", children, clickHandler }) => {
+const DropdownMenu = ({
+	show,
+	position,
+	color,
+	indicator = "top",
+	indicatorColor,
+	children,
+	clickHandler,
+}) => {
 	if (!show) {
 		return null;
 	}
 
 	return (
-		<div className={styles.menu} onClick={clickHandler}>
+		<div
+			className={`${styles.menu} ${
+				position === "center" && styles.menuCenter
+			} ${color === "dark" && styles.menuDark}`}
+			onClick={clickHandler}
+		>
 			<span
 				className={`${styles.indicator} ${
 					indicator === "right" && styles.indicatorRight

@@ -3,14 +3,19 @@ import { useParams } from "react-router-dom";
 
 import styles from "./user-card.module.scss";
 
+import { getCurrentUser } from "../../local-storage/current-user";
+
 import ProfilePicture from "../profile-picture/profile-picture";
 import RequestControls from "./request-controls/request-controls";
 import SelectControl from "./select-control/select-control";
+import UserMenu from "./user-menu/user-menu";
 
 const UserCard = ({ userID, username, email, groups, type }) => {
 	const params = useParams();
 
 	const groupID = params.id;
+
+	const currentUser = getCurrentUser();
 
 	const renderUserControls = () => {
 		switch (type) {
@@ -28,6 +33,12 @@ const UserCard = ({ userID, username, email, groups, type }) => {
 		}
 	};
 
+	const renderUserMenu = () => {
+		if (currentUser._id !== userID) {
+			return <UserMenu />;
+		}
+	};
+
 	return (
 		<div className={styles.userCard}>
 			<div className={styles.user}>
@@ -37,6 +48,9 @@ const UserCard = ({ userID, username, email, groups, type }) => {
 					<p className={styles.email}>{email}</p>
 				</div>
 			</div>
+
+			{/* {type === "menu" && renderUserMenu()} */}
+
 			{type && (
 				<div className={styles.controls}>{renderUserControls()}</div>
 			)}

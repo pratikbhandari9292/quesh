@@ -1,0 +1,12 @@
+@import "../../../styles/utils.module.scss";
+
+.container {
+	position: absolute;
+	right: 0;
+	top: 0.5rem;
+}
+
+.icon {
+	@extend .iconSecondary;
+	@extend .iconSmaller;
+}

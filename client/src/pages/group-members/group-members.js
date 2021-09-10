@@ -31,21 +31,37 @@ const GroupMembers = ({ groups }) => {
 	}, []);
 
 	useEffect(() => {
-		setGroupMembers(groups.find((group) => group._id === groupID).members);
+		const currentGroup = groups.find((group) => group._id === groupID);
+
+		if (currentGroup) {
+			setGroupMembers(currentGroup.members);
+		}
 	}, [groups]);
 
 	useEffect(() => {
 		const optimizedSearchTerm = searchTerm.toLowerCase().trim();
 
-		setMembersToRender(
-			groupMembers.filter((member) => {
-				return (
-					member.username.includes(optimizedSearchTerm) ||
-					member.email.includes(optimizedSearchTerm)
-				);
-			})
-		);
-	}, [searchTerm, groups]);
+		if (groupMembers) {
+			setMembersToRender(
+				groupMembers.filter((member) => {
+					return (
+						member.username.includes(optimizedSearchTerm) ||
+						member.email.includes(optimizedSearchTerm)
+					);
+				})
+			);
+		}
+	}, [searchTerm, groupMembers]);
+
+	useEffect(() => {
+		if (searchTerm && membersToRender.length === 0) {
+			setMembersMessage("no user found");
+		}
+
+		if (!searchTerm || membersToRender.length > 0) {
+			setMembersMessage("");
+		}
+	}, [searchTerm, membersToRender]);
 
 	const fetchGroupMembers = async () => {
 		setFetchingMembers(true);
@@ -87,6 +103,7 @@ const GroupMembers = ({ groups }) => {
 				listMessage={membersMessage}
 				type="user"
 				messageAlign="left"
+				userCardType="menu"
 			/>
 		</div>
 	);
