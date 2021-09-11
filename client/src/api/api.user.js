@@ -27,3 +27,16 @@ export const searchUser = async (searchTerm, token) => {
 
 	return data;
 };
+
+export const getUserDetails = async (userID, token) => {
+	const result = await fetch(`${baseURL}/${userID}`, {
+		headers: {
+			"Content-Type": "application/json",
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

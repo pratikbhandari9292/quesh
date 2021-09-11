@@ -22,3 +22,8 @@ export const getCurrentUser = () => {
 export const setCurrentUser = (currentUser) => {
 	localStorage.setItem("queshUser", JSON.stringify(currentUser));
 };
+
+export const updateCurrentUser = (updateInfo) => {
+	const currentUser = getCurrentUser();
+	setCurrentUser({ ...currentUser, ...updateInfo });
+};

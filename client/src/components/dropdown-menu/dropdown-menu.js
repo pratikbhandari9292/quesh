@@ -19,7 +19,7 @@ const DropdownMenu = ({
 		<div
 			className={`${styles.menu} ${
 				position === "center" && styles.menuCenter
-			} ${color === "dark" && styles.menuDark}`}
+			} ${color === "light" && styles.menuLight}`}
 			onClick={clickHandler}
 		>
 			<span

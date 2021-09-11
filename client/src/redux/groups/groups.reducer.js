@@ -31,6 +31,23 @@ export const groupsReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, needToFetch: action.payload };
 		case "SET_ACTIVE_GROUP_ID":
 			return { ...state, activeGroupID: action.payload };
+		case "REMOVE_GROUP_MEMBER":
+			return {
+				...state,
+				groups: state.groups.map((group) => {
+					if (group._id === action.payload.groupID) {
+						return {
+							...group,
+							members: group.members.filter(
+								(member) =>
+									member._id !== action.payload.memberID
+							),
+						};
+					}
+
+					return group;
+				}),
+			};
 		default:
 			return state;
 	}

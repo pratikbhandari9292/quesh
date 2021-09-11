@@ -168,3 +168,16 @@ export const getGroupMembers = async (groupID, token) => {
 
 	return data;
 };
+
+export const removeGroupMember = async (groupID, userID, token) => {
+	const result = await fetch(`${baseURL}/${groupID}/remove/${userID}`, {
+		method: "DELETE",
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = result.json();
+
+	return data;
+};

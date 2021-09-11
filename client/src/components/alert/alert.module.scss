@@ -31,13 +31,14 @@
 	@extend .alert;
 
 	background-color: $color-red;
+	color: white;
 
 	svg {
 		height: 1.75rem;
 		width: 1.75rem;
 
 		path {
-			fill: $color-black;
+			fill: white;
 		}
 	}
 }

@@ -32,3 +32,21 @@
 .indicatorRight {
 	left: 90%;
 }
+
+.menuLight {
+	background-color: white;
+
+	.indicator {
+		background-color: white;
+	}
+
+	& > * {
+		&:hover {
+			background-color: $color-grey-lightest;
+		}
+
+		&:active {
+			background-color: $color-grey-lighter-more;
+		}
+	}
+}

@@ -45,6 +45,7 @@ const FinalizeSelect = ({ selectedUsers }) => {
 			);
 
 			if (result.error) {
+				console.log(result.error);
 				return;
 			}
 

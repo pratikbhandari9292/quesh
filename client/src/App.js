@@ -3,7 +3,11 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
-import { getCurrentUser } from "./local-storage/current-user";
+import {
+	getCurrentUser,
+	updateCurrentUser,
+} from "./local-storage/current-user";
+import { getUserDetails } from "./api/api.user";
 
 import "./styles/globals.scss";
 import styles from "./styles/app.module.scss";
@@ -36,11 +40,20 @@ const App = ({ currentUserRedux, location, history }) => {
 		const currentUser = getCurrentUser();
 
 		if (currentUser) {
+			fetchUserDetails(currentUser._id, currentUser.token);
 			return dispatch(setCurrentUserRedux(true));
 		}
 
 		dispatch(setCurrentUserRedux(false));
 	}, []);
+
+	const fetchUserDetails = async (userID, token) => {
+		try {
+			const result = await getUserDetails(userID, token);
+
+			updateCurrentUser(result.user);
+		} catch (error) {}
+	};
 
 	useEffect(() => {
 		if (notInsideApp()) {

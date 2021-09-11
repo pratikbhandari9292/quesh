@@ -144,7 +144,7 @@ router.post(
 				!requestingUser.groups.find(
 					(group) => group._id == request.params.groupID
 				) &&
-				request.user != group.member
+				request.user != group.owner
 			) {
 				return response
 					.status(400)
@@ -357,17 +357,15 @@ router.delete(
 				request.params.userID == group.owner &&
 				request.user != group.owner
 			) {
-				return response
-					.status(400)
-					.send({ error: "unauthorized to remove this member" });
+				return response.status(400).send({ error: "unauthorized" });
 			}
 
 			//checking to see if the requesting user is the owner of the group or if the requesting user added the member to be removed
 			if (
 				group.owner == request.user ||
-				member.groups
-					.find((group) => group._id == request.params.groupID)
-					.addedBy(request.user)
+				member.groups.find(
+					(group) => group._id == request.params.groupID
+				).addedBy == request.user
 			) {
 				//updating the member so that they are not a member of the group
 				member.groups = member.groups.filter(
@@ -383,10 +381,9 @@ router.delete(
 				return response.status(200).send({ message: "member removed" });
 			}
 
-			return response
-				.status(400)
-				.send({ error: "unauthorized to remove this member" });
+			return response.status(400).send({ error: "unauthorized" });
 		} catch (error) {
+			console.log(error);
 			return response.status(500).send({ error: error.message });
 		}
 	}

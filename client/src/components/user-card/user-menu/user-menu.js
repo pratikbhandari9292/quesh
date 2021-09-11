@@ -1,28 +1,63 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import styles from "./user-menu.module.scss";
+
+import { displayAlert } from "../../../redux/alert/alert.actions";
+import { resetModal, setModal } from "../../../redux/modal/modal.actions";
+import { removeGroupMember as removeGroupMemberRedux } from "../../../redux/groups/groups.actions";
+
+import { removeGroupMember } from "../../../api/api.group";
 
 import { ReactComponent as HorizontalDotsIcon } from "../../../assets/icons/horizontal-dots.svg";
 
 import DropdownMenu from "../../../components/dropdown-menu/dropdown-menu";
 import DropdownItem from "../../../components/dropdown-item/dropdown-item";
+import Spinner from "../../../components/spinner/spinner";
 
-const UserMenu = () => {
+const UserMenu = ({ userID, groupID, token }) => {
 	const [showDropdown, setShowDropdown] = useState(false);
 
-	const handleDotsIconClick = () => {
+	const dispatch = useDispatch();
+
+	const toggleDropdown = () => {
 		setShowDropdown(!showDropdown);
+	};
+
+	const handleRemoveClick = async () => {
+		toggleDropdown();
+
+		try {
+			dispatch(setModal(true, "removing member...", <Spinner />, false));
+
+			const result = await removeGroupMember(groupID, userID, token);
+
+			if (result.error) {
+				if (result.error === "unauthorized") {
+					dispatch(displayAlert("not authorized", false));
+				}
+				return;
+			}
+
+			dispatch(removeGroupMemberRedux(groupID, userID));
+			dispatch(displayAlert("member removed"));
+		} catch (error) {
+		} finally {
+			dispatch(resetModal());
+		}
 	};
 
 	return (
 		<div className={styles.container}>
 			<HorizontalDotsIcon
 				className={styles.icon}
-				onClick={handleDotsIconClick}
+				onClick={toggleDropdown}
 			/>
 
-			<DropdownMenu show={showDropdown} position="center">
-				<DropdownItem>remove user</DropdownItem>
+			<DropdownMenu show={showDropdown} position="center" color="light">
+				<DropdownItem clickHandler={handleRemoveClick}>
+					remove user
+				</DropdownItem>
 			</DropdownMenu>
 		</div>
 	);
