@@ -1,15 +1,26 @@
 @import "../../styles/utils.module.scss";
 
+.container,
+.controls,
+.titleContainer,
+.titleIconContainer {
+	display: flex;
+	align-items: center;
+}
+
 .container {
 	justify-content: space-between;
 	height: 4rem;
 	padding-bottom: 2.5rem;
 }
 
+.titleContainer {
+}
+
 .title {
 	font-size: 1.85rem;
 	color: $color-black;
-	max-width: 35rem;
+	max-width: 42rem;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -22,9 +33,6 @@
 }
 
 .titleIconContainer {
-	display: flex;
-	align-items: center;
-
 	svg {
 		@extend .iconSecondary;
 
@@ -54,11 +62,4 @@
 	svg {
 		background-color: $color-grey-lightest;
 	}
-}
-
-.container,
-.controls,
-.title {
-	display: flex;
-	align-items: center;
 }

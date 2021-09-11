@@ -1,8 +1,13 @@
 @import "../../styles/variables.module.scss";
 @import "../../styles/utils.module.scss";
 
-.wrapper {
+.wrapper,
+.container,
+.buttons {
 	display: flex;
+}
+
+.wrapper {
 	justify-content: center;
 	align-items: center;
 	position: fixed;
@@ -15,7 +20,6 @@
 }
 
 .container {
-	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
@@ -27,14 +31,22 @@
 	position: relative;
 }
 
-.title {
+.message {
 	color: $color-grey-light;
 	text-align: center;
 	margin-bottom: 1.5rem;
+	font-weight: 500;
 
 	&::first-letter {
 		text-transform: uppercase;
 	}
+}
+
+.title {
+	@extend .message;
+
+	font-size: 1.85rem;
+	max-width: 95%;
 }
 
 .icon {
@@ -43,4 +55,10 @@
 	position: absolute;
 	right: 0.5rem;
 	top: 0.5rem;
+}
+
+.buttons {
+	& > *:first-child {
+		margin-right: 1.5rem;
+	}
 }

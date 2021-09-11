@@ -2,11 +2,18 @@ export const setModal = (
 	showModal,
 	modalTitle,
 	modalChildren,
-	closable = true
+	closable = true,
+	clickHandler
 ) => {
 	return {
 		type: "SET_MODAL",
-		payload: { showModal, modalTitle, modalChildren, closable },
+		payload: {
+			showModal,
+			modalTitle,
+			modalChildren,
+			closable,
+			clickHandler,
+		},
 	};
 };
 

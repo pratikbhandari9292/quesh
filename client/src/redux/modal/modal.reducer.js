@@ -3,6 +3,7 @@ const INITIAL_STATE = {
 		showModal: false,
 		modalTitle: "",
 		modalChildren: null,
+		clickHandler: null,
 	},
 	closable: true,
 };

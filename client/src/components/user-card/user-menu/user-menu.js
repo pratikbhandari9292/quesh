@@ -24,9 +24,21 @@ const UserMenu = ({ userID, groupID, token }) => {
 		setShowDropdown(!showDropdown);
 	};
 
-	const handleRemoveClick = async () => {
+	const handleRemoveClick = () => {
 		toggleDropdown();
 
+		dispatch(
+			setModal(
+				true,
+				"are you sure you want to remove this member ?",
+				null,
+				true,
+				handleMemberRemoval
+			)
+		);
+	};
+
+	const handleMemberRemoval = async () => {
 		try {
 			dispatch(setModal(true, "removing member...", <Spinner />, false));
 
