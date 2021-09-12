@@ -18,7 +18,7 @@ import { ReactComponent as ArrowLeftIcon } from "../../assets/icons/arrow-left.s
 import OptionsToggle from "../options-toggle/options-toggle";
 import GroupMenu from "./group-menu/group-menu";
 
-const GroupHeader = ({ groups, searchResults, sortBy }) => {
+const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 	const [sortOptions, setSortOptions] = useState([
 		{
 			option: "time",
@@ -33,6 +33,7 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 	]);
 	const [groupTitle, setGroupTitle] = useState("");
 	const [groupSubtitle, setGroupSubtitle] = useState("");
+	const [activeGroup, setActiveGroup] = useState(null);
 
 	const params = useParams();
 	const groupID = params.id;
@@ -157,12 +158,31 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 		);
 	}, [location]);
 
+	useEffect(() => {
+		setActiveGroup(groups.find((group) => group._id === groupID));
+	}, []);
+
 	const handleBackClick = () => {
 		history.goBack();
 	};
 
 	const sortOptionSelectHandler = (option) => {
 		dispatch(setSortType(option));
+	};
+
+	const renderOptionsToggle = () => {
+		if (
+			location.pathname.includes("explore") &&
+			groupQuestions.length > 0
+		) {
+			return (
+				<OptionsToggle
+					options={sortOptions}
+					selectHandler={sortOptionSelectHandler}
+					type="sort"
+				/>
+			);
+		}
 	};
 
 	return (
@@ -179,13 +199,7 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 				</p>
 			</div>
 			<div className={styles.controls}>
-				{location.pathname.includes("explore") && (
-					<OptionsToggle
-						options={sortOptions}
-						selectHandler={sortOptionSelectHandler}
-						type="sort"
-					/>
-				)}
+				{renderOptionsToggle()}
 
 				{icons.map((icon) => {
 					return (
@@ -203,7 +217,7 @@ const GroupHeader = ({ groups, searchResults, sortBy }) => {
 					);
 				})}
 
-				<GroupMenu />
+				<GroupMenu owner={activeGroup?.owner._id} />
 			</div>
 		</div>
 	);
@@ -214,6 +228,7 @@ const mapStateToProps = (state) => {
 		groups: state.groups.groups,
 		searchResults: state.search.searchResults,
 		sortBy: state.groupQuestions.sortBy,
+		groupQuestions: state.groupQuestions.questions,
 	};
 };
 

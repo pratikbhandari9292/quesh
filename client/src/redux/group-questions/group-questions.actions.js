@@ -32,3 +32,9 @@ export const setSortType = (sortType) => {
 		payload: sortType,
 	};
 };
+
+export const resetGroupQuestions = () => {
+	return {
+		type: "RESET_GROUP_QUESTIONS",
+	};
+};

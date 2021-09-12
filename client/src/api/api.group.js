@@ -181,3 +181,16 @@ export const removeGroupMember = async (groupID, userID, token) => {
 
 	return data;
 };
+
+export const leaveGroup = async (groupID, token) => {
+	const result = await fetch(`${baseURL}/${groupID}/leave`, {
+		method: "DELETE",
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = result.json();
+
+	return data;
+};

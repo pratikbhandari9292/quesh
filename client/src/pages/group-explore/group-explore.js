@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 
 import styles from "./group-explore.module.scss";
 
@@ -7,7 +8,7 @@ import OptionsToggle from "../../components/options-toggle/options-toggle";
 import Button from "../../components/button/button";
 import GroupQuestions from "../../components/group-questions/group-questions";
 
-const GroupExplore = () => {
+const GroupExplore = ({ groupQuestions }) => {
 	const [toggleOptions, setToggleOptions] = useState([
 		{
 			option: "unsolved",
@@ -37,12 +38,14 @@ const GroupExplore = () => {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.optionsToggle}>
-				<OptionsToggle
-					options={toggleOptions}
-					setOptions={setToggleOptions}
-				/>
-			</div>
+			{groupQuestions.length > 0 && (
+				<div className={styles.optionsToggle}>
+					<OptionsToggle
+						options={toggleOptions}
+						setOptions={setToggleOptions}
+					/>
+				</div>
+			)}
 
 			<GroupQuestions />
 
@@ -55,4 +58,10 @@ const GroupExplore = () => {
 	);
 };
 
-export default GroupExplore;
+const mapStateToProps = (state) => {
+	return {
+		groupQuestions: state.groupQuestions.questions,
+	};
+};
+
+export default connect(mapStateToProps)(GroupExplore);

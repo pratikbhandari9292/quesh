@@ -27,6 +27,7 @@ router.post("/create", auth, async (request, response) => {
 	const group = new Group({
 		...groupInfo,
 		owner: request.user,
+		createdBy: request.user,
 		joinID,
 		noOfMembers: 1,
 	});
@@ -390,7 +391,7 @@ router.delete(
 );
 
 //leave a group
-router.patch(
+router.delete(
 	"/:groupID/leave",
 	auth,
 	validateGroupID,

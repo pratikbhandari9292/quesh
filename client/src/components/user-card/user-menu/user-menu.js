@@ -5,7 +5,7 @@ import styles from "./user-menu.module.scss";
 
 import { displayAlert } from "../../../redux/alert/alert.actions";
 import { resetModal, setModal } from "../../../redux/modal/modal.actions";
-import { removeGroupMember as removeGroupMemberRedux } from "../../../redux/groups/groups.actions";
+import { removeGroupMember as removeGroupMemberRedux } from "../../../redux/group-members/group-members.actions";
 
 import { removeGroupMember } from "../../../api/api.group";
 
@@ -51,7 +51,7 @@ const UserMenu = ({ userID, groupID, token }) => {
 				return;
 			}
 
-			dispatch(removeGroupMemberRedux(groupID, userID));
+			dispatch(removeGroupMemberRedux(userID));
 			dispatch(displayAlert("member removed"));
 		} catch (error) {
 		} finally {

@@ -52,6 +52,14 @@
 	}
 }
 
+.itemDanger {
+	color: $color-red;
+
+	&:hover {
+		color: $color-red;
+	}
+}
+
 .activeItem {
 	background-color: $color-grey-lighter-more;
 	color: $color-black;

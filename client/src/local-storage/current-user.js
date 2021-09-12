@@ -1,14 +1,5 @@
 const localStorage = window.localStorage;
 
-export const addUserGroup = (group) => {
-	const currentUser = getCurrentUser();
-
-	setCurrentUser({
-		...currentUser,
-		groups: [...currentUser.groups, group],
-	});
-};
-
 export const getCurrentUser = () => {
 	const currentUser = localStorage.getItem("queshUser");
 
@@ -21,6 +12,24 @@ export const getCurrentUser = () => {
 
 export const setCurrentUser = (currentUser) => {
 	localStorage.setItem("queshUser", JSON.stringify(currentUser));
+};
+
+export const addUserGroup = (group) => {
+	const currentUser = getCurrentUser();
+
+	setCurrentUser({
+		...currentUser,
+		groups: [...currentUser.groups, group],
+	});
+};
+
+export const removeUserGroup = (groupID) => {
+	const currentUser = getCurrentUser();
+
+	setCurrentUser({
+		...currentUser,
+		groups: currentUser.groups.filter((group) => group._id !== groupID),
+	});
 };
 
 export const updateCurrentUser = (updateInfo) => {

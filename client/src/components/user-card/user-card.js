@@ -48,15 +48,32 @@ const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 	};
 
 	const renderUserTags = () => {
+		let tags = [];
+
 		const currentGroup = reduxGroups.find((group) => group._id === groupID);
 
-		if (currentGroup.owner._id === userID) {
-			return (
-				<div className={styles.tags}>
-					<Tag text="owner" />
-				</div>
-			);
+		if (
+			currentGroup.owner._id === userID ||
+			currentGroup.owner === userID
+		) {
+			tags = [...tags, "owner"];
 		}
+
+		if (currentGroup.createdBy === userID) {
+			tags = [...tags, "creator"];
+		}
+
+		if (tags.length === 0) {
+			return null;
+		}
+
+		return (
+			<div className={styles.tags}>
+				{tags.map((tag) => {
+					return <Tag text={tag} key={tag} />;
+				})}
+			</div>
+		);
 	};
 
 	return (

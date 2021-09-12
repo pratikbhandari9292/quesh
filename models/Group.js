@@ -7,6 +7,7 @@ const groupSchema = new mongoose.Schema(
 		about: { type: String, default: "" },
 		description: String,
 		owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+		createdBy: mongoose.Schema.Types.ObjectId,
 		memberJoinRequests: {
 			type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 			default: [],

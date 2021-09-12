@@ -4,15 +4,18 @@ import { useDispatch, connect } from "react-redux";
 
 import styles from "./group-members.module.scss";
 
+import {
+	setGroupMembers,
+	setNeedToFetch,
+} from "../../redux/group-members/group-members.actions";
+
 import { getGroupMembers } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
-import { updateGroup } from "../../redux/groups/groups.actions";
 
 import GenericSearch from "../../components/generic-search/generic-search";
 import CardsList from "../../components/cards-list/cards-list";
 
-const GroupMembers = ({ groups }) => {
-	const [groupMembers, setGroupMembers] = useState([]);
+const GroupMembers = ({ groupMembers, needToFetch }) => {
 	const [membersToRender, setMembersToRender] = useState([]);
 	const [fetchingMembers, setFetchingMembers] = useState(false);
 	const [membersMessage, setMembersMessage] = useState("");
@@ -27,16 +30,16 @@ const GroupMembers = ({ groups }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		if (!needToFetch) {
+			if (groupMembers.length === 0) {
+				return setMembersMessage("this group has no members");
+			}
+
+			return;
+		}
+
 		fetchGroupMembers();
 	}, []);
-
-	useEffect(() => {
-		const currentGroup = groups.find((group) => group._id === groupID);
-
-		if (currentGroup) {
-			setGroupMembers(currentGroup.members);
-		}
-	}, [groups]);
 
 	useEffect(() => {
 		const optimizedSearchTerm = searchTerm.toLowerCase().trim();
@@ -74,9 +77,8 @@ const GroupMembers = ({ groups }) => {
 			}
 
 			if (result.members.length > 0) {
-				return dispatch(
-					updateGroup(groupID, { members: result.members })
-				);
+				dispatch(setGroupMembers(result.members));
+				return dispatch(setNeedToFetch(false));
 			}
 
 			setMembersMessage("this group has no members");
@@ -111,7 +113,8 @@ const GroupMembers = ({ groups }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		groups: state.groups.groups,
+		groupMembers: state.groupMembers.members,
+		needToFetch: state.groupMembers.needToFetch,
 	};
 };
 

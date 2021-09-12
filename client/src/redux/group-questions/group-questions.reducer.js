@@ -35,6 +35,8 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 			};
 		case "SET_SORT_TYPE":
 			return { ...state, sortBy: action.payload };
+		case "RESET_GROUP_QUESTIONS":
+			return { ...INITIAL_STATE };
 		default:
 			return state;
 	}

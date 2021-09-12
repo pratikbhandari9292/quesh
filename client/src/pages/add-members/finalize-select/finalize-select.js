@@ -7,6 +7,7 @@ import { setModal, resetModal } from "../../../redux/modal/modal.actions";
 import { displayAlert } from "../../../redux/alert/alert.actions";
 import { updateGroup } from "../../../redux/groups/groups.actions";
 import { resetAddMembers } from "../../../redux/add-members/add-members.actions";
+import { setGroupMembers } from "../../../redux/group-members/group-members.actions";
 
 import { addGroupMembers } from "../../../api/api.group";
 
@@ -51,6 +52,7 @@ const FinalizeSelect = ({ selectedUsers }) => {
 
 			dispatch(displayAlert(`${getTerm()} added`));
 			dispatch(updateGroup(groupID, result.group));
+			dispatch(setGroupMembers(selectedUsers));
 			dispatch(resetAddMembers());
 			history.push(`/group/${groupID}/explore`);
 		} catch (error) {

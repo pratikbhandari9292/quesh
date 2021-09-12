@@ -47,9 +47,9 @@ export const setActiveGroupID = (groupID) => {
 	};
 };
 
-export const removeGroupMember = (groupID, memberID) => {
+export const removeGroup = (groupID) => {
 	return {
-		type: "REMOVE_GROUP_MEMBER",
-		payload: { groupID, memberID },
+		type: "REMOVE_GROUP",
+		payload: groupID,
 	};
 };

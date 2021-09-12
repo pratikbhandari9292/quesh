@@ -3,6 +3,9 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
+import { resetGroupQuestions } from "./redux/group-questions/group-questions.actions";
+import { resetGroupMembers } from "./redux/group-members/group-members.actions";
+
 import {
 	getCurrentUser,
 	updateCurrentUser,
@@ -67,6 +70,18 @@ const App = ({ currentUserRedux, location, history }) => {
 			history.push("/signin");
 		}
 	}, [location, currentUserRedux]);
+
+	useEffect(() => {
+		if (
+			location.pathname.includes("group") &&
+			!location.pathname.includes("groups")
+		) {
+			return;
+		}
+
+		dispatch(resetGroupQuestions());
+		dispatch(resetGroupMembers());
+	}, [location]);
 
 	const renderSideBar = () => {
 		if (notInsideApp()) {
