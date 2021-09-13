@@ -130,7 +130,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		}
 
 		if (pathname.includes("select")) {
-			return setGroupSubtitle("select users");
+			return setGroupSubtitle("select to add");
 		}
 
 		if (pathname.includes("finalize")) {

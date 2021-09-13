@@ -358,15 +358,15 @@ router.delete(
 
 			//checking to see of the member to be removed is the owner of the group
 			if (
-				request.params.userID == group.owner &&
-				request.user != group.owner
+				request.params.userID == group.owner._id &&
+				request.user != group.owner._id
 			) {
 				return response.status(400).send({ error: "unauthorized" });
 			}
 
 			//checking to see if the requesting user is the owner of the group or if the requesting user added the member to be removed
 			if (
-				group.owner == request.user ||
+				group.owner._id == request.user ||
 				member.groups.find(
 					(group) => group._id == request.params.groupID
 				).addedBy == request.user
