@@ -34,6 +34,7 @@ const SearchResults = ({ groups, searching, searchMessage, searchTerm }) => {
 
 	const fetchSearchResults = async () => {
 		dispatch(setSearching(true));
+		setSearchResults([]);
 
 		try {
 			const result = await searchGroup(searchTerm, currentUser.token);
@@ -64,7 +65,7 @@ const SearchResults = ({ groups, searching, searchMessage, searchTerm }) => {
 		<div>
 			<PageHeader
 				title="search results for"
-				term={searchTerm}
+				term={`${searchTerm} - ${searchResults.length}`}
 				align="center"
 				capitalize={false}
 				color="muted"

@@ -53,7 +53,7 @@ const CreateGroup = () => {
 			}
 
 			addUserGroup(result.group);
-			dispatch(addGroup(result.group));
+			dispatch(addGroup({ ...result.group, owner: currentUser }));
 			dispatch(displayAlert("group has been created"));
 			history.push("/groups/me");
 		} catch (error) {

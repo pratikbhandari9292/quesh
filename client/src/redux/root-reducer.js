@@ -8,6 +8,7 @@ import { searchReducer } from "./search/search.reducer";
 import { groupQuestionsReducer } from "./group-questions/group-questions.reducer";
 import { addMembersReducer } from "./add-members/add-members.reducer";
 import { groupMembersReducer } from "./group-members/group-members.reducer";
+import { menuReducer } from "./menu/menu.reducer";
 
 export default combineReducers({
 	currentUser: currentUserReducer,
@@ -18,4 +19,5 @@ export default combineReducers({
 	groupQuestions: groupQuestionsReducer,
 	addMembers: addMembersReducer,
 	groupMembers: groupMembersReducer,
+	menu: menuReducer,
 });

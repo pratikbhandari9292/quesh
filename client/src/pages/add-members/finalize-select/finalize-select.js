@@ -7,7 +7,10 @@ import { setModal, resetModal } from "../../../redux/modal/modal.actions";
 import { displayAlert } from "../../../redux/alert/alert.actions";
 import { updateGroup } from "../../../redux/groups/groups.actions";
 import { resetAddMembers } from "../../../redux/add-members/add-members.actions";
-import { setGroupMembers } from "../../../redux/group-members/group-members.actions";
+import {
+	setGroupMembers,
+	resetGroupMembers,
+} from "../../../redux/group-members/group-members.actions";
 
 import { addGroupMembers } from "../../../api/api.group";
 
@@ -50,10 +53,17 @@ const FinalizeSelect = ({ selectedUsers }) => {
 				return;
 			}
 
-			dispatch(displayAlert(`${getTerm()} added`));
 			dispatch(updateGroup(groupID, result.group));
-			dispatch(setGroupMembers(selectedUsers));
+			// dispatch(
+			// 	setGroupMembers(
+			// 		selectedUsers.map((selectedUser) => {
+			// 			return { ...selectedUser, _id: selectedUser.userID };
+			// 		})
+			// 	)
+			// );
 			dispatch(resetAddMembers());
+			dispatch(resetGroupMembers());
+			dispatch(displayAlert(`${getTerm()} added`));
 			history.push(`/group/${groupID}/explore`);
 		} catch (error) {
 		} finally {

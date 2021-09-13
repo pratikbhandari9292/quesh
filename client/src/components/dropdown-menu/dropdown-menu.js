@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
+
+import { displayMenu } from "../../redux/menu/menu.actions";
 
 import styles from "./dropdown-menu.module.scss";
 
@@ -10,7 +13,16 @@ const DropdownMenu = ({
 	indicatorColor,
 	children,
 	clickHandler,
+	showMenu,
 }) => {
+	const dispatch = useDispatch();
+
+	// useEffect(() => {
+	// 	if (show) {
+	// 		dispatch(displayMenu());
+	// 	}
+	// }, [show]);
+
 	if (!show) {
 		return null;
 	}
@@ -32,4 +44,10 @@ const DropdownMenu = ({
 	);
 };
 
-export default DropdownMenu;
+const mapStateToProps = (state) => {
+	return {
+		showMenu: state.menu.showMenu,
+	};
+};
+
+export default connect(mapStateToProps)(DropdownMenu);

@@ -4,8 +4,16 @@ import { useDispatch } from "react-redux";
 import styles from "./user-menu.module.scss";
 
 import { displayAlert } from "../../../redux/alert/alert.actions";
-import { resetModal, setModal } from "../../../redux/modal/modal.actions";
-import { removeGroupMember as removeGroupMemberRedux } from "../../../redux/group-members/group-members.actions";
+import {
+	displayConfirmationModal,
+	resetModal,
+	setModal,
+} from "../../../redux/modal/modal.actions";
+import {
+	removeGroupMember as removeGroupMemberRedux,
+	resetGroupMembers,
+} from "../../../redux/group-members/group-members.actions";
+import { updateGroup } from "../../../redux/groups/groups.actions";
 
 import { removeGroupMember } from "../../../api/api.group";
 
@@ -28,11 +36,8 @@ const UserMenu = ({ userID, groupID, token }) => {
 		toggleDropdown();
 
 		dispatch(
-			setModal(
-				true,
+			displayConfirmationModal(
 				"are you sure you want to remove this member ?",
-				null,
-				true,
 				handleMemberRemoval
 			)
 		);
@@ -46,12 +51,16 @@ const UserMenu = ({ userID, groupID, token }) => {
 
 			if (result.error) {
 				if (result.error === "unauthorized") {
-					dispatch(displayAlert("not authorized", false));
+					dispatch(
+						displayAlert("you donot have the authorization", false)
+					);
 				}
 				return;
 			}
 
 			dispatch(removeGroupMemberRedux(userID));
+			dispatch(updateGroup(groupID, result.group));
+			// dispatch(resetGroupMembers());
 			dispatch(displayAlert("member removed"));
 		} catch (error) {
 		} finally {

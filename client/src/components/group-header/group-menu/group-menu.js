@@ -4,7 +4,11 @@ import { useDispatch } from "react-redux";
 
 import groupHeaderStyles from "../group-header.module.scss";
 
-import { resetModal, setModal } from "../../../redux/modal/modal.actions";
+import {
+	displayConfirmationModal,
+	resetModal,
+	setModal,
+} from "../../../redux/modal/modal.actions";
 import { removeGroup } from "../../../redux/groups/groups.actions";
 import { displayAlert } from "../../../redux/alert/alert.actions";
 
@@ -42,11 +46,8 @@ const GroupMenu = ({ owner }) => {
 
 	const handleLeaveClick = () => {
 		dispatch(
-			setModal(
-				true,
+			displayConfirmationModal(
 				"are you sure you want to leave the group ?",
-				null,
-				true,
 				handleMemberLeave
 			)
 		);
@@ -72,6 +73,10 @@ const GroupMenu = ({ owner }) => {
 		}
 	};
 
+	const handleDelegateClick = () => {
+		history.push(`/group/${groupID}/delegate-ownership`);
+	};
+
 	return (
 		<div
 			className={groupHeaderStyles.iconContainer}
@@ -84,9 +89,13 @@ const GroupMenu = ({ owner }) => {
 					view members
 				</DropdownItem>
 
-				{currentUser._id !== owner && (
+				{currentUser._id !== owner ? (
 					<DropdownItem type="danger" clickHandler={handleLeaveClick}>
 						leave group
+					</DropdownItem>
+				) : (
+					<DropdownItem clickHandler={handleDelegateClick}>
+						delegate ownership
 					</DropdownItem>
 				)}
 			</DropdownMenu>

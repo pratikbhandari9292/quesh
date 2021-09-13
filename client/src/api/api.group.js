@@ -194,3 +194,19 @@ export const leaveGroup = async (groupID, token) => {
 
 	return data;
 };
+
+export const delegateOwnership = async (groupID, userID, token) => {
+	const result = await fetch(
+		`${baseURL}/${groupID}/delegate-ownership/${userID}`,
+		{
+			method: "PUT",
+			headers: {
+				"auth-token": token,
+			},
+		}
+	);
+
+	const data = result.json();
+
+	return data;
+};

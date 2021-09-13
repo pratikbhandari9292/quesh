@@ -14,7 +14,7 @@ export const groupMembersReducer = (state = INITIAL_STATE, action) => {
 					(member) => member._id !== action.payload
 				),
 			};
-		case "SET_NEED_TO_FETCH":
+		case "SET_NEED_TO_FETCH_MEMBERS":
 			return {
 				...state,
 				needToFetch: action.payload,

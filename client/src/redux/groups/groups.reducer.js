@@ -27,7 +27,7 @@ export const groupsReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, loadingGroups: action.payload };
 		case "SET_GROUPS_MESSAGE":
 			return { ...state, groupsMessage: action.payload };
-		case "SET_NEED_TO_FETCH":
+		case "SET_NEED_TO_FETCH_GROUPS":
 			return { ...state, needToFetch: action.payload };
 		case "SET_ACTIVE_GROUP_ID":
 			return { ...state, activeGroupID: action.payload };

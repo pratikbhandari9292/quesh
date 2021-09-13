@@ -30,7 +30,7 @@
 .alertFailure {
 	@extend .alert;
 
-	background-color: $color-red;
+	background-color: $color-red-lighter;
 	color: white;
 
 	svg {

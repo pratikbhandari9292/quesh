@@ -24,7 +24,9 @@ const GenericSearch = ({
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
 
-		submitHandler();
+		if (submitHandler) {
+			submitHandler();
+		}
 	};
 
 	return (

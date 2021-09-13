@@ -34,8 +34,9 @@ import JoinRequests from "./pages/join-requests/join-requests";
 import SelectUsers from "./pages/add-members/select-users/select-users";
 import FinalizeSelect from "./pages/add-members/finalize-select/finalize-select";
 import GroupMembers from "./pages/group-members/group-members";
+import { hideMenu } from "./redux/menu/menu.actions";
 
-const App = ({ currentUserRedux, location, history }) => {
+const App = ({ currentUserRedux, showMenu, location, history }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -99,8 +100,14 @@ const App = ({ currentUserRedux, location, history }) => {
 		);
 	};
 
+	const handleAppClick = () => {
+		if (showMenu) {
+			dispatch(hideMenu());
+		}
+	};
+
 	return (
-		<div className={styles.app}>
+		<div className={styles.app} onClick={handleAppClick}>
 			<Header />
 			<Modal />
 			<Alert />
@@ -167,6 +174,9 @@ const App = ({ currentUserRedux, location, history }) => {
 						<Route path="/group/:id/members">
 							<GroupMembers />
 						</Route>
+						<Route path="/group/:id/delegate-ownership">
+							<GroupMembers />
+						</Route>
 					</section>
 				</Switch>
 			</div>
@@ -177,6 +187,7 @@ const App = ({ currentUserRedux, location, history }) => {
 const mapStateToProps = (state) => {
 	return {
 		currentUserRedux: state.currentUser.currentUser,
+		showMenu: state.menu.showMenu,
 	};
 };
 

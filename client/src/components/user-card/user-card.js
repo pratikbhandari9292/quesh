@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -11,23 +11,42 @@ import RequestControls from "./request-controls/request-controls";
 import SelectControl from "./select-control/select-control";
 import UserMenu from "./user-menu/user-menu";
 import Tag from "../../components/tag/tag";
+import OwnershipControl from "./ownership-control/ownership-control";
 
 const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 	const params = useParams();
 
 	const groupID = params.id;
 
+	const [currentGroup, setCurrentGroup] = useState(
+		reduxGroups.find((group) => group._id === groupID)
+	);
+
 	const currentUser = getCurrentUser();
 
 	const renderUserControls = () => {
 		switch (type) {
 			case "join-request":
-				return <RequestControls userID={userID} />;
+				return (
+					<div className={styles.controls}>
+						<RequestControls userID={userID} />
+					</div>
+				);
 			case "select":
 				return (
-					<SelectControl
-						user={{ userID, username, email, groups }}
-						groupID={groupID}
+					<div className={styles.controls}>
+						<SelectControl
+							user={{ userID, username, email, groups }}
+							groupID={groupID}
+						/>
+					</div>
+				);
+			case "delegate-ownership":
+				return (
+					<OwnershipControl
+						userID={userID}
+						username={username}
+						currentGroup={currentGroup}
 					/>
 				);
 			default:
@@ -50,12 +69,7 @@ const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 	const renderUserTags = () => {
 		let tags = [];
 
-		const currentGroup = reduxGroups.find((group) => group._id === groupID);
-
-		if (
-			currentGroup.owner._id === userID ||
-			currentGroup.owner === userID
-		) {
+		if (currentGroup.owner._id === userID) {
 			tags = [...tags, "owner"];
 		}
 
@@ -89,9 +103,7 @@ const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 
 			{type === "menu" && renderUserMenu()}
 
-			{type !== "menu" && (
-				<div className={styles.controls}>{renderUserControls()}</div>
-			)}
+			{type !== "menu" && renderUserControls()}
 		</div>
 	);
 };

@@ -140,6 +140,10 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		if (pathname.includes("members")) {
 			return setGroupSubtitle("members");
 		}
+
+		if (pathname.includes("delegate-ownership")) {
+			return setGroupSubtitle("delegate ownership");
+		}
 	}, [location]);
 
 	useEffect(() => {

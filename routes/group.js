@@ -47,7 +47,9 @@ router.post("/create", auth, async (request, response) => {
 			},
 		});
 
-		response.status(201).send({ group: savedGroup });
+		response.status(201).send({
+			group: savedGroup,
+		});
 	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}
@@ -136,7 +138,7 @@ router.post(
 		try {
 			//getting the group with the given id and the requesting user
 			const [group, requestingUser] = await Promise.all([
-				Group.findById(request.params.groupID),
+				Group.findById(request.params.groupID).populate("owner"),
 				User.findById(request.user),
 			]);
 
@@ -181,6 +183,7 @@ router.post(
 
 			response.status(201).send({ group: savedGroup });
 		} catch (error) {
+			console.log(error);
 			response.status(500).send({ error: error.message });
 		}
 	}
@@ -345,7 +348,7 @@ router.delete(
 		try {
 			//getting the group with the given id and the member to be removed
 			const [group, member] = await Promise.all([
-				Group.findById(request.params.groupID),
+				Group.findById(request.params.groupID).populate("owner"),
 				User.findById(request.params.userID),
 			]);
 
@@ -377,9 +380,12 @@ router.delete(
 				group.noOfMembers = group.noOfMembers - 1;
 
 				//saving the user and the group to the database
-				await Promise.all([member.save(), group.save()]);
+				const [savedMember, savedGroup] = await Promise.all([
+					member.save(),
+					group.save(),
+				]);
 
-				return response.status(200).send({ message: "member removed" });
+				return response.status(200).send({ group: savedGroup });
 			}
 
 			return response.status(400).send({ error: "unauthorized" });
@@ -471,7 +477,7 @@ router.put(
 			//saving the group to the database
 			await group.save();
 
-			response.status(200).send({ message: "ownership changed" });
+			response.status(200).send({ owner: newOwner });
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}
@@ -531,7 +537,7 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 				{ title: { $regex: searchRegularExpression } },
 				{ about: { $regex: searchRegularExpression } },
 			],
-		});
+		}).populate("owner");
 
 		response.send({ groups });
 	} catch (error) {

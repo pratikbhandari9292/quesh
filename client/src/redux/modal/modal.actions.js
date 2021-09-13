@@ -30,3 +30,9 @@ export const resetModal = () => {
 		dispatch(setClosable(true));
 	};
 };
+
+export const displayConfirmationModal = (message, confirmationHandler) => {
+	return (dispatch) => {
+		dispatch(setModal(true, message, null, true, confirmationHandler));
+	};
+};

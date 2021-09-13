@@ -35,7 +35,7 @@ export const setGroupsMessage = (message) => {
 
 export const setNeedToFetch = (needToFetch) => {
 	return {
-		type: "SET_NEED_TO_FETCH",
+		type: "SET_NEED_TO_FETCH_GROUPS",
 		payload: needToFetch,
 	};
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, connect } from "react-redux";
 
 import styles from "./group-members.module.scss";
@@ -22,6 +22,7 @@ const GroupMembers = ({ groupMembers, needToFetch }) => {
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const params = useParams();
+	const location = useLocation();
 
 	const groupID = params.id;
 
@@ -105,7 +106,11 @@ const GroupMembers = ({ groupMembers, needToFetch }) => {
 				listMessage={membersMessage}
 				type="user"
 				messageAlign="left"
-				userCardType="menu"
+				userCardType={
+					location.pathname.includes("members")
+						? "menu"
+						: "delegate-ownership"
+				}
 			/>
 		</div>
 	);
