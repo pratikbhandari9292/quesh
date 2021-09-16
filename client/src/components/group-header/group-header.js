@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams, useLocation } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
-import styles from "./group-header.module.scss";
-
 import { setSortType } from "../../redux/group-questions/group-questions.actions";
 
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
@@ -13,10 +11,11 @@ import { ReactComponent as SearchIcon } from "../../assets/icons/search-secondar
 import { ReactComponent as UsersIcon } from "../../assets/icons/users.svg";
 import { ReactComponent as NotificationOutlineIcon } from "../../assets/icons/notification-outlined.svg";
 import { ReactComponent as UserAddIcon } from "../../assets/icons/user-add.svg";
-import { ReactComponent as ArrowLeftIcon } from "../../assets/icons/arrow-left.svg";
 
 import OptionsToggle from "../options-toggle/options-toggle";
 import GroupMenu from "./group-menu/group-menu";
+import IconContainer from "../icon-container/icon-container";
+import ContentHeader from "../content-header/content-header";
 
 const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 	const [sortOptions, setSortOptions] = useState([
@@ -48,19 +47,13 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		},
 		{
 			icon: <SearchIcon />,
-			linkTo: null,
+			linkTo: `/group/${groupID}/question/search`,
 			active: false,
 			activeLinks: ["search"],
 			title: "search",
 		},
 		{
-			icon: (
-				<UsersIcon
-					onClick={() => {
-						return history.push(`/group/${groupID}/join-requests`);
-					}}
-				/>
-			),
+			icon: <UsersIcon />,
 			linkTo: `/group/${groupID}/join-requests`,
 			active: false,
 			activeLinks: ["join-requests"],
@@ -144,6 +137,10 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		if (pathname.includes("delegate-ownership")) {
 			return setGroupSubtitle("delegate ownership");
 		}
+
+		if (pathname.includes("question/search")) {
+			return setGroupSubtitle("search question");
+		}
 	}, [location]);
 
 	useEffect(() => {
@@ -166,10 +163,6 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		setActiveGroup(groups.find((group) => group._id === groupID));
 	}, []);
 
-	const handleBackClick = () => {
-		history.goBack();
-	};
-
 	const sortOptionSelectHandler = (option) => {
 		dispatch(setSortType(option));
 	};
@@ -190,40 +183,25 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 	};
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.titleContainer}>
-				<div className={styles.titleIconContainer}>
-					<ArrowLeftIcon
-						className={styles.icon}
-						onClick={handleBackClick}
-					/>
-				</div>
-				<p className={styles.title}>
-					{`${capitalizeFirstLetter(groupTitle)} - ${groupSubtitle}`}
-				</p>
-			</div>
-			<div className={styles.controls}>
-				{renderOptionsToggle()}
+		<ContentHeader
+			title={`${capitalizeFirstLetter(
+				groupTitle
+			)} - ${capitalizeFirstLetter(groupSubtitle)}`}
+		>
+			{renderOptionsToggle()}
 
-				{icons.map((icon) => {
-					return (
-						<div
-							className={`${styles.iconContainer} ${
-								icon.active && styles.iconContainerActive
-							}`}
-							key={icon.title}
-							onClick={() => {
-								icon.linkTo && history.push(icon.linkTo);
-							}}
-						>
-							{icon.icon}
-						</div>
-					);
-				})}
+			{icons.map((icon) => {
+				return (
+					<IconContainer linkTo={icon.linkTo} active={icon.active}>
+						{icon.icon}
+					</IconContainer>
+				);
+			})}
 
+			<IconContainer>
 				<GroupMenu owner={activeGroup?.owner._id} />
-			</div>
-		</div>
+			</IconContainer>
+		</ContentHeader>
 	);
 };
 

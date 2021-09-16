@@ -104,6 +104,33 @@ router.patch("/:questionID", auth, questionAuth, async (request, response) => {
 	}
 });
 
+//search question
+router.get("/search/:searchTerm", auth, async (request, response) => {
+	const searchTermRegularExpression = new RegExp(
+		request.params.searchTerm,
+		"i"
+	);
+
+	const groupID = request.query.groupID;
+
+	const groupFilter = groupID ? { ["group"]: groupID } : {};
+
+	try {
+		const questions = await Question.find({
+			$or: [
+				{ title: { $regex: searchTermRegularExpression } },
+				{ description: { $regex: searchTermRegularExpression } },
+			],
+			...groupFilter,
+		}).populate("author");
+
+		response.send({ questions });
+	} catch (error) {
+		console.log(error);
+		response.status(500).send({ error: error.message });
+	}
+});
+
 //middlewares
 async function questionAuth(request, response, next) {
 	const question = await Question.findById(request.params.questionID);

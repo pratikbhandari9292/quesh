@@ -1,0 +1,52 @@
+@import "../../styles/variables.module.scss";
+
+.questionTitle,
+.postInfo,
+.questionDescription,
+.previewUsername {
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.container {
+	margin-top: -1rem;
+}
+
+.userPreview {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.5rem;
+	width: 30rem;
+	border-bottom: 1px solid $color-grey-lighter-more;
+}
+
+.previewUsername {
+	margin-left: 0.75rem;
+	font-weight: 500;
+}
+
+.questionTitle {
+	font-size: 1.8rem;
+	font-weight: 500;
+	color: $color-grey-light;
+	margin-bottom: 0.5rem;
+}
+
+.postInfo {
+	color: $color-grey-lighter;
+	font-size: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.questionDescription {
+	color: $color-grey-light;
+	width: fit-content;
+	border: 1px solid $color-grey-lighter-more;
+	padding: 1rem 0.75rem;
+	border-radius: 3px;
+	white-space: pre-wrap;
+	background-color: $color-grey-lightest;
+	position: relative;
+}

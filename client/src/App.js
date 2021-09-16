@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
+import { AnimatePresence } from "framer-motion";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
 import { resetGroupQuestions } from "./redux/group-questions/group-questions.actions";
 import { resetGroupMembers } from "./redux/group-members/group-members.actions";
+import { hideMenu } from "./redux/menu/menu.actions";
 
 import {
 	getCurrentUser,
@@ -34,7 +36,9 @@ import JoinRequests from "./pages/join-requests/join-requests";
 import SelectUsers from "./pages/add-members/select-users/select-users";
 import FinalizeSelect from "./pages/add-members/finalize-select/finalize-select";
 import GroupMembers from "./pages/group-members/group-members";
-import { hideMenu } from "./redux/menu/menu.actions";
+import QuestionSearch from "./pages/question-search/question-search";
+import QuestionDetails from "./pages/question-details/question-details";
+import QuestionHeader from "./components/question-header/question-header";
 
 const App = ({ currentUserRedux, showMenu, location, history }) => {
 	const dispatch = useDispatch();
@@ -109,7 +113,13 @@ const App = ({ currentUserRedux, showMenu, location, history }) => {
 	return (
 		<div className={styles.app} onClick={handleAppClick}>
 			<Header />
-			<Modal />
+			<Modal key="modal" />
+			{/* <AnimatePresence
+				initial={false}
+				exitBeforeEnter={true}
+				onExitComplete={() => null}
+			>
+			</AnimatePresence> */}
 			<Alert />
 			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
 				{renderSideBar()}
@@ -145,7 +155,8 @@ const App = ({ currentUserRedux, showMenu, location, history }) => {
 						</Route>
 						<Route path="/group/:id/">
 							{!location.pathname.includes("details") &&
-								!location.pathname.includes("create") && (
+								!location.pathname.includes("create") &&
+								!location.pathname.includes("/question/") && (
 									<GroupHeader />
 								)}
 						</Route>
@@ -176,6 +187,15 @@ const App = ({ currentUserRedux, showMenu, location, history }) => {
 						</Route>
 						<Route path="/group/:id/delegate-ownership">
 							<GroupMembers />
+						</Route>
+						<Route path="/group/:id/question/search">
+							<QuestionSearch />
+						</Route>
+						<Route path="/group/:groupID/question/">
+							<QuestionHeader />
+						</Route>
+						<Route path="/group/:groupID/question/:questionID">
+							<QuestionDetails />
 						</Route>
 					</section>
 				</Switch>

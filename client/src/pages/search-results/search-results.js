@@ -6,7 +6,6 @@ import { setGroups, setNeedToFetch } from "../../redux/groups/groups.actions";
 import {
 	setSearching,
 	setSearchMessage,
-	setSearchTerm,
 } from "../../redux/search/search.actions";
 
 import { searchGroup } from "../../api/api.group";
@@ -25,12 +24,6 @@ const SearchResults = ({ groups, searching, searchMessage, searchTerm }) => {
 	useEffect(() => {
 		fetchSearchResults();
 	}, [searchTerm]);
-
-	useEffect(() => {
-		return () => {
-			dispatch(setSearchTerm(""));
-		};
-	}, []);
 
 	const fetchSearchResults = async () => {
 		dispatch(setSearching(true));
@@ -64,17 +57,18 @@ const SearchResults = ({ groups, searching, searchMessage, searchTerm }) => {
 	return (
 		<div>
 			<PageHeader
-				title="search results for"
-				term={`${searchTerm} - ${searchResults.length}`}
-				align="center"
-				capitalize={false}
+				title={"search results for"}
+				term={`${searchTerm} - ${searchResults.length} found`}
 				color="muted"
+				capFirst
+				backArrow
 			/>
 
 			<CardsList
 				list={searchResults}
 				listMessage={searchMessage}
 				loadingList={searching}
+				messageAlign="left"
 			/>
 		</div>
 	);

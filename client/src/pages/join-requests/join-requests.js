@@ -27,6 +27,7 @@ const JoinRequests = ({ groups }) => {
 				loadingList={false}
 				type="user"
 				userCardType="join-request"
+				messageAlign="left"
 			/>
 		</div>
 	);

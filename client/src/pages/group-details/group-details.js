@@ -12,14 +12,12 @@ import { capitalizeFirstLetter } from "../../utils/utils.strings";
 import StatusMessage from "../../components/status-message/status-message";
 import PageHeader from "../../components/page-header/page-header";
 import GroupInfo from "../../components/group-info/group-info";
-import DotIndicator from "../../components/dot-indicator/dot-indicator";
 import MembershipStatus from "../../components/membership-status/membership-status";
 
 const GroupDetails = ({ groups, searchResults }) => {
 	const [groupDetails, setGroupDetails] = useState(null);
 	const [loadingDetails, setLoadingDetails] = useState(false);
 	const [detailsMessage, setDetailsMessage] = useState("");
-	const [memNum, setMemNum] = useState(null);
 
 	const params = useParams();
 
@@ -54,12 +52,6 @@ const GroupDetails = ({ groups, searchResults }) => {
 		}
 	};
 
-	const getAbout = () => {
-		return groupDetails.about.split(",").map((aboutItem) => {
-			return <p className={styles.infoTag}>{aboutItem}</p>;
-		});
-	};
-
 	if (!groupDetails) {
 		return (
 			<StatusMessage message={detailsMessage} spinner={loadingDetails} />
@@ -68,11 +60,7 @@ const GroupDetails = ({ groups, searchResults }) => {
 
 	return (
 		<div className={styles.container}>
-			<PageHeader
-				title={groupDetails.title}
-				capitalize={false}
-				size="larger"
-			/>
+			<PageHeader title={groupDetails.title} capFirst backArrow />
 
 			<div className={styles.groupDetailsGrid}>
 				<div>
@@ -82,7 +70,6 @@ const GroupDetails = ({ groups, searchResults }) => {
 
 					{groupDetails.about && (
 						<GroupInfo title="this group is about">
-							{/* {getAbout(groupDetails.description)} */}
 							{groupDetails.about}
 						</GroupInfo>
 					)}
@@ -100,7 +87,7 @@ const GroupDetails = ({ groups, searchResults }) => {
 					</GroupInfo>
 
 					<GroupInfo title="members">
-						{memNum !== null ? memNum : <DotIndicator />}
+						{groupDetails.noOfMembers}
 					</GroupInfo>
 				</div>
 

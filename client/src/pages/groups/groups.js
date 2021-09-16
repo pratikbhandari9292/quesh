@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -77,7 +77,11 @@ const Groups = ({ groups, loadingGroups, groupsMessage, needToFetch }) => {
 
 	return (
 		<div>
-			<PageHeader title="your groups" info={currentUser.groups.length}>
+			<PageHeader
+				title="your groups"
+				info={currentUser.groups.length}
+				capitalize={true}
+			>
 				<Button
 					type="secondary"
 					size="smaller"

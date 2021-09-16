@@ -30,6 +30,16 @@ const questionSchema = new mongoose.Schema(
 			ref: "Solution",
 			default: null,
 		},
+		proposedSolutions: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Solution",
+					default: null,
+				},
+			],
+			default: [],
+		},
 		votes: { type: Array, default: [] },
 		votesNumber: { type: Number, default: 0 },
 	},

@@ -2,6 +2,7 @@ const INITIAL_STATE = {
 	questions: [],
 	groupID: "",
 	sortBy: "time",
+	activeQuestion: null,
 };
 
 export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
@@ -35,6 +36,8 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 			};
 		case "SET_SORT_TYPE":
 			return { ...state, sortBy: action.payload };
+		case "SET_ACTIVE_QUESTION":
+			return { ...state, activeQuestion: action.payload };
 		case "RESET_GROUP_QUESTIONS":
 			return { ...INITIAL_STATE };
 		default:

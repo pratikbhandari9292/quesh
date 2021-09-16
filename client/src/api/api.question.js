@@ -30,3 +30,18 @@ export const updateQuestion = async (questionID, updateInfo, token) => {
 
 	return data;
 };
+
+export const searchQuestion = async (searchTerm, groupID, token) => {
+	const result = await fetch(
+		`${baseURL}/search/${searchTerm}/?groupID=${groupID}`,
+		{
+			headers: {
+				"auth-token": token,
+			},
+		}
+	);
+
+	const data = await result.json();
+
+	return data;
+};

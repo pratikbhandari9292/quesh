@@ -1,18 +1,27 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 import styles from "./page-header.module.scss";
+
+import { capitalizeFirstLetter } from "../../utils/utils.strings";
+
+import { ReactComponent as BackArrow } from "../../assets/icons/arrow-left.svg";
 
 const PageHeader = ({
 	title,
 	info,
 	term,
 	bottomMargin,
-	capitalize = true,
+	capitalize,
+	capFirst,
 	size,
 	align,
 	color,
+	backArrow,
 	children,
 }) => {
+	const history = useHistory();
+
 	return (
 		<div
 			className={`${styles.container} ${
@@ -21,15 +30,25 @@ const PageHeader = ({
 		>
 			<p
 				className={`${styles.title} ${
-					!capitalize && styles.nonCapitalized
+					capitalize && styles.capitalized
 				} ${size === "larger" && styles.titleLarger}  ${
 					color === "muted" && styles.titleMuted
 				}`}
 			>
-				{title}
+				{backArrow && (
+					<BackArrow
+						onClick={() => {
+							history.goBack();
+						}}
+					/>
+				)}
+
+				{capFirst ? capitalizeFirstLetter(title) : title}
+
 				{info !== undefined && (
 					<span className={styles.info}>({info})</span>
 				)}
+
 				{term && <p className={styles.term}>{term}</p>}
 			</p>
 			{children}

@@ -33,6 +33,13 @@ export const setSortType = (sortType) => {
 	};
 };
 
+export const setActiveQuestion = (question) => {
+	return {
+		type: "SET_ACTIVE_QUESTION",
+		payload: question,
+	};
+};
+
 export const resetGroupQuestions = () => {
 	return {
 		type: "RESET_GROUP_QUESTIONS",

@@ -1,0 +1,39 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
+
+.voteContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+	right: -3rem;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.iconStyles {
+	height: 1.7rem;
+	width: 1.7rem;
+}
+
+.icon {
+	@extend .iconSecondary;
+	@extend .iconStyles;
+}
+
+.iconActive {
+	@extend .iconActive;
+	@extend .iconStyles;
+}
+
+.iconDeactivated {
+	@extend .iconStyles;
+	@extend .iconDisabled;
+}
+
+.votes {
+}
+
+.votesActive {
+	font-weight: 500;
+}

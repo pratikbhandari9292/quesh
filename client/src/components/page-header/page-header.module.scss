@@ -1,4 +1,5 @@
 @import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
 
 .container,
 .title {
@@ -24,17 +25,17 @@
 .title {
 	font-size: 2rem;
 	font-weight: 500;
-	text-transform: capitalize;
+
+	svg {
+		@extend .iconSecondary;
+		@extend .iconSmaller;
+
+		margin-right: 0.75rem;
+	}
 }
 
-.nonCapitalized {
-	@extend .title;
-
-	text-transform: lowercase;
-
-	&::first-letter {
-		text-transform: uppercase;
-	}
+.capitalized {
+	text-transform: capitalize;
 }
 
 .titleLarger {

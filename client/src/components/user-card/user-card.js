@@ -77,6 +77,13 @@ const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 			tags = [...tags, "creator"];
 		}
 
+		if (
+			groups.find((group) => group._id === groupID).addedBy ===
+			currentUser._id
+		) {
+			tags = [...tags, "added by me"];
+		}
+
 		if (tags.length === 0) {
 			return null;
 		}

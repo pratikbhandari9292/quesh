@@ -1,0 +1,17 @@
+@import "../../styles/utils.module.scss";
+
+.container {
+	position: relative;
+
+	svg {
+		@extend .iconSecondary;
+		height: 1.85rem;
+		width: 1.85rem;
+	}
+}
+
+.containerActive {
+	svg {
+		background-color: $color-grey-lightest;
+	}
+}

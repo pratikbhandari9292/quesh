@@ -1,0 +1,47 @@
+@import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
+
+.container,
+.iconContainer,
+.titleContainer,
+.controls {
+	display: flex;
+	align-items: center;
+}
+
+.container {
+	justify-content: space-between;
+	height: 4rem;
+	padding-bottom: 2.5rem;
+}
+
+.titleContainer {
+}
+
+.title {
+	font-size: 1.85rem;
+	color: $color-black;
+	max-width: 42rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: $color-grey-light;
+	font-weight: 500;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.icon {
+	@extend .iconSecondary;
+	@extend .iconSmaller;
+
+	margin-right: 0.75rem;
+}
+
+.controls {
+	& > * {
+		margin-left: 3rem;
+	}
+}
