@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
 import styles from "./user-card.module.scss";
@@ -13,8 +13,17 @@ import UserMenu from "./user-menu/user-menu";
 import Tag from "../../components/tag/tag";
 import OwnershipControl from "./ownership-control/ownership-control";
 
-const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
+const UserCard = ({
+	userID,
+	username,
+	email,
+	groups,
+	avatar,
+	type,
+	reduxGroups,
+}) => {
 	const params = useParams();
+	const location = useLocation();
 
 	const groupID = params.id;
 
@@ -78,8 +87,9 @@ const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 		}
 
 		if (
+			location.pathname.includes("/members") &&
 			groups.find((group) => group._id === groupID).addedBy ===
-			currentUser._id
+				currentUser._id
 		) {
 			tags = [...tags, "added by me"];
 		}
@@ -100,7 +110,7 @@ const UserCard = ({ userID, username, email, groups, type, reduxGroups }) => {
 	return (
 		<div className={styles.userCard}>
 			<div className={styles.user}>
-				<ProfilePicture username={username} />
+				<ProfilePicture username={username} avatar={avatar} />
 				<div className={styles.userInfo}>
 					<p className={styles.username}>{username}</p>
 					<p className={styles.email}>{email}</p>

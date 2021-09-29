@@ -3,7 +3,7 @@ const INITIAL_STATE = {
 	loadingGroups: false,
 	groupsMessage: "",
 	needToFetch: true,
-	activeGroupID: null,
+	activeGroup: null,
 };
 
 export const groupsReducer = (state = INITIAL_STATE, action) => {
@@ -29,14 +29,17 @@ export const groupsReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, groupsMessage: action.payload };
 		case "SET_NEED_TO_FETCH_GROUPS":
 			return { ...state, needToFetch: action.payload };
-		case "SET_ACTIVE_GROUP_ID":
-			return { ...state, activeGroupID: action.payload };
 		case "REMOVE_GROUP":
 			return {
 				...state,
 				groups: state.groups.filter(
 					(group) => group._id !== action.payload
 				),
+			};
+		case "SET_ACTIVE_GROUP":
+			return {
+				...state,
+				activeGroup: action.payload,
 			};
 		default:
 			return state;

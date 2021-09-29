@@ -34,22 +34,24 @@ const QuestionCard = ({
 
 	const currentUser = getCurrentUser();
 
-	const { username, _id: authorID } = author;
+	const { username, _id: authorID, avatar } = author;
 
 	const handleContainerClick = () => {
-		// dispatch(
-		// 	setActiveQuestion({
-		// 		questionID,
-		// 		author,
-		// 		createdAt,
-		// 		title,
-		// 		description,
-		// 		votes,
-		// 		votesNumber,
-		// 		sortBy,
-		// 	})
-		// );
-		// history.push(`/group/${groupID}/question/${questionID}`);
+		dispatch(
+			setActiveQuestion({
+				questionID,
+				author,
+				createdAt,
+				title,
+				description,
+				votes,
+				votesNumber,
+				sortBy,
+				solution,
+				proposedSolutions,
+			})
+		);
+		history.push(`/group/${groupID}/question/${questionID}`);
 	};
 
 	const renderVoteContainer = () => {
@@ -100,7 +102,11 @@ const QuestionCard = ({
 		<div className={styles.container} onClick={handleContainerClick}>
 			<div className={styles.question}>
 				<div className={styles.header}>
-					<UserPreview username={username} profileSize="smaller" />
+					<UserPreview
+						username={username}
+						avatar={avatar}
+						profileSize="smaller"
+					/>
 					<p className={styles.date}>{getHowLongAgo(createdAt)}</p>
 				</div>
 

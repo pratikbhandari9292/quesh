@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
 
 import styles from "./question-search.module.scss";
+
+import { setSearchedQuestions } from "../../redux/group-questions/group-questions.actions";
 
 import { searchQuestion } from "../../api/api.question";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -9,17 +12,24 @@ import { getCurrentUser } from "../../local-storage/current-user";
 import GenericSearch from "../../components/generic-search/generic-search";
 import CardsList from "../../components/cards-list/cards-list";
 
-const QuestionSearch = () => {
-	const [searchedQuestions, setSearchedQuestions] = useState([]);
+const QuestionSearch = ({ searchedQuestions }) => {
 	const [searchMessage, setSearchMessage] = useState(false);
 	const [searching, setSearching] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const params = useParams();
 
+	const dispatch = useDispatch();
+
 	const groupID = params.id;
 
 	const currentUser = getCurrentUser();
+
+	useEffect(() => {
+		return () => {
+			dispatch(setSearchedQuestions([]));
+		};
+	}, []);
 
 	const handleFormSubmit = async () => {
 		setSearching(true);
@@ -37,7 +47,7 @@ const QuestionSearch = () => {
 			}
 
 			if (result.questions.length > 0) {
-				return setSearchedQuestions(result.questions);
+				return dispatch(setSearchedQuestions(result.questions));
 			}
 
 			setSearchMessage("no questions found");
@@ -73,4 +83,10 @@ const QuestionSearch = () => {
 	);
 };
 
-export default QuestionSearch;
+const mapStateToProps = (state) => {
+	return {
+		searchedQuestions: state.groupQuestions.searchedQuestions,
+	};
+};
+
+export default connect(mapStateToProps)(QuestionSearch);

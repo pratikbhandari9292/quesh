@@ -40,16 +40,16 @@ export const setNeedToFetch = (needToFetch) => {
 	};
 };
 
-export const setActiveGroupID = (groupID) => {
-	return {
-		type: "SET_ACTIVE_GROUP_ID",
-		payload: groupID,
-	};
-};
-
 export const removeGroup = (groupID) => {
 	return {
 		type: "REMOVE_GROUP",
 		payload: groupID,
+	};
+};
+
+export const setActiveGroup = (group) => {
+	return {
+		type: "SET_ACTIVE_GROUP",
+		payload: group,
 	};
 };

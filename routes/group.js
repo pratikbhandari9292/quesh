@@ -89,16 +89,12 @@ router.get("/:userID/groups", auth, async (request, response) => {
 		})
 			.sort({ createdAt: -1 })
 			.populate("owner")
-			.populate("memberJoinRequests", { _id: 1, username: 1, email: 1 });
-
-		// const groupsWithJoinedDate = groups.map((group) => {
-		// 	return {
-		// 		...group.toObject(),
-		// 		joinedAt: user.groups.find(
-		// 			(userGroup) => userGroup._id == group._id
-		// 		).joinedAt,
-		// 	};
-		// });
+			.populate("memberJoinRequests", {
+				_id: 1,
+				username: 1,
+				email: 1,
+				avatar: 1,
+			});
 
 		response.send({ groups });
 	} catch (error) {
@@ -548,7 +544,14 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 //middlewares
 async function validateGroupID(request, response, next) {
 	//checking to see if the group of the given id exists
-	const group = await Group.findById(request.params.groupID);
+	const group = await Group.findById(request.params.groupID)
+		.populate("owner")
+		.populate("memberJoinRequests", {
+			_id: 1,
+			username: 1,
+			email: 1,
+			avatar: 1,
+		});
 
 	if (!group) {
 		return response.status(400).send({ error: "group does not exist" });

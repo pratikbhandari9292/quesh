@@ -17,7 +17,7 @@ import ProfilePicture from "../profile-picture/profile-picture";
 import DropdownMenu from "../dropdown-menu/dropdown-menu";
 import DropdownItem from "../dropdown-item/dropdown-item";
 
-const ProfilePreview = ({ username, email }) => {
+const ProfilePreview = ({ username, email, avatar }) => {
 	const [showDropdown, setShowDropdown] = useState(false);
 
 	const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const ProfilePreview = ({ username, email }) => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.preview} onClick={toggleDropdown}>
-				<ProfilePicture username={username} />
+				<ProfilePicture username={username} avatar={avatar} />
 				<span className={styles.username}>{username}</span>
 				<ChevronDownIcon className={styles.icon} />
 			</div>

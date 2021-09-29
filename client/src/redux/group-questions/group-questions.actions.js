@@ -12,13 +12,6 @@ export const addGroupQuestion = (question) => {
 	};
 };
 
-export const setGroupID = (groupID) => {
-	return {
-		type: "SET_GROUP_ID",
-		payload: groupID,
-	};
-};
-
 export const updateGroupQuestion = (questionID, updateInfo) => {
 	return {
 		type: "UPDATE_GROUP_QUESTION",
@@ -37,6 +30,20 @@ export const setActiveQuestion = (question) => {
 	return {
 		type: "SET_ACTIVE_QUESTION",
 		payload: question,
+	};
+};
+
+export const setSearchedQuestions = (questions) => {
+	return {
+		type: "SET_SEARCHED_QUESTIONS",
+		payload: questions,
+	};
+};
+
+export const updateSearchedQuestion = (questionID, updateInfo) => {
+	return {
+		type: "UPDATE_SEARCHED_QUESTION",
+		payload: { questionID, updateInfo },
 	};
 };
 

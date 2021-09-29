@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
-import { AnimatePresence } from "framer-motion";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
-import { resetGroupQuestions } from "./redux/group-questions/group-questions.actions";
+import {
+	resetGroupQuestions,
+	updateGroupQuestion,
+	updateSearchedQuestion,
+} from "./redux/group-questions/group-questions.actions";
 import { resetGroupMembers } from "./redux/group-members/group-members.actions";
 import { hideMenu } from "./redux/menu/menu.actions";
 
@@ -40,7 +43,7 @@ import QuestionSearch from "./pages/question-search/question-search";
 import QuestionDetails from "./pages/question-details/question-details";
 import QuestionHeader from "./components/question-header/question-header";
 
-const App = ({ currentUserRedux, showMenu, location, history }) => {
+const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -88,6 +91,19 @@ const App = ({ currentUserRedux, showMenu, location, history }) => {
 		dispatch(resetGroupMembers());
 	}, [location]);
 
+	useEffect(() => {
+		if (!activeQuestion) {
+			return;
+		}
+
+		dispatch(
+			updateGroupQuestion(activeQuestion.questionID, activeQuestion)
+		);
+		dispatch(
+			updateSearchedQuestion(activeQuestion.questionID, activeQuestion)
+		);
+	}, [activeQuestion]);
+
 	const renderSideBar = () => {
 		if (notInsideApp()) {
 			return null;
@@ -104,22 +120,10 @@ const App = ({ currentUserRedux, showMenu, location, history }) => {
 		);
 	};
 
-	const handleAppClick = () => {
-		if (showMenu) {
-			dispatch(hideMenu());
-		}
-	};
-
 	return (
-		<div className={styles.app} onClick={handleAppClick}>
+		<div className={styles.app}>
 			<Header />
 			<Modal key="modal" />
-			{/* <AnimatePresence
-				initial={false}
-				exitBeforeEnter={true}
-				onExitComplete={() => null}
-			>
-			</AnimatePresence> */}
 			<Alert />
 			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
 				{renderSideBar()}
@@ -188,10 +192,10 @@ const App = ({ currentUserRedux, showMenu, location, history }) => {
 						<Route path="/group/:id/delegate-ownership">
 							<GroupMembers />
 						</Route>
-						<Route path="/group/:id/question/search">
+						<Route path="/group/:id/search">
 							<QuestionSearch />
 						</Route>
-						<Route path="/group/:groupID/question/">
+						<Route path="/group/:groupID/question/:questionID">
 							<QuestionHeader />
 						</Route>
 						<Route path="/group/:groupID/question/:questionID">
@@ -208,6 +212,7 @@ const mapStateToProps = (state) => {
 	return {
 		currentUserRedux: state.currentUser.currentUser,
 		showMenu: state.menu.showMenu,
+		activeQuestion: state.groupQuestions.activeQuestion,
 	};
 };
 

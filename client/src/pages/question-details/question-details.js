@@ -4,35 +4,43 @@ import { connect } from "react-redux";
 import styles from "./question-details.module.scss";
 
 import { getDate, getHowLongAgo } from "../../utils/utils.date-time";
-import { capitalizeFirstLetter } from "../../utils/utils.strings";
 
 import VoteContainer from "../../components/vote-container/vote-container";
 import ProfilePicture from "../../components/profile-picture/profile-picture";
+import QuestionStatus from "./question-status/question-status";
 
-const QuestionDetails = ({ activeQuestion }) => {
+const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 	const {
-		title,
 		description,
 		author,
 		createdAt,
 		votes,
 		votesNumber,
 		questionID,
+		solution,
+		proposedSolutions,
 	} = activeQuestion;
 
-	const { username } = author;
+	const { username, avatar } = author;
+
+	const { groupID, owner } = activeGroup;
 
 	return (
 		<div className={styles.container}>
-			{/* {title && <p className={styles.questionTitle}>{title}</p>} */}
 			<div className={styles.userPreview}>
-				<ProfilePicture username={username} size="smaller" />
-				<p className={styles.previewUsername}>{username}</p>
+				<ProfilePicture
+					username={username}
+					avatar={avatar}
+					size="smaller"
+				/>
+				<div className={styles.userPostInfo}>
+					<p className={styles.previewUsername}>{username}</p>
+					<p className={styles.postInfo}>
+						posted {getHowLongAgo(createdAt)} ago on{" "}
+						{getDate(createdAt)}
+					</p>
+				</div>
 			</div>
-
-			<p className={styles.postInfo}>
-				posted {getHowLongAgo(createdAt)} ago on {getDate(createdAt)}
-			</p>
 
 			<div className={styles.questionDescription}>
 				{description}
@@ -40,6 +48,15 @@ const QuestionDetails = ({ activeQuestion }) => {
 					{...{ votes, votesNumber, author, questionID }}
 				/>
 			</div>
+
+			<QuestionStatus
+				{...{
+					solution,
+					proposedSolutions,
+					groupID,
+					owner,
+				}}
+			/>
 		</div>
 	);
 };
@@ -47,6 +64,7 @@ const QuestionDetails = ({ activeQuestion }) => {
 const mapStateToProps = (state) => {
 	return {
 		activeQuestion: state.groupQuestions.activeQuestion,
+		activeGroup: state.groups.activeGroup,
 	};
 };
 

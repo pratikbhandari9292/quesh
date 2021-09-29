@@ -1,0 +1,53 @@
+@import "../../../styles/variables.module.scss";
+@import "../../../styles/utils.module.scss";
+
+.container {
+	margin-top: 1.5rem;
+}
+
+.questionStatus {
+	font-weight: 500;
+	color: $color-grey-lighter;
+	border: 1px solid $color-grey-lightest;
+	border-radius: 2px;
+	width: fit-content;
+	padding: 0.5rem 1rem;
+	margin-bottom: 0.75rem;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.statusButton {
+	border: none;
+	outline: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.7rem;
+	font-family: inherit;
+	padding: 0.4rem 0.5rem;
+	margin-top: 0.75rem;
+	border-radius: 2px;
+	color: $color-blue;
+	font-weight: 500;
+	cursor: pointer;
+	background-color: transparent;
+
+	svg {
+		@extend .icon;
+		@extend .iconSmallest;
+		@extend .iconBlue;
+
+		margin-left: 0.75rem;
+	}
+
+	&:hover {
+		background-color: $color-grey-lightest;
+	}
+
+	&:active {
+		background-color: $color-grey-lighter-more;
+	}
+}

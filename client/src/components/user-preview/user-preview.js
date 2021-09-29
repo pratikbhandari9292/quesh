@@ -4,10 +4,10 @@ import styles from "./user-preview.module.scss";
 
 import ProfilePicture from "../profile-picture/profile-picture";
 
-const UserPreview = ({ username, profileSize }) => {
+const UserPreview = ({ username, avatar, profileSize }) => {
 	return (
 		<div className={styles.container}>
-			<ProfilePicture username={username} size={profileSize} />
+			<ProfilePicture avatar={avatar} size={profileSize} />
 			<p className={styles.username}>{username}</p>
 		</div>
 	);

@@ -55,6 +55,21 @@
 	width: 1.75rem;
 }
 
+.iconSmallest {
+	@extend .icon;
+
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.iconBlue {
+	@extend .icon;
+
+	path {
+		fill: $color-blue;
+	}
+}
+
 .cornerButton {
 	position: fixed;
 	right: 2rem;

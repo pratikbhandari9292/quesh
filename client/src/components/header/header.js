@@ -64,10 +64,13 @@ const Header = ({ currentUserRedux }) => {
 				{currentUserRedux ? (
 					<div className={styles.headerContent}>
 						<GroupSearch />
-						<ProfilePreview
-							username={currentUser && currentUser.username}
-							email={currentUser && currentUser.email}
-						/>
+						{currentUser && (
+							<ProfilePreview
+								username={currentUser.username}
+								email={currentUser.email}
+								avatar={currentUser.avatar}
+							/>
+						)}
 					</div>
 				) : (
 					renderButtons()

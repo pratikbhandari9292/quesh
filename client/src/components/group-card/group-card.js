@@ -1,8 +1,10 @@
 import React from "react";
-import { useDispatch, connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import styles from "./group-card.module.scss";
+
+import { setActiveGroup } from "../../redux/groups/groups.actions";
 
 import { getCurrentUser } from "../../local-storage/current-user";
 import { getHowLongAgo } from "../../utils/utils.date-time";
@@ -25,6 +27,7 @@ const GroupCard = (props) => {
 
 	const handleGroupClick = () => {
 		if (currentUser.groups.find((group) => group._id === groupID)) {
+			dispatch(setActiveGroup({ ...props }));
 			return history.push(`/group/${groupID}/explore`);
 		}
 
@@ -62,10 +65,4 @@ const GroupCard = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return {
-		groupsMemNum: state.groups.groupsMemNum,
-	};
-};
-
-export default connect(mapStateToProps)(GroupCard);
+export default GroupCard;

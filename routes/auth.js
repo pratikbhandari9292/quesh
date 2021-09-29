@@ -38,6 +38,7 @@ router.post("/register", async (request, response) => {
 	const user = new User({
 		...userInfo,
 		password: hash,
+		avatar: `https://avatars.dicebear.com/api/initials/${userInfo.username}.svg`,
 	});
 
 	try {
@@ -91,6 +92,7 @@ router.post("/signin", async (request, response) => {
 			username: user.username,
 			email: user.email,
 			groups: user.groups,
+			avatar: user.avatar,
 			token,
 		},
 	});

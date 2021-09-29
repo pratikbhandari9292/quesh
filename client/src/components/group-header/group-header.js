@@ -47,7 +47,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		},
 		{
 			icon: <SearchIcon />,
-			linkTo: `/group/${groupID}/question/search`,
+			linkTo: `/group/${groupID}/search`,
 			active: false,
 			activeLinks: ["search"],
 			title: "search",

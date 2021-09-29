@@ -45,7 +45,7 @@ function getDirectionalTurnAnimation(direction) {
 			opacity: 0,
 			[`rotate${direction}`]: "-180deg",
 			transition: {
-				delay: 0.1,
+				delay: 0.2,
 			},
 		},
 		visible: {
