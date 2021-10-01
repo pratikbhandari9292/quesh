@@ -199,10 +199,14 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 							<QuestionSearch />
 						</Route>
 						<Route path="/group/:groupID/question/:questionID">
-							<QuestionHeader />
-						</Route>
-						<Route path="/group/:groupID/question/:questionID">
-							<QuestionDetails />
+							{currentUserRedux ? (
+								<React.Fragment>
+									<QuestionHeader />
+									<QuestionDetails />
+								</React.Fragment>
+							) : (
+								<Redirect to="/signin" />
+							)}
 						</Route>
 						<Route path="/profile/me">
 							<UserProfile />

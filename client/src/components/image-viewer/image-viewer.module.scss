@@ -1,4 +1,6 @@
 @import "../../styles/box-shadows.module.scss";
+@import "../../styles/image.module.scss";
+@import "../../styles/utils.module.scss";
 
 .overlay,
 .container {
@@ -15,22 +17,56 @@
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.75);
 	z-index: 5;
+	outline: none;
 }
 
 .container {
-	height: 85%;
+	height: 90%;
 	min-width: 15rem;
-	background-color: white;
 	background-color: transparent;
+	position: relative;
 }
 
 .image {
-	display: block;
-	max-height: 100%;
-	max-width: 100%;
-	height: auto;
-	width: auto;
-	object-fit: contain;
+	@extend .image;
+	@extend .imagePreserved;
+
 	border-radius: 5px;
 	box-shadow: $box-shadow-three;
+	position: relative;
+	z-index: 7;
+}
+
+.indicator {
+	@extend .iconSecondary;
+
+	position: absolute;
+	path {
+		fill: lighten($color-grey-lighter, 12%);
+	}
+	background-color: lighten($color-grey-light, 5%);
+
+	&:hover {
+		path {
+			fill: $color-grey-lighter-more;
+		}
+		background-color: lighten($color-grey-light, 5%);
+	}
+
+	&:active {
+		path {
+			fill: lighten($color-grey-lighter, 12%);
+		}
+		background-color: $color-grey-light;
+	}
+}
+
+.indicatorLeft {
+	@extend .indicator;
+	left: 20%;
+}
+
+.indicatorRight {
+	@extend .indicator;
+	right: 20%;
 }

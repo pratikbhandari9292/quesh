@@ -1,4 +1,5 @@
 @import "../../styles/variables.module.scss";
+@import "../input-group/input-group.module.scss";
 
 .fileSelector {
 	visibility: hidden;
@@ -7,24 +8,20 @@
 	width: 0;
 }
 
-.filenames {
-	margin-top: 0.5rem;
-}
-
-.filename {
-	color: $color-grey-light;
-	font-size: 1.5rem;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 .error {
-	font-size: 1.5rem;
 	color: $color-red;
 	margin-top: 0.5rem;
+	margin-left: 0;
 
 	&::first-letter {
 		text-transform: uppercase;
 	}
+}
+
+.label {
+	@extend .label;
+}
+
+.divider {
+	margin-bottom: 1rem;
 }

@@ -1,13 +1,24 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 
 import styles from "./file-selector.module.scss";
+
+import { resetFiles, selectFiles } from "../../redux/files/files.actions";
 
 import { ReactComponent as ImageIcon } from "../../assets/icons/image.svg";
 
 import Button from "../button/button";
+import SelectedFile from "./selected-file/selected-file";
 
-const FileSelector = ({ files, error, changeHandler }) => {
+const FileSelector = ({
+	label,
+	text = "select image",
+	selectedFiles = [],
+	error,
+}) => {
 	const fileSelectorRef = useRef();
+
+	const dispatch = useDispatch();
 
 	const handleSelectButtonClick = (event) => {
 		event.preventDefault();
@@ -15,13 +26,24 @@ const FileSelector = ({ files, error, changeHandler }) => {
 		fileSelectorRef.current.click();
 	};
 
+	const handleFileChange = (event) => {
+		dispatch(selectFiles(event.target.files));
+	};
+
+	useEffect(() => {
+		return () => {
+			dispatch(resetFiles());
+		};
+	}, []);
+
 	return (
 		<div>
+			{label && <p className={styles.label}>{label}</p>}
 			<input
 				type="file"
 				className={styles.fileSelector}
 				ref={fileSelectorRef}
-				onChange={changeHandler}
+				onChange={handleFileChange}
 			/>
 			<Button
 				size="smaller"
@@ -29,19 +51,20 @@ const FileSelector = ({ files, error, changeHandler }) => {
 				color="blue"
 				clickHandler={handleSelectButtonClick}
 			>
-				<ImageIcon /> select image
+				<ImageIcon /> {text}
 			</Button>
 
-			{files.length > 0 && (
+			<div className={styles.divider}></div>
+
+			{selectedFiles.length > 0 && (
 				<div className={styles.filenames}>
-					{files.map((file) => {
+					{selectedFiles.map((file, index) => {
 						return (
-							<p
-								className={styles.filename}
+							<SelectedFile
+								name={file.name}
+								index={index}
 								key={`${file.name}${Date.now()}`}
-							>
-								{file.name}
-							</p>
+							/>
 						);
 					})}
 				</div>
@@ -52,4 +75,10 @@ const FileSelector = ({ files, error, changeHandler }) => {
 	);
 };
 
-export default FileSelector;
+const mapStateToProps = (state) => {
+	return {
+		selectedFiles: state.files.selectedFiles,
+	};
+};
+
+export default connect(mapStateToProps)(FileSelector);

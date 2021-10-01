@@ -21,9 +21,9 @@ const questionSchema = new mongoose.Schema(
 			ref: "Group",
 			default: null,
 		},
-		imageNumber: {
-			type: Number,
-			default: 0,
+		images: {
+			type: Array,
+			default: [],
 		},
 		solution: {
 			type: mongoose.Schema.Types.ObjectId,

@@ -8,6 +8,7 @@ import { getDate, getHowLongAgo } from "../../utils/utils.date-time";
 import VoteContainer from "../../components/vote-container/vote-container";
 import ProfilePicture from "../../components/profile-picture/profile-picture";
 import QuestionStatus from "./question-status/question-status";
+import ImageList from "../../components/image-list/image-list";
 
 const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 	const {
@@ -19,6 +20,7 @@ const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 		questionID,
 		solution,
 		proposedSolutions,
+		images,
 	} = activeQuestion;
 
 	const { username, avatar } = author;
@@ -57,6 +59,10 @@ const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 					owner,
 				}}
 			/>
+
+			<div className={styles.divider}></div>
+
+			<ImageList list={images} />
 		</div>
 	);
 };

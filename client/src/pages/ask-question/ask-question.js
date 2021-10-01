@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 
 import styles from "./ask-question.module.scss";
 
@@ -13,12 +13,13 @@ import { getCurrentUser } from "../../local-storage/current-user";
 import FormHeader from "../../components/form-header/form-header";
 import InputGroup from "../../components/input-group/input-group";
 import Button from "../../components/button/button";
+import FileSelector from "../../components/file-selector/file-selector";
 
-const AskQuestion = () => {
+const AskQuestion = ({ selectedFiles }) => {
 	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [about, setAbout] = useState("");
+	const [description, setDescription] = useState("pratiic");
 	const [descriptionError, setDescriptionError] = useState("");
+	const [filesError, setFilesError] = useState("");
 	const [asking, setAsking] = useState(false);
 
 	const params = useParams();
@@ -45,7 +46,7 @@ const AskQuestion = () => {
 				{
 					title: title.trim(),
 					description: description.trim(),
-					about: about.trim(),
+					images: selectedFiles,
 				},
 				groupID,
 				currentUser.token
@@ -68,10 +69,19 @@ const AskQuestion = () => {
 		if (error.includes("description")) {
 			return setDescriptionError(error);
 		}
+
+		if (
+			error.includes("supported") ||
+			error.includes("MB") ||
+			error.includes("uploaded")
+		) {
+			setFilesError(error);
+		}
 	};
 
 	const clearFieldErrors = () => {
 		setDescriptionError("");
+		setFilesError("");
 	};
 
 	return (
@@ -91,11 +101,11 @@ const AskQuestion = () => {
 						changeHandler={setDescription}
 						error={descriptionError}
 					/>
-					{/* <InputGroup
-						label="about"
-						placeholder="optional"
-						changeHandler={setAbout}
-					/> */}
+					<FileSelector
+						label="select upto 3 images, max 5mb each"
+						text="select images"
+						error={filesError}
+					/>
 					<Button size="full" loading={asking}>
 						{asking ? "asking question" : "ask question"}
 					</Button>
@@ -105,4 +115,10 @@ const AskQuestion = () => {
 	);
 };
 
-export default AskQuestion;
+const mapStateToProps = (state) => {
+	return {
+		selectedFiles: state.files.selectedFiles,
+	};
+};
+
+export default connect(mapStateToProps)(AskQuestion);

@@ -9,9 +9,17 @@ router.get("/:randomString", async (request, response) => {
 	let options = null;
 
 	const userID = request.query.userID;
+	const questionID = request.query.questionID;
 
 	if (userID) {
 		options = { user: userID };
+	}
+
+	if (questionID) {
+		options = {
+			question: questionID,
+			randomStr: request.params.randomString,
+		};
 	}
 
 	try {

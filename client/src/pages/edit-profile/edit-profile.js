@@ -27,11 +27,10 @@ import Button from "../../components/button/button";
 import FileSelector from "../../components/file-selector/file-selector";
 import Spinner from "../../components/spinner/spinner";
 
-const EditProfile = ({ updates }) => {
+const EditProfile = ({ updates, selectedFiles }) => {
 	const currentUser = getCurrentUser();
 
 	const [username, setUsername] = useState(currentUser.username);
-	const [newAvatar, setNewAvatar] = useState(null);
 	const [usernameError, setUsernameError] = useState("");
 	const [avatarError, setAvatarError] = useState("");
 
@@ -43,10 +42,6 @@ const EditProfile = ({ updates }) => {
 		document.title = "Edit your profile";
 	}, []);
 
-	const handleAvatarChange = (event) => {
-		setNewAvatar(event.target.files[0]);
-	};
-
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
 
@@ -57,7 +52,7 @@ const EditProfile = ({ updates }) => {
 		try {
 			const result = await updateUserProfile(
 				currentUser._id,
-				{ username, avatar: newAvatar },
+				{ username, avatar: selectedFiles[0] },
 				currentUser.token
 			);
 
@@ -127,11 +122,7 @@ const EditProfile = ({ updates }) => {
 				/>
 
 				<div className={styles.divider}></div>
-				<FileSelector
-					files={newAvatar ? [newAvatar] : []}
-					error={avatarError}
-					changeHandler={handleAvatarChange}
-				/>
+				<FileSelector error={avatarError} />
 
 				<div className={styles.divider}></div>
 
@@ -162,6 +153,7 @@ const EditProfile = ({ updates }) => {
 const mapStateToProps = (state) => {
 	return {
 		updates: state.currentUser.updates,
+		selectedFiles: state.files.selectedFiles,
 	};
 };
 

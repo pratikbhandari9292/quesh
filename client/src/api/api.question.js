@@ -2,13 +2,23 @@
 const baseURL = "/api/question";
 
 export const askQuestion = async (questionInfo, groupID, token) => {
+	const formData = new FormData();
+
+	formData.append("title", questionInfo.title);
+	formData.append("description", questionInfo.description);
+
+	if (questionInfo.images.length > 0) {
+		questionInfo.images.forEach((image) => {
+			formData.append("uploads", image);
+		});
+	}
+
 	const result = await fetch(`${baseURL}/${groupID}`, {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/json",
 			"auth-token": token,
 		},
-		body: JSON.stringify(questionInfo),
+		body: formData,
 	});
 
 	const data = await result.json();

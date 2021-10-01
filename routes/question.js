@@ -1,107 +1,123 @@
 const express = require("express");
-const multer = require("multer");
+const uniqid = require("uniqid");
 
 const { auth } = require("../middleware/auth");
 const { validateQuestion } = require("../validation/question.validation");
 const Group = require("../models/Group");
 const Question = require("../models/Question");
 const User = require("../models/User");
+const { getUpload } = require("../middleware/multer");
+const Image = require("../models/Image");
+const { getImageError } = require("../utils/utils.files");
 
 const router = express.Router();
 
-const upload = multer({
-	limits: {
-		fileSize: 5000000,
-	},
-	fileFilter(request, file, cb) {
-		if (
-			file.originalname.endsWith(".jpg") ||
-			file.originalname.endsWith(".jpeg") ||
-			file.originalname.endsWith(".png")
-		) {
-			return cb(null, true);
-		}
-
-		cb(new Error("supported file types are .jpg, .jpeg and .png"));
-	},
-});
+//create a new question
+const fileSizeLimit = 5;
+const maxImages = 3;
+const upload = getUpload(fileSizeLimit);
 
 router.post(
-	"/upload",
-	upload.array("upload", 3),
-	(request, response) => {
-		console.log(request.files);
-		response.send();
-	},
-	(error, request, response, next) => {
-		response.status(400).send({ error: error.message });
-	}
-);
+	"/:groupID",
+	auth,
+	upload.array("uploads", maxImages),
+	async (request, response) => {
+		const questionInfo = request.body;
+		let images = [];
 
-//create a new question
-router.post("/:groupID", auth, async (request, response) => {
-	const questionInfo = request.body;
+		//checking to see if the question has any errors
+		const error = validateQuestion(questionInfo);
 
-	//checking to see if the question has any errors
-	const error = validateQuestion(questionInfo);
-
-	if (error) {
-		return response.status(400).send({ error });
-	}
-
-	try {
-		//getting the group of the given id
-		const questionGroup = await Group.findById(request.params.groupID);
-
-		if (!questionGroup) {
-			return response.status(400).send({ error: "group not found" });
+		if (error) {
+			return response.status(400).send({ error });
 		}
 
-		const question = new Question({
-			...questionInfo,
-			author: request.user,
-			group: request.params.groupID,
-		});
+		try {
+			//getting the group of the given id
+			const questionGroup = await Group.findById(request.params.groupID);
 
-		//saving the question to the database
-		const [savedQuestion, requestingUser] = await Promise.all([
-			question.save(),
-			User.findById(request.user),
-		]);
+			if (!questionGroup) {
+				return response.status(400).send({ error: "group not found" });
+			}
 
-		const {
-			_id,
-			description,
-			title,
-			group,
-			image,
-			solution,
-			createdAt,
-			updatedAt,
-			votes,
-			proposedSolutions,
-		} = savedQuestion;
+			const question = new Question({
+				...questionInfo,
+				author: request.user,
+				group: request.params.groupID,
+				images: [],
+			});
 
-		response.status(201).send({
-			question: {
+			let finalQuestion = {};
+
+			//saving the question to the database
+			const [savedQuestion, requestingUser] = await Promise.all([
+				question.save(),
+				User.findById(request.user),
+			]);
+
+			finalQuestion = savedQuestion;
+
+			if (request.files.length > 0) {
+				request.files.forEach((file) => {
+					const randomString = uniqid();
+					images = [
+						...images,
+						new Image({
+							binary: file.buffer,
+							question: savedQuestion._id,
+							randomStr: randomString,
+						}),
+					];
+					savedQuestion.images = [
+						...savedQuestion.images,
+						`/api/image/${randomString}/?questionID=${savedQuestion._id}`,
+					];
+				});
+
+				const [savedQuestionWithImages] = await Promise.all([
+					savedQuestion.save(),
+					Image.insertMany(images),
+				]);
+
+				finalQuestion = savedQuestionWithImages;
+			}
+
+			const {
 				_id,
 				description,
 				title,
 				group,
-				image,
 				solution,
 				createdAt,
 				updatedAt,
 				votes,
 				proposedSolutions,
-				author: requestingUser,
-			},
-		});
-	} catch (error) {
-		console.log(error);
-		response.status(500).send({ error: error.message });
+			} = finalQuestion;
+
+			response.status(201).send({
+				question: {
+					_id,
+					description,
+					title,
+					group,
+					solution,
+					createdAt,
+					updatedAt,
+					votes,
+					proposedSolutions,
+					author: requestingUser,
+				},
+			});
+		} catch (error) {
+			response.status(500).send({ error: error.message });
+		}
+	},
+	(error, request, response, next) => {
+		response
+			.status(400)
+			.send({ error: getImageError(error, fileSizeLimit, maxImages) });
 	}
-});
+);
 
 //get the details of a question
 router.get("/:questionID", auth, questionAuth, async (request, response) => {

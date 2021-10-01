@@ -23,6 +23,7 @@ const QuestionCard = ({
 	sortBy,
 	solution,
 	proposedSolutions,
+	images,
 }) => {
 	const dispatch = useDispatch();
 
@@ -46,6 +47,7 @@ const QuestionCard = ({
 				sortBy,
 				solution,
 				proposedSolutions,
+				images,
 			})
 		);
 		history.push(`/group/${groupID}/question/${questionID}/details`);

@@ -6,6 +6,10 @@ const imageSchema = new mongoose.Schema({
 		type: Buffer,
 	},
 	user: mongoose.Schema.Types.ObjectId,
+	question: mongoose.Schema.Types.ObjectId,
+	randomStr: {
+		type: String,
+	},
 });
 
 module.exports = mongoose.model("Image", imageSchema);

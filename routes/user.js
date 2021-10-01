@@ -7,6 +7,7 @@ const Group = require("../models/Group");
 const { getUpload } = require("../middleware/multer");
 const Image = require("../models/Image");
 const { validateUserUpdate } = require("../validation/user.validation");
+const { getImageError } = require("../utils/utils.files");
 
 const router = express.Router();
 
@@ -106,13 +107,9 @@ router.patch(
 		response.send({ user });
 	},
 	(error, request, response, next) => {
-		let errorMessage = error.message;
-
-		if (error.message === "File too large") {
-			errorMessage = `max file size is ${fileSizeLimit}MB`;
-		}
-
-		response.status(400).send({ error: errorMessage });
+		response
+			.status(400)
+			.send({ error: getImageError(error, fileSizeLimit) });
 	}
 );
 
