@@ -65,7 +65,6 @@ const OwnershipControl = ({ userID, username, currentGroup }) => {
 		<div className={userCardStyles.controls}>
 			<Button
 				color="blue"
-				type="secondary"
 				size="smaller"
 				clickHandler={handleMakeOwnerClick}
 			>

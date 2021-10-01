@@ -7,7 +7,7 @@ const ProfilePicture = ({ avatar, size }) => {
 		<div
 			className={`${styles.container} ${
 				size === "smaller" && styles.containerSmaller
-			}`}
+			} ${size === "bigger" && styles.containerBigger}`}
 		>
 			<img src={`${avatar}`} alt="avatar" className={styles.image} />
 		</div>

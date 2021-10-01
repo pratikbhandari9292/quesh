@@ -7,6 +7,7 @@ import { displayAlert } from "../../../redux/alert/alert.actions";
 import {
 	displayConfirmationModal,
 	resetModal,
+	setClosable,
 	setModal,
 } from "../../../redux/modal/modal.actions";
 import {
@@ -45,7 +46,8 @@ const UserMenu = ({ userID, groupID, token }) => {
 
 	const handleMemberRemoval = async () => {
 		try {
-			dispatch(setModal(true, "removing member...", <Spinner />, false));
+			dispatch(setModal(true, "removing member...", <Spinner />));
+			dispatch(setClosable(false));
 
 			const result = await removeGroupMember(groupID, userID, token);
 
@@ -60,7 +62,6 @@ const UserMenu = ({ userID, groupID, token }) => {
 
 			dispatch(removeGroupMemberRedux(userID));
 			dispatch(updateGroup(groupID, result.group));
-			// dispatch(resetGroupMembers());
 			dispatch(displayAlert("member removed"));
 		} catch (error) {
 		} finally {

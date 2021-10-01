@@ -11,13 +11,13 @@ const PageHeader = ({
 	title,
 	info,
 	term,
-	bottomMargin,
 	capitalize,
 	capFirst,
 	size,
+	margin,
 	align,
-	color,
-	backArrow,
+	muted,
+	backArrow = true,
 	children,
 }) => {
 	const history = useHistory();
@@ -26,13 +26,13 @@ const PageHeader = ({
 		<div
 			className={`${styles.container} ${
 				align === "center" && styles.containerCentered
-			}`}
+			} ${margin === "bigger" && styles.marginBigger}`}
 		>
 			<p
 				className={`${styles.title} ${
 					capitalize && styles.capitalized
 				} ${size === "larger" && styles.titleLarger}  ${
-					color === "muted" && styles.titleMuted
+					muted && styles.titleMuted
 				}`}
 			>
 				{backArrow && (

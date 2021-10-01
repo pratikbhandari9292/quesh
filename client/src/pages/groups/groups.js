@@ -81,6 +81,7 @@ const Groups = ({ groups, loadingGroups, groupsMessage, needToFetch }) => {
 				title="your groups"
 				info={currentUser.groups.length}
 				capitalize={true}
+				backArrow={false}
 			>
 				<Button
 					type="secondary"

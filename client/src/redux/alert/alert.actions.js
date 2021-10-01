@@ -20,3 +20,11 @@ export const displayAlert = (alertText, success = true) => {
 		}, 2500);
 	};
 };
+
+export const displayErrorAlert = (
+	alertText = "something went wrong, try again"
+) => {
+	return (dispatch) => {
+		dispatch(displayAlert(alertText, false));
+	};
+};

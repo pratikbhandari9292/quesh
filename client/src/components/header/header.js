@@ -1,29 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
 import styles from "./header.module.scss";
 import wrapperStyles from "../../styles/wrapper.module.scss";
 
-import { setCurrentUser as setCurrentUserRedux } from "../../redux/current-user/current-user.actions";
-import {
-	setCurrentUser,
-	getCurrentUser,
-} from "../../local-storage/current-user";
+import { getCurrentUser } from "../../local-storage/current-user";
 
 import Logo from "../logo/logo";
 import Button from "../button/button";
-import ProfilePicture from "../profile-picture/profile-picture";
 import ProfilePreview from "../profile-preview/profile-preview";
 import GroupSearch from "../group-search/group-search";
 
-const Header = ({ currentUserRedux }) => {
+const Header = ({ currentUserRedux, updates }) => {
+	const [currentUser, setCurrentUser] = useState(getCurrentUser());
+
 	const history = useHistory();
 	const location = useLocation();
 
-	const dispatch = useDispatch();
-
-	const currentUser = getCurrentUser();
+	useEffect(() => {
+		setCurrentUser(getCurrentUser());
+	}, [updates]);
 
 	const renderButtons = () => {
 		if (location.pathname.includes("signin")) {
@@ -83,6 +80,7 @@ const Header = ({ currentUserRedux }) => {
 const mapStateToProps = (state) => {
 	return {
 		currentUserRedux: state.currentUser.currentUser,
+		updates: state.currentUser.updates,
 	};
 };
 

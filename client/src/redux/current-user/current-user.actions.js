@@ -4,3 +4,9 @@ export const setCurrentUser = (currentUser) => {
 		payload: currentUser,
 	};
 };
+
+export const incrementUserUpdates = () => {
+	return {
+		type: "INCREMENT_USER_UPDATES",
+	};
+};

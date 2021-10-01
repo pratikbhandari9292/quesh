@@ -123,7 +123,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		}
 
 		if (pathname.includes("select")) {
-			return setGroupSubtitle("select to add");
+			return setGroupSubtitle("add users");
 		}
 
 		if (pathname.includes("finalize")) {
@@ -192,7 +192,11 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 
 			{icons.map((icon) => {
 				return (
-					<IconContainer linkTo={icon.linkTo} active={icon.active}>
+					<IconContainer
+						linkTo={icon.linkTo}
+						active={icon.active}
+						key={icon.title}
+					>
 						{icon.icon}
 					</IconContainer>
 				);

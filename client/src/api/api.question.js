@@ -45,3 +45,16 @@ export const searchQuestion = async (searchTerm, groupID, token) => {
 
 	return data;
 };
+
+export const deleteQuestion = async (questionID, token) => {
+	const result = await fetch(`${baseURL}/${questionID}`, {
+		method: "DELETE",
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

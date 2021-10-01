@@ -11,3 +11,19 @@
 .containerRed {
 	background-color: $color-red-lighter;
 }
+
+.containerTransparent {
+	background-color: transparent;
+	border: 1px solid $color-grey-lighter-more;
+	color: $color-grey-light;
+}
+
+.containerBigger {
+	padding: 0.3rem 1rem;
+}
+
+.textCapitalized {
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}

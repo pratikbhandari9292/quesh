@@ -4,6 +4,7 @@ const INITIAL_STATE = {
 		modalTitle: "",
 		modalChildren: null,
 		clickHandler: null,
+		showAnimation: true,
 	},
 	closable: true,
 };
@@ -20,6 +21,11 @@ export const modalReducer = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				closable: action.payload,
+			};
+		case "RESET_MODAL":
+			return {
+				...state,
+				...INITIAL_STATE,
 			};
 		default:
 			return state;

@@ -1,0 +1,28 @@
+@import "../../styles/variables.module.scss";
+
+.profileMain {
+	display: flex;
+}
+
+.userInfo {
+	margin-left: 1.5rem;
+}
+
+.username {
+	font-size: 2rem;
+	font-weight: 500;
+	color: $color-grey-light;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}
+
+.email {
+	color: $color-grey-lighter;
+	margin-bottom: 0.75rem;
+}
+
+.divider {
+	margin-bottom: 2rem;
+}

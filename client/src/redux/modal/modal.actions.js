@@ -3,7 +3,8 @@ export const setModal = (
 	modalTitle,
 	modalChildren,
 	closable = true,
-	clickHandler
+	clickHandler,
+	showAnimation = true
 ) => {
 	return {
 		type: "SET_MODAL",
@@ -13,6 +14,7 @@ export const setModal = (
 			modalChildren,
 			closable,
 			clickHandler,
+			showAnimation,
 		},
 	};
 };
@@ -25,14 +27,26 @@ export const setClosable = (closable) => {
 };
 
 export const resetModal = () => {
-	return (dispatch) => {
-		dispatch(setModal(false, ""));
-		dispatch(setClosable(true));
+	return {
+		type: "RESET_MODAL",
 	};
 };
 
-export const displayConfirmationModal = (message, confirmationHandler) => {
+export const displayConfirmationModal = (
+	message,
+	confirmationHandler,
+	showAnimation
+) => {
 	return (dispatch) => {
-		dispatch(setModal(true, message, null, true, confirmationHandler));
+		dispatch(
+			setModal(
+				true,
+				message,
+				null,
+				true,
+				confirmationHandler,
+				showAnimation
+			)
+		);
 	};
 };

@@ -40,3 +40,25 @@ export const getUserDetails = async (userID, token) => {
 
 	return data;
 };
+
+export const updateUserProfile = async (userID, updateInfo, token) => {
+	const formData = new FormData();
+
+	formData.append("username", updateInfo.username);
+
+	if (updateInfo.avatar) {
+		formData.append("avatar", updateInfo.avatar);
+	}
+
+	const result = await fetch(`${baseURL}/update/${userID}`, {
+		method: "PATCH",
+		headers: {
+			"auth-token": token,
+		},
+		body: formData,
+	});
+
+	const data = await result.json();
+
+	return data;
+};

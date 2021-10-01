@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
-import groupHeaderStyles from "../group-header.module.scss";
 
 import {
 	displayConfirmationModal,
@@ -18,15 +16,11 @@ import {
 } from "../../../local-storage/current-user";
 import { leaveGroup } from "../../../api/api.group";
 
-import { ReactComponent as HorizontalDotsIcon } from "../../../assets/icons/horizontal-dots.svg";
-
-import DropdownMenu from "../../dropdown-menu/dropdown-menu";
 import DropdownItem from "../../dropdown-item/dropdown-item";
 import Spinner from "../../spinner/spinner";
+import DotMenu from "../../dot-menu/dot-menu";
 
 const GroupMenu = ({ owner }) => {
-	const [showDropdown, setShowDropdown] = useState(false);
-
 	const history = useHistory();
 	const params = useParams();
 
@@ -35,10 +29,6 @@ const GroupMenu = ({ owner }) => {
 	const currentUser = getCurrentUser();
 
 	const dispatch = useDispatch();
-
-	const handleDotsIconClick = () => {
-		setShowDropdown(!showDropdown);
-	};
 
 	const handleViewMembersClick = () => {
 		history.push(`/group/${groupID}/members`);
@@ -78,28 +68,21 @@ const GroupMenu = ({ owner }) => {
 	};
 
 	return (
-		<div
-			className={groupHeaderStyles.iconContainer}
-			onClick={handleDotsIconClick}
-		>
-			<HorizontalDotsIcon />
+		<DotMenu indicator="right">
+			<DropdownItem clickHandler={handleViewMembersClick}>
+				view members
+			</DropdownItem>
 
-			<DropdownMenu show={showDropdown} indicator="right">
-				<DropdownItem clickHandler={handleViewMembersClick}>
-					view members
+			{currentUser._id !== owner ? (
+				<DropdownItem type="danger" clickHandler={handleLeaveClick}>
+					leave group
 				</DropdownItem>
-
-				{currentUser._id !== owner ? (
-					<DropdownItem type="danger" clickHandler={handleLeaveClick}>
-						leave group
-					</DropdownItem>
-				) : (
-					<DropdownItem clickHandler={handleDelegateClick}>
-						delegate ownership
-					</DropdownItem>
-				)}
-			</DropdownMenu>
-		</div>
+			) : (
+				<DropdownItem clickHandler={handleDelegateClick}>
+					delegate ownership
+				</DropdownItem>
+			)}
+		</DotMenu>
 	);
 };
 

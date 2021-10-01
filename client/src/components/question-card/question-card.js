@@ -7,7 +7,6 @@ import styles from "./question-card.module.scss";
 import { setActiveQuestion } from "../../redux/group-questions/group-questions.actions";
 
 import { getHowLongAgo } from "../../utils/utils.date-time";
-import { getCurrentUser } from "../../local-storage/current-user";
 
 import UserPreview from "../user-preview/user-preview";
 import VoteContainer from "../vote-container/vote-container";
@@ -32,8 +31,6 @@ const QuestionCard = ({
 
 	const groupID = params.id;
 
-	const currentUser = getCurrentUser();
-
 	const { username, _id: authorID, avatar } = author;
 
 	const handleContainerClick = () => {
@@ -51,7 +48,7 @@ const QuestionCard = ({
 				proposedSolutions,
 			})
 		);
-		history.push(`/group/${groupID}/question/${questionID}`);
+		history.push(`/group/${groupID}/question/${questionID}/details`);
 	};
 
 	const renderVoteContainer = () => {

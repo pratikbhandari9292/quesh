@@ -9,7 +9,6 @@ import {
 	updateSearchedQuestion,
 } from "./redux/group-questions/group-questions.actions";
 import { resetGroupMembers } from "./redux/group-members/group-members.actions";
-import { hideMenu } from "./redux/menu/menu.actions";
 
 import {
 	getCurrentUser,
@@ -42,6 +41,8 @@ import GroupMembers from "./pages/group-members/group-members";
 import QuestionSearch from "./pages/question-search/question-search";
 import QuestionDetails from "./pages/question-details/question-details";
 import QuestionHeader from "./components/question-header/question-header";
+import UserProfile from "./pages/user-profile/user-profile";
+import EditProfile from "./pages/edit-profile/edit-profile";
 
 const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 	const dispatch = useDispatch();
@@ -200,6 +201,12 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 						</Route>
 						<Route path="/group/:groupID/question/:questionID">
 							<QuestionDetails />
+						</Route>
+						<Route path="/profile/me">
+							<UserProfile />
+						</Route>
+						<Route path="/profile/edit">
+							<EditProfile />
 						</Route>
 					</section>
 				</Switch>

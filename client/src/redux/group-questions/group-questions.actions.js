@@ -47,6 +47,13 @@ export const updateSearchedQuestion = (questionID, updateInfo) => {
 	};
 };
 
+export const removeGroupQuestion = (questionID) => {
+	return {
+		type: "REMOVE_GROUP_QUESTION",
+		payload: questionID,
+	};
+};
+
 export const resetGroupQuestions = () => {
 	return {
 		type: "RESET_GROUP_QUESTIONS",

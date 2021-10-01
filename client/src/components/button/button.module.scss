@@ -1,4 +1,5 @@
 @import "../../styles/variables.module.scss";
+@import "../../styles/utils.module.scss";
 
 .buttonPrimary {
 	display: flex;
@@ -18,14 +19,15 @@
 		border 100ms ease-in;
 	min-width: 7rem;
 
-	div,
-	svg {
-		margin-left: 0.75rem;
-	}
-
 	div {
+		margin-left: 0.75rem;
 		border-color: white;
 		border-left-color: transparent;
+	}
+
+	svg {
+		@extend .iconSmaller;
+		margin-right: 0.75rem;
 	}
 
 	&:hover {
@@ -77,6 +79,12 @@
 	&:hover {
 		border: 1px solid $color-blue;
 		color: $color-blue;
+
+		svg {
+			path {
+				fill: $color-blue;
+			}
+		}
 	}
 }
 

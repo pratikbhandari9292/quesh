@@ -12,7 +12,7 @@ const getErrorMessage = (error, fields) => {
 
 	for (let i = 0; i < fields.length; i++) {
 		if (error.includes(fields[i].name)) {
-			if (error.includes("empty")) {
+			if (error.includes("empty") || error.includes("required")) {
 				errorMessage = `${fields[i].name} cannot be empty`;
 				break;
 			}

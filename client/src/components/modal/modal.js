@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import styles from "./modal.module.scss";
 
-import { setModal } from "../../redux/modal/modal.actions";
+import { resetModal } from "../../redux/modal/modal.actions";
 import { animations } from "./modal.animations";
 
 import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
@@ -12,16 +12,26 @@ import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
 import Button from "../../components/button/button";
 
 const Modal = ({ modalInfo, closable }) => {
-	const { showModal, modalTitle, modalChildren, clickHandler } = modalInfo;
+	const {
+		showModal,
+		modalTitle,
+		modalChildren,
+		clickHandler,
+		showAnimation,
+	} = modalInfo;
 
 	const getAnimation = () => {
+		if (!showAnimation) {
+			return null;
+		}
+
 		return animations[Math.floor(Math.random() * 5)];
 	};
 
 	const dispatch = useDispatch();
 
 	const closeModal = () => {
-		dispatch(setModal(false, ""));
+		dispatch(resetModal());
 	};
 
 	const handleWrapperClick = (event) => {

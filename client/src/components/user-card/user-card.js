@@ -45,7 +45,7 @@ const UserCard = ({
 				return (
 					<div className={styles.controls}>
 						<SelectControl
-							user={{ userID, username, email, groups }}
+							user={{ userID, username, email, avatar, groups }}
 							groupID={groupID}
 						/>
 					</div>

@@ -10,9 +10,9 @@ import { getDate } from "../../utils/utils.date-time";
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
 
 import StatusMessage from "../../components/status-message/status-message";
-import PageHeader from "../../components/page-header/page-header";
 import GroupInfo from "../../components/group-info/group-info";
 import MembershipStatus from "../../components/membership-status/membership-status";
+import ContentHeader from "../../components/content-header/content-header";
 
 const GroupDetails = ({ groups, searchResults }) => {
 	const [groupDetails, setGroupDetails] = useState(null);
@@ -60,7 +60,7 @@ const GroupDetails = ({ groups, searchResults }) => {
 
 	return (
 		<div className={styles.container}>
-			<PageHeader title={groupDetails.title} capFirst backArrow />
+			<ContentHeader title={groupDetails.title} />
 
 			<div className={styles.groupDetailsGrid}>
 				<div>

@@ -44,4 +44,24 @@ const validateUserSignIn = (user) => {
 	return null;
 };
 
-module.exports = { validateUserRegistration, validateUserSignIn };
+//defining a schema for user profile update
+const userUpdateSchema = Joi.object({
+	username: Joi.string().min(5).max(25).required(),
+});
+
+const validateUserUpdate = (user) => {
+	const validationResult = userUpdateSchema.validate(user);
+	const error = checkForErrors(validationResult);
+
+	if (error) {
+		return getErrorMessage(error, fields);
+	}
+
+	return null;
+};
+
+module.exports = {
+	validateUserRegistration,
+	validateUserSignIn,
+	validateUserUpdate,
+};

@@ -39,6 +39,15 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 					action
 				),
 			};
+		case "REMOVE_GROUP_QUESTION":
+			return {
+				...state,
+				questions: deleteQuestion(state.questions, action.payload),
+				searchedQuestions: deleteQuestion(
+					state.searchedQuestions,
+					action.payload
+				),
+			};
 		case "RESET_GROUP_QUESTIONS":
 			return { ...INITIAL_STATE };
 		default:
@@ -57,4 +66,8 @@ function updateQuestion(questionArr, action) {
 
 		return question;
 	});
+}
+
+function deleteQuestion(questionArr, questionID) {
+	return questionArr.filter((question) => question._id !== questionID);
 }

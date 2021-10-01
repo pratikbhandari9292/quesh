@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 
 const { auth } = require("../middleware/auth");
 const { validateQuestion } = require("../validation/question.validation");
@@ -7,6 +8,35 @@ const Question = require("../models/Question");
 const User = require("../models/User");
 
 const router = express.Router();
+
+const upload = multer({
+	limits: {
+		fileSize: 5000000,
+	},
+	fileFilter(request, file, cb) {
+		if (
+			file.originalname.endsWith(".jpg") ||
+			file.originalname.endsWith(".jpeg") ||
+			file.originalname.endsWith(".png")
+		) {
+			return cb(null, true);
+		}
+
+		cb(new Error("supported file types are .jpg, .jpeg and .png"));
+	},
+});
+
+router.post(
+	"/upload",
+	upload.array("upload", 3),
+	(request, response) => {
+		console.log(request.files);
+		response.send();
+	},
+	(error, request, response, next) => {
+		response.status(400).send({ error: error.message });
+	}
+);
 
 //create a new question
 router.post("/:groupID", auth, async (request, response) => {
@@ -49,6 +79,7 @@ router.post("/:groupID", auth, async (request, response) => {
 			createdAt,
 			updatedAt,
 			votes,
+			proposedSolutions,
 		} = savedQuestion;
 
 		response.status(201).send({
@@ -62,6 +93,7 @@ router.post("/:groupID", auth, async (request, response) => {
 				createdAt,
 				updatedAt,
 				votes,
+				proposedSolutions,
 				author: requestingUser,
 			},
 		});
@@ -126,7 +158,24 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 
 		response.send({ questions });
 	} catch (error) {
-		console.log(error);
+		response.status(500).send({ error: error.message });
+	}
+});
+
+//delete a question
+router.delete("/:questionID", auth, questionAuth, async (request, response) => {
+	const question = request.question;
+	const requestingUser = request.user;
+
+	if (question.author != requestingUser) {
+		return response.status(400).send({ error: "not authorized" });
+	}
+
+	try {
+		await Question.findByIdAndDelete(request.params.questionID);
+
+		response.send({ message: "deleted" });
+	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}
 });
