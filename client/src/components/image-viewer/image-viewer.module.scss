@@ -1,0 +1,36 @@
+@import "../../styles/box-shadows.module.scss";
+
+.overlay,
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.overlay {
+	position: fixed;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.75);
+	z-index: 5;
+}
+
+.container {
+	height: 85%;
+	min-width: 15rem;
+	background-color: white;
+	background-color: transparent;
+}
+
+.image {
+	display: block;
+	max-height: 100%;
+	max-width: 100%;
+	height: auto;
+	width: auto;
+	object-fit: contain;
+	border-radius: 5px;
+	box-shadow: $box-shadow-three;
+}

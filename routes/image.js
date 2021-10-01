@@ -5,7 +5,7 @@ const Image = require("../models/Image");
 const router = express.Router();
 
 //get an image
-router.get("/", async (request, response) => {
+router.get("/:randomString", async (request, response) => {
 	let options = null;
 
 	const userID = request.query.userID;

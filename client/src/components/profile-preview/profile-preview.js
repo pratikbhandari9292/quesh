@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import styles from "./profile-preview.module.scss";
 
-import { setCurrentUser as setCurrentUserRedux } from "../../redux/current-user/current-user.actions";
+import { resetCurrentUser } from "../../redux/current-user/current-user.actions";
 import { setGroups, setNeedToFetch } from "../../redux/groups/groups.actions";
 import { resetAddMembers } from "../../redux/add-members/add-members.actions";
 import {
@@ -47,7 +47,7 @@ const ProfilePreview = ({ username, email, avatar }) => {
 		dispatch(resetModal());
 		dispatch(setGroups([]));
 		dispatch(setNeedToFetch(true));
-		dispatch(setCurrentUserRedux(false));
+		dispatch(resetCurrentUser());
 		dispatch(resetAddMembers());
 		setCurrentUser(null);
 		history.push("/signin");

@@ -43,6 +43,7 @@ import QuestionDetails from "./pages/question-details/question-details";
 import QuestionHeader from "./components/question-header/question-header";
 import UserProfile from "./pages/user-profile/user-profile";
 import EditProfile from "./pages/edit-profile/edit-profile";
+import ImageViewer from "./components/image-viewer/image-viewer";
 
 const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 	const dispatch = useDispatch();
@@ -126,6 +127,7 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 			<Header />
 			<Modal key="modal" />
 			<Alert />
+			<ImageViewer />
 			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
 				{renderSideBar()}
 				<Switch>

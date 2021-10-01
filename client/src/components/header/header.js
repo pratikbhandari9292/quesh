@@ -13,14 +13,10 @@ import ProfilePreview from "../profile-preview/profile-preview";
 import GroupSearch from "../group-search/group-search";
 
 const Header = ({ currentUserRedux, updates }) => {
-	const [currentUser, setCurrentUser] = useState(getCurrentUser());
+	const currentUser = getCurrentUser();
 
 	const history = useHistory();
 	const location = useLocation();
-
-	useEffect(() => {
-		setCurrentUser(getCurrentUser());
-	}, [updates]);
 
 	const renderButtons = () => {
 		if (location.pathname.includes("signin")) {

@@ -9,6 +9,8 @@ export const currentUserReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, currentUser: action.payload };
 		case "INCREMENT_USER_UPDATES":
 			return { ...state, updates: state.updates + 1 };
+		case "RESET_CURRENT_USER":
+			return { ...state, ...INITIAL_STATE };
 		default:
 			return state;
 	}

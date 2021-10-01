@@ -10,3 +10,9 @@ export const incrementUserUpdates = () => {
 		type: "INCREMENT_USER_UPDATES",
 	};
 };
+
+export const resetCurrentUser = () => {
+	return {
+		type: "RESET_CURRENT_USER",
+	};
+};

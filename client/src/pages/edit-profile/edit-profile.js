@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import styles from "./edit-profile.module.scss";
 import formStyles from "../../styles/form.module.scss";
 
-import { displayAlert } from "../../redux/alert/alert.actions";
+import {
+	displayAlert,
+	displayErrorAlert,
+} from "../../redux/alert/alert.actions";
 import { incrementUserUpdates } from "../../redux/current-user/current-user.actions";
 import { resetModal, setModal } from "../../redux/modal/modal.actions";
 
@@ -13,7 +16,9 @@ import {
 	getCurrentUser,
 	updateCurrentUser,
 } from "../../local-storage/current-user";
-import { updateUserProfile } from "../../api/api.user";
+import { removeUserAvatar, updateUserProfile } from "../../api/api.user";
+
+import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
 
 import InputGroup from "../../components/input-group/input-group";
 import FormHeader from "../../components/form-header/form-header";
@@ -22,7 +27,7 @@ import Button from "../../components/button/button";
 import FileSelector from "../../components/file-selector/file-selector";
 import Spinner from "../../components/spinner/spinner";
 
-const EditProfile = () => {
+const EditProfile = ({ updates }) => {
 	const currentUser = getCurrentUser();
 
 	const [username, setUsername] = useState(currentUser.username);
@@ -60,9 +65,7 @@ const EditProfile = () => {
 				return renderError(result.error);
 			}
 
-			updateCurrentUser(result.user);
-			dispatch(incrementUserUpdates());
-			dispatch(displayAlert("profile edited"));
+			updateUser(result.user, "profile edited");
 			history.goBack();
 		} catch (error) {
 		} finally {
@@ -85,12 +88,43 @@ const EditProfile = () => {
 		setAvatarError("");
 	};
 
+	const handleRemoveAvatarClick = async () => {
+		dispatch(setModal(true, "removing avatar...", <Spinner />, false));
+
+		try {
+			const result = await removeUserAvatar(
+				currentUser._id,
+				currentUser.token
+			);
+
+			if (result.error) {
+				dispatch(displayErrorAlert());
+			}
+
+			updateUser(result.user, "avatar removed");
+		} catch (error) {
+		} finally {
+			dispatch(resetModal());
+		}
+	};
+
+	const updateUser = (updateInfo, updateMessage) => {
+		updateCurrentUser(updateInfo);
+		dispatch(incrementUserUpdates());
+		dispatch(displayAlert(updateMessage));
+	};
+
 	return (
 		<div className={formStyles.container}>
 			<FormHeader heading="edit your profile" backArrow={true} />
 
 			<div className={styles.profilePictureContainer}>
-				<ProfilePicture avatar={currentUser.avatar} size="bigger" />
+				<ProfilePicture
+					avatar={currentUser.avatar}
+					size="bigger"
+					expand={true}
+					rounded={false}
+				/>
 
 				<div className={styles.divider}></div>
 				<FileSelector
@@ -98,6 +132,18 @@ const EditProfile = () => {
 					error={avatarError}
 					changeHandler={handleAvatarChange}
 				/>
+
+				<div className={styles.divider}></div>
+
+				{!currentUser.avatar.includes("dicebear") && (
+					<Button
+						size="smaller"
+						type="secondary"
+						clickHandler={handleRemoveAvatarClick}
+					>
+						<CrossIcon /> remove avatar
+					</Button>
+				)}
 			</div>
 
 			<form onSubmit={handleFormSubmit}>
@@ -113,4 +159,10 @@ const EditProfile = () => {
 	);
 };
 
-export default EditProfile;
+const mapStateToProps = (state) => {
+	return {
+		updates: state.currentUser.updates,
+	};
+};
+
+export default connect(mapStateToProps)(EditProfile);

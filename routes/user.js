@@ -1,4 +1,5 @@
 const express = require("express");
+const uniqid = require("uniqid");
 
 const { auth } = require("../middleware/auth");
 const User = require("../models/User");
@@ -87,7 +88,10 @@ router.patch(
 
 			savedImage = await image.save();
 
-			imageOption = { avatar: `/api/image/?userID=${userID}` };
+			const randomString = uniqid();
+			imageOption = {
+				avatar: `/api/image/${randomString}?userID=${userID}`,
+			};
 		}
 
 		const user = await User.findByIdAndUpdate(
@@ -111,5 +115,28 @@ router.patch(
 		response.status(400).send({ error: errorMessage });
 	}
 );
+
+//remove avatar
+router.delete("/avatar/:userID", auth, async (request, response) => {
+	if (request.user != request.params.userID) {
+		return response.status(400).send({ error: "not authorized" });
+	}
+
+	const user = await User.findById(request.params.userID);
+
+	if (!user) {
+		return response.status(400).send({ error: "user not found" });
+	}
+
+	user.avatar = `https://avatars.dicebear.com/api/initials/${user.username}.svg`;
+
+	try {
+		const savedUser = await user.save();
+
+		response.send({ user: savedUser });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
 
 module.exports = router;

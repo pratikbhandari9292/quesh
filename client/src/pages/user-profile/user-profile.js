@@ -26,8 +26,13 @@ const UserProfile = () => {
 			<PageHeader title="your profile" capitalize={true} />
 
 			<div className={styles.profileMain}>
-				<div>
-					<ProfilePicture avatar={avatar} size="bigger" />
+				<div className={styles.avatarContainer}>
+					<ProfilePicture
+						avatar={avatar}
+						size="bigger"
+						expand={true}
+						rounded={false}
+					/>
 				</div>
 
 				<div className={styles.userInfo}>

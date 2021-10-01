@@ -62,3 +62,16 @@ export const updateUserProfile = async (userID, updateInfo, token) => {
 
 	return data;
 };
+
+export const removeUserAvatar = async (userID, token) => {
+	const result = await fetch(`${baseURL}/avatar/${userID}`, {
+		method: "DELETE",
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

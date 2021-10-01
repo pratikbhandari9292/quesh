@@ -1,12 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const uniqid = require("uniqid");
 
 const { auth } = require("../middleware/auth");
 const { validateGroup } = require("../validation/group.validation");
 const Group = require("../models/Group");
 const Question = require("../models/Question");
 const User = require("../models/User");
-const uniqid = require("uniqid");
 
 const router = express.Router();
 

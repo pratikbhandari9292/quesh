@@ -2,7 +2,7 @@
 
 .container,
 .image {
-	border-radius: 50%;
+	border-radius: 5px;
 }
 
 .container {
@@ -22,8 +22,16 @@
 }
 
 .containerBigger {
-	height: 7.5rem;
-	width: 7.5rem;
+	height: 9rem;
+	width: 9rem;
+}
+
+.containerRounded {
+	border-radius: 50%;
+
+	.image {
+		border-radius: 50%;
+	}
 }
 
 .image {

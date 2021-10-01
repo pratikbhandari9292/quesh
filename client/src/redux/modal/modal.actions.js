@@ -35,7 +35,7 @@ export const resetModal = () => {
 export const displayConfirmationModal = (
 	message,
 	confirmationHandler,
-	showAnimation
+	showAnimation = false
 ) => {
 	return (dispatch) => {
 		dispatch(
