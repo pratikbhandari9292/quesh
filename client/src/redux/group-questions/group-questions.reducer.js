@@ -34,6 +34,23 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				activeQuestion: { ...state.activeQuestion, ...action.payload },
 			};
+		case "DELETE_SOLUTION":
+			return {
+				...state,
+				activeQuestion: { ...state.activeQuestion, solution: null },
+			};
+		case "DELETE_PROPOSED_SOLUTION":
+			return {
+				...state,
+				activeQuestion: {
+					...state.activeQuestion,
+					proposedSolutions:
+						state.activeQuestion.proposedSolutions.filter(
+							(proposedSolution) =>
+								proposedSolution._id !== action.payload
+						),
+				},
+			};
 		case "SET_SEARCHED_QUESTIONS":
 			return { ...state, searchedQuestions: action.payload };
 		case "UPDATE_SEARCHED_QUESTION":

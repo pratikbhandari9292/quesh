@@ -120,7 +120,9 @@ const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 				<Element name="scrollSection"></Element>
 			</div>
 
-			{showSolution && <SolutionContainer solution={solution} />}
+			{solution && showSolution && (
+				<SolutionContainer solution={solution} />
+			)}
 
 			{renderCornerButton()}
 		</div>

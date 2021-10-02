@@ -1,3 +1,5 @@
+import Spinner from "../../components/spinner/spinner";
+
 export const setModal = (
 	showModal,
 	modalTitle,
@@ -26,12 +28,6 @@ export const setClosable = (closable) => {
 	};
 };
 
-export const resetModal = () => {
-	return {
-		type: "RESET_MODAL",
-	};
-};
-
 export const displayConfirmationModal = (
 	message,
 	confirmationHandler,
@@ -48,5 +44,17 @@ export const displayConfirmationModal = (
 				showAnimation
 			)
 		);
+	};
+};
+
+export const displayLoadingModal = (message) => {
+	return (dispatch) => {
+		dispatch(setModal(true, message, <Spinner />, false));
+	};
+};
+
+export const resetModal = () => {
+	return {
+		type: "RESET_MODAL",
 	};
 };

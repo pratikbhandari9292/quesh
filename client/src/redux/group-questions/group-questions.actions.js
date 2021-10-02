@@ -40,6 +40,19 @@ export const updateActiveQuestion = (updateInfo) => {
 	};
 };
 
+export const deleteSolution = (type, solutionID) => {
+	if (type === "solution") {
+		return {
+			type: "DELETE_SOLUTION",
+		};
+	}
+
+	return {
+		type: "DELETE_PROPOSED_SOLUTION",
+		payload: solutionID,
+	};
+};
+
 export const setSearchedQuestions = (questions) => {
 	return {
 		type: "SET_SEARCHED_QUESTIONS",

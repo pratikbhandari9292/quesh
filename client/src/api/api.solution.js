@@ -21,3 +21,16 @@ export const solveOrPropose = async (solutionInfo, questionID, type, token) => {
 
 	return data;
 };
+
+export const deleteSolution = async (solutionID, type, token) => {
+	const result = await fetch(`${baseURL}/${solutionID}/?type=${type}`, {
+		method: "DELETE",
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

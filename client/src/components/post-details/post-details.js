@@ -6,7 +6,14 @@ import { getDate, getHowLongAgo } from "../../utils/utils.date-time";
 
 import ProfilePicture from "../profile-picture/profile-picture";
 
-const PostDetails = ({ author, createdAt, description, voteContainer }) => {
+const PostDetails = ({
+	author,
+	createdAt,
+	description,
+	voteContainer,
+	type = "solution",
+	menu,
+}) => {
 	const { username, avatar } = author;
 
 	return (
@@ -24,6 +31,8 @@ const PostDetails = ({ author, createdAt, description, voteContainer }) => {
 						{getDate(createdAt)}
 					</p>
 				</div>
+
+				{menu}
 			</div>
 
 			<div className={styles.postDescription}>

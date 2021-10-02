@@ -3,10 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import styles from "./solution-container.module.scss";
 
+import { getCurrentUser } from "../../local-storage/current-user";
+
 import PageHeader from "../page-header/page-header";
 import PostDetails from "../post-details/post-details";
 import ImageList from "../image-list/image-list";
 import Button from "../button/button";
+import SolutionMenu from "./solution-menu/solution-menu";
 
 const SolutionContainer = ({
 	solution,
@@ -15,7 +18,15 @@ const SolutionContainer = ({
 }) => {
 	const [showImages, setShowImages] = useState(!showContentToggler);
 
-	const { author, createdAt, description, images } = solution;
+	const {
+		_id: solutionID,
+		author,
+		createdAt,
+		description,
+		images,
+	} = solution;
+
+	const currentUser = getCurrentUser();
 
 	const imageListAnimation = {
 		hidden: {
@@ -56,7 +67,16 @@ const SolutionContainer = ({
 				/>
 			)}
 
-			<PostDetails {...{ author, createdAt, description }} />
+			<PostDetails
+				{...{
+					author,
+					createdAt,
+					description,
+					menu: currentUser._id === author._id && (
+						<SolutionMenu solutionID={solutionID} />
+					),
+				}}
+			/>
 
 			<div className={styles.divider}></div>
 

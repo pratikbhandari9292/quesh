@@ -111,50 +111,6 @@ router.post(
 	}
 );
 
-//propose a solution
-router.post(
-	"/:questionID/propose",
-	auth,
-	questionAuth,
-	async (request, response) => {
-		const solutionInfo = request.body;
-		const question = request.question;
-
-		//checking to see if the solution has any errors
-		const error = validateSolution(solutionInfo);
-
-		if (error) {
-			return response.status(400).send({ error });
-		}
-
-		try {
-			//getting the group the question belongs to
-			const group = await Group.findById(question.group);
-
-			//checking to see if the requesting user if a member of the group
-			if (!group.members.find((member) => member._id == request.user)) {
-				return response
-					.status(400)
-					.send({ error: "unauthorized to propose a solution" });
-			}
-
-			const solution = new Solution({
-				...solutionInfo,
-				author: request.user,
-				approved: false,
-				question: request.params.questionID,
-			});
-
-			//saving the solution to the database
-			const savedSolution = await solution.save();
-
-			response.status(201).send({ message: "solution proposed" });
-		} catch (error) {
-			response.status(500).send({ error: error.message });
-		}
-	}
-);
-
 //approve a solution
 router.put(
 	"/:questionID/approve/:solutionID",
@@ -225,6 +181,36 @@ router.get(
 	}
 );
 
+//delete a solution
+router.delete("/:solutionID", auth, solutionAuth, async (request, response) => {
+	const type = request.query.type;
+	const solution = request.solution;
+
+	try {
+		const [question] = await Promise.all([
+			Question.findById(solution.question),
+			Solution.findByIdAndDelete(request.params.solutionID),
+		]);
+
+		if (type === "solution") {
+			question.solution = null;
+		}
+
+		if (type === "proposal") {
+			question.proposedSolutions = question.proposedSolutions.filter(
+				(proposedSolution) =>
+					proposedSolution != request.params.solutionID
+			);
+		}
+
+		await question.save();
+
+		response.send({ message: "deleted" });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
+
 //middlewares
 async function questionAuth(request, response, next) {
 	try {
@@ -237,6 +223,22 @@ async function questionAuth(request, response, next) {
 		}
 
 		request.question = question;
+
+		next();
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+}
+
+async function solutionAuth(request, response, next) {
+	try {
+		const solution = await Solution.findById(request.params.solutionID);
+
+		if (!solution) {
+			return response.status(400).send({ error: "solution not found" });
+		}
+
+		request.solution = solution;
 
 		next();
 	} catch (error) {
