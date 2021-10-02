@@ -1,5 +1,6 @@
 const express = require("express");
 const uniqid = require("uniqid");
+const mongoose = require("mongoose");
 
 const { auth } = require("../middleware/auth");
 const { validateQuestion } = require("../validation/question.validation");
@@ -13,9 +14,8 @@ const { getImageError } = require("../utils/utils.files");
 const router = express.Router();
 
 //create a new question
-const fileSizeLimit = 5;
 const maxImages = 3;
-const upload = getUpload(fileSizeLimit);
+const upload = getUpload();
 
 router.post(
 	"/:groupID",
@@ -24,6 +24,7 @@ router.post(
 	async (request, response) => {
 		const questionInfo = request.body;
 		let images = [];
+		const questionID = new mongoose.Types.ObjectId();
 
 		//checking to see if the question has any errors
 		const error = validateQuestion(questionInfo);
@@ -42,71 +43,43 @@ router.post(
 
 			const question = new Question({
 				...questionInfo,
+				_id: questionID,
 				author: request.user,
 				group: request.params.groupID,
 				images: [],
 			});
 
-			let finalQuestion = {};
-
-			//saving the question to the database
-			const [savedQuestion, requestingUser] = await Promise.all([
-				question.save(),
-				User.findById(request.user),
-			]);
-
-			finalQuestion = savedQuestion;
-
 			if (request.files.length > 0) {
 				request.files.forEach((file) => {
 					const randomString = uniqid();
+
 					images = [
 						...images,
 						new Image({
 							binary: file.buffer,
-							question: savedQuestion._id,
+							question: questionID,
 							randomStr: randomString,
 						}),
 					];
-					savedQuestion.images = [
-						...savedQuestion.images,
-						`/api/image/${randomString}/?questionID=${savedQuestion._id}`,
+
+					question.images = [
+						...question.images,
+						`/api/image/${randomString}/?questionID=${questionID}`,
 					];
 				});
-
-				const [savedQuestionWithImages] = await Promise.all([
-					savedQuestion.save(),
-					Image.insertMany(images),
-				]);
-
-				finalQuestion = savedQuestionWithImages;
 			}
 
-			const {
-				_id,
-				description,
-				title,
-				group,
-				solution,
-				createdAt,
-				updatedAt,
-				votes,
-				proposedSolutions,
-			} = finalQuestion;
+			//saving the question and images to the database
+			const [savedQuestion, savedImages, requestingUser] =
+				await Promise.all([
+					question.save(),
+					Image.insertMany(images),
+					User.findById(request.user),
+				]);
 
 			response.status(201).send({
-				question: {
-					_id,
-					description,
-					title,
-					group,
-					solution,
-					createdAt,
-					updatedAt,
-					votes,
-					proposedSolutions,
-					author: requestingUser,
-				},
+				question: savedQuestion,
+				author: requestingUser,
 			});
 		} catch (error) {
 			response.status(500).send({ error: error.message });
@@ -115,7 +88,7 @@ router.post(
 	(error, request, response, next) => {
 		response
 			.status(400)
-			.send({ error: getImageError(error, fileSizeLimit, maxImages) });
+			.send({ error: getImageError(error, 5, maxImages) });
 	}
 );
 

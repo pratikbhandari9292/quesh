@@ -29,6 +29,11 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 			return { ...state, sortBy: action.payload };
 		case "SET_ACTIVE_QUESTION":
 			return { ...state, activeQuestion: action.payload };
+		case "UPDATE_ACTIVE_QUESTION":
+			return {
+				...state,
+				activeQuestion: { ...state.activeQuestion, ...action.payload },
+			};
 		case "SET_SEARCHED_QUESTIONS":
 			return { ...state, searchedQuestions: action.payload };
 		case "UPDATE_SEARCHED_QUESTION":

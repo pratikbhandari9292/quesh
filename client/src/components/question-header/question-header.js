@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -11,6 +12,8 @@ import QuestionMenu from "./question-menu/question-menu";
 const QuestionHeader = ({ activeQuestion }) => {
 	const [questionTitle, setQuestionTitle] = useState("");
 
+	const location = useLocation();
+
 	const currentUser = getCurrentUser();
 
 	const {
@@ -20,14 +23,37 @@ const QuestionHeader = ({ activeQuestion }) => {
 	} = activeQuestion;
 
 	useEffect(() => {
+		const titleSection = getTitleSection();
+
 		setQuestionTitle(
-			capitalizeFirstLetter(title || `${username}'s question`)
+			`${titleSection} - ${capitalizeFirstLetter(
+				title || `${username}'s question`
+			)}`
 		);
-	}, []);
+	}, [location]);
 
 	useEffect(() => {
-		document.title = `Question - ${questionTitle}`;
+		document.title = questionTitle;
 	}, [questionTitle]);
+
+	const getTitleSection = () => {
+		if (location.pathname.includes("solve")) {
+			return "Solve";
+		}
+
+		if (
+			location.pathname.includes("propose") &&
+			!location.pathname.includes("proposed-solutions")
+		) {
+			return "Propose";
+		}
+
+		if (location.pathname.includes("proposed-solutions")) {
+			return "Proposed solutions";
+		}
+
+		return "Question";
+	};
 
 	return (
 		<ContentHeader title={questionTitle}>

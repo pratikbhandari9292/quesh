@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import * as Scroll from "react-scroll";
 
 import styles from "./question-details.module.scss";
 
-import { getDate, getHowLongAgo } from "../../utils/utils.date-time";
+import { getCurrentUser } from "../../local-storage/current-user";
 
 import VoteContainer from "../../components/vote-container/vote-container";
-import ProfilePicture from "../../components/profile-picture/profile-picture";
 import QuestionStatus from "./question-status/question-status";
 import ImageList from "../../components/image-list/image-list";
+import Button from "../../components/button/button";
+import PostDetails from "../../components/post-details/post-details";
+import SolutionContainer from "../../components/solution-container/solution-container";
 
 const QuestionDetails = ({ activeQuestion, activeGroup }) => {
+	const [showSolution, setShowSolution] = useState(false);
+
+	const dividerRef = useRef();
+
+	const history = useHistory();
+
 	const {
 		description,
 		author,
@@ -23,46 +33,96 @@ const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 		images,
 	} = activeQuestion;
 
-	const { username, avatar } = author;
-
 	const { groupID, owner } = activeGroup;
+
+	const currentUser = getCurrentUser();
+
+	const Element = Scroll.Element;
+	const scroller = Scroll.scroller;
+
+	useEffect(() => {
+		scroller.scrollTo("scrollSection", {
+			duration: 100,
+			smooth: true,
+			containerID: "scrollSectionContainer",
+		});
+	}, [showSolution]);
+
+	const renderCornerButton = () => {
+		return (
+			<div className={styles.buttonContainer}>
+				{owner._id === currentUser._id ? (
+					<Button color="blue" clickHandler={handleSolveClick}>
+						solve
+					</Button>
+				) : (
+					<Button color="blue" clickHandler={handleProposeClick}>
+						propose
+					</Button>
+				)}
+			</div>
+		);
+	};
+
+	const handleSolveClick = () => {
+		takeToSolve("solve");
+	};
+
+	const handleProposeClick = () => {
+		takeToSolve("propose");
+	};
+
+	const takeToSolve = (type) => {
+		history.push(`/group/${groupID}/question/${questionID}/${type}`);
+	};
+
+	const scrollToSolution = () => {
+		if (!showSolution) {
+			setShowSolution(true);
+		}
+
+		setTimeout(() => {
+			dividerRef.current.scrollIntoView();
+		}, 100);
+	};
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.userPreview}>
-				<ProfilePicture
-					username={username}
-					avatar={avatar}
-					size="smaller"
+			<div className={styles.detailsMain}>
+				<PostDetails
+					{...{
+						author,
+						createdAt,
+						description,
+						voteContainer: (
+							<VoteContainer
+								{...{ votes, votesNumber, author, questionID }}
+							/>
+						),
+					}}
 				/>
-				<div className={styles.userPostInfo}>
-					<p className={styles.previewUsername}>{username}</p>
-					<p className={styles.postInfo}>
-						posted {getHowLongAgo(createdAt)} ago on{" "}
-						{getDate(createdAt)}
-					</p>
-				</div>
+
+				<QuestionStatus
+					{...{
+						solution,
+						proposedSolutions,
+						groupID,
+						owner,
+						scrollToSolution,
+					}}
+				/>
 			</div>
 
-			<div className={styles.questionDescription}>
-				{description}
-				<VoteContainer
-					{...{ votes, votesNumber, author, questionID }}
-				/>
+			<ImageList list={images} title="question images" />
+
+			<div className={styles.divider} ref={dividerRef}></div>
+			<div id="scrollSectionContainer">
+				<Element name="scrollSection"></Element>
 			</div>
 
-			<QuestionStatus
-				{...{
-					solution,
-					proposedSolutions,
-					groupID,
-					owner,
-				}}
-			/>
+			{showSolution && <SolutionContainer solution={solution} />}
 
-			<div className={styles.divider}></div>
-
-			<ImageList list={images} />
+			{renderCornerButton()}
 		</div>
 	);
 };

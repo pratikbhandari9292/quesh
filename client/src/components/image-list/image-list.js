@@ -1,14 +1,36 @@
 import React from "react";
 
-import ContentImage from "../content-image/content-image";
+import styles from "./image-list.module.scss";
 
-const ImageList = ({ list }) => {
+import ContentImage from "../content-image/content-image";
+import PageHeader from "../page-header/page-header";
+
+const ImageList = ({ list, title }) => {
+	const listStyles = {
+		gridTemplateColumns: `repeat(auto-fit, 30rem)`,
+	};
+
+	if (list.length === 0) {
+		return null;
+	}
+
 	return (
-		<div>
-			{list.map((image) => {
-				return <ContentImage src={image} key={image} />;
-			})}
-		</div>
+		<React.Fragment>
+			<PageHeader
+				title={`${title} - ${list.length}`}
+				capFirst
+				muted
+				backArrow={false}
+			/>
+
+			<div className={styles.container} style={listStyles}>
+				{list.map((image, index) => {
+					return (
+						<ContentImage src={image} index={index} key={image} />
+					);
+				})}
+			</div>
+		</React.Fragment>
 	);
 };
 

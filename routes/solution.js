@@ -1,59 +1,115 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const uniqid = require("uniqid");
 
 const { auth } = require("../middleware/auth");
 const Question = require("../models/Question.js");
 const { validateSolution } = require("../validation/solution.validation");
 const Group = require("../models/Group");
 const Solution = require("../models/Solution");
+const { getUpload } = require("../middleware/multer");
+const { getImageError } = require("../utils/utils.files");
+const Image = require("../models/Image");
+const User = require("../models/User");
 
 const router = express.Router();
 
 //submit a solution to a question
-router.post("/:questionID", auth, questionAuth, async (request, response) => {
-	const solutionInfo = request.body;
-	const question = request.question;
+const maxImages = 5;
+const upload = getUpload();
 
-	//checking to see if the solution has any errors
-	const error = validateSolution(solutionInfo);
+router.post(
+	"/:questionID",
+	auth,
+	upload.array("uploads", maxImages),
+	questionAuth,
+	async (request, response) => {
+		const solutionInfo = request.body;
+		const question = request.question;
+		const solutionID = new mongoose.Types.ObjectId();
+		const type = request.query.type;
+		let images = [];
 
-	if (error) {
-		return response.status(400).send({ error });
-	}
+		//checking to see if the solution has any errors
+		const error = validateSolution(solutionInfo);
 
-	try {
-		//getting the group the question belongs to
-		const group = await Group.findById(question.group);
-
-		//checking to see if the requesting user is the owner of the group
-		if (request.user != group.owner) {
-			return response
-				.status(400)
-				.send({ error: "not authorized to submit solution" });
+		if (error) {
+			return response.status(400).send({ error });
 		}
 
-		//deleting the existing solution
-		await Solution.findByIdAndDelete(question.solution);
+		try {
+			//getting the group the question belongs to
+			const group = await Group.findById(question.group);
 
-		const solution = new Solution({
-			...solutionInfo,
-			author: request.user,
-			approved: true,
-			question: request.params.questionID,
-		});
+			//checking to see if the requesting user is the owner of the group
+			if (
+				(type === "solve" && request.user != group.owner) ||
+				(type === "propose" && request.user == group.owner)
+			) {
+				return response.status(400).send({ error: "not authorized" });
+			}
 
-		//saving the solution to the database
-		const savedSolution = await solution.save();
+			const solution = new Solution({
+				...solutionInfo,
+				_id: solutionID,
+				author: request.user,
+				approved: type === "solve" ? true : false,
+				question: request.params.questionID,
+			});
 
-		question.solution = savedSolution._id;
+			if (request.files.length > 0) {
+				request.files.forEach((file) => {
+					const randomString = uniqid();
 
-		//saving the question to the database
-		await question.save();
+					images = [
+						...images,
+						new Image({
+							binary: file.buffer,
+							solution: solutionID,
+							randomStr: randomString,
+						}),
+					];
 
-		response.status(201).send({ message: "solution submitted" });
-	} catch (error) {
-		response.status(500).send({ error: error.message });
+					solution.images = [
+						...solution.images,
+						`/api/image/${randomString}/?solutionID=${solutionID}`,
+					];
+				});
+			}
+
+			if (type === "solve") {
+				question.solution = solutionID;
+			}
+
+			if (type === "propose") {
+				question.proposedSolutions = [
+					...question.proposedSolutions,
+					solutionID,
+				];
+			}
+
+			//saving the solution, question and images to the database
+			const [savedSolution, savedQuestion, savedImages, requestingUser] =
+				await Promise.all([
+					solution.save(),
+					question.save(),
+					Image.insertMany(images),
+					User.findById(request.user),
+				]);
+
+			response
+				.status(201)
+				.send({ solution: savedSolution, author: requestingUser });
+		} catch (error) {
+			response.status(500).send({ error: error.message });
+		}
+	},
+	(error, request, response, next) => {
+		response
+			.status(400)
+			.send({ error: getImageError(error, 5, maxImages) });
 	}
-});
+);
 
 //propose a solution
 router.post(

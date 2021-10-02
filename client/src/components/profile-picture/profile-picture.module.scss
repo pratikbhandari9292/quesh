@@ -1,4 +1,5 @@
 @import "../../styles/variables.module.scss";
+@import "../../styles/image.module.scss";
 
 .container,
 .image {
@@ -35,8 +36,7 @@
 }
 
 .image {
-	height: 100%;
-	width: 100%;
+	@extend .image;
 }
 
 .text {

@@ -43,7 +43,8 @@ const questionSchema = new mongoose.Schema(
 		votes: { type: Array, default: [] },
 		votesNumber: { type: Number, default: 0 },
 	},
-	{ timestamps: true }
+	{ timestamps: true },
+	{ _id: false }
 );
 
 module.exports = mongoose.model("Question", questionSchema);

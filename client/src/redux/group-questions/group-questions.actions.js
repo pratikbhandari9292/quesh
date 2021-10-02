@@ -33,6 +33,13 @@ export const setActiveQuestion = (question) => {
 	};
 };
 
+export const updateActiveQuestion = (updateInfo) => {
+	return {
+		type: "UPDATE_ACTIVE_QUESTION",
+		payload: updateInfo,
+	};
+};
+
 export const setSearchedQuestions = (questions) => {
 	return {
 		type: "SET_SEARCHED_QUESTIONS",

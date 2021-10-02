@@ -2,6 +2,7 @@ const INITIAL_STATE = {
 	showViewer: false,
 	images: [],
 	currentlyDisplayed: 0,
+	imageSize: "normal",
 };
 
 export const imageViewerReducer = (state = INITIAL_STATE, action) => {
@@ -11,9 +12,13 @@ export const imageViewerReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				showViewer: action.payload.show,
 				images: action.payload.images,
+				currentlyDisplayed: action.payload.current,
+				imageSize: action.payload.imageSize,
 			};
 		case "SET_SHOW_VIEWER":
 			return { ...state, showViewer: action.payload };
+		case "SET_CURRENTLY_DISPLAYED":
+			return { ...state, currentlyDisplayed: action.payload };
 		case "DISPLAY_NEXT_IMAGE":
 			return {
 				...state,

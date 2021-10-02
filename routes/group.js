@@ -494,7 +494,23 @@ router.get(
 			const questions = await Question.find({
 				group: request.params.groupID,
 			})
-				.populate("author")
+				.populate([
+					{
+						path: "author",
+					},
+					{
+						path: "solution",
+						populate: {
+							path: "author",
+						},
+					},
+					{
+						path: "proposedSolutions",
+						populate: {
+							path: "author",
+						},
+					},
+				])
 				.sort({ [sortBy]: order });
 
 			response.status(200).send({ questions });

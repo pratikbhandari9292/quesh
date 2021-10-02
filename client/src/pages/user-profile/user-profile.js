@@ -44,6 +44,7 @@ const UserProfile = () => {
 						transparent
 						size="bigger"
 						capitalize
+						type="none"
 					/>
 
 					<div className={styles.divider}></div>

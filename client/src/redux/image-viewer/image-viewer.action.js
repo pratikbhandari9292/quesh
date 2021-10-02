@@ -1,7 +1,7 @@
-export const setImageViewer = (show, images) => {
+export const setImageViewer = (show, images, current = 0, imageSize) => {
 	return {
 		type: "SET_IMAGE_VIEWER",
-		payload: { show, images },
+		payload: { show, images, current, imageSize },
 	};
 };
 
@@ -9,6 +9,13 @@ export const setShowViewer = (show = true) => {
 	return {
 		type: "SET_SHOW_VIEWER",
 		payload: show,
+	};
+};
+
+export const setCurrentlyDisplayed = (index) => {
+	return {
+		type: "SET_CURRENTLY_DISPLAYED",
+		payload: index,
 	};
 };
 

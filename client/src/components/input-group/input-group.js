@@ -12,8 +12,6 @@ const InputGroup = ({
 	displayType = "input",
 	changeHandler,
 }) => {
-	console.log(value);
-
 	const handleInputChange = (event) => {
 		changeHandler(event.target.value);
 	};

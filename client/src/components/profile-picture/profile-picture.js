@@ -13,7 +13,7 @@ const ProfilePicture = ({ avatar, size, expand = false, rounded = true }) => {
 			return;
 		}
 
-		dispatch(setImageViewer(true, [avatar]));
+		dispatch(setImageViewer(true, [avatar], 0, "smaller"));
 	};
 
 	return (

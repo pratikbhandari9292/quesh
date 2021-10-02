@@ -1,17 +1,15 @@
+import { getFormData } from "./api.utils";
+
 // const baseURL = "http://localhost:5000/api/question";
 const baseURL = "/api/question";
 
 export const askQuestion = async (questionInfo, groupID, token) => {
-	const formData = new FormData();
+	let formData = new FormData();
 
 	formData.append("title", questionInfo.title);
 	formData.append("description", questionInfo.description);
 
-	if (questionInfo.images.length > 0) {
-		questionInfo.images.forEach((image) => {
-			formData.append("uploads", image);
-		});
-	}
+	formData = getFormData(formData, questionInfo.images);
 
 	const result = await fetch(`${baseURL}/${groupID}`, {
 		method: "POST",

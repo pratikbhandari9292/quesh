@@ -1,33 +1,40 @@
 import React, { useState } from "react";
+import { useParams, useHistory } from "react-router-dom";
 
 import styles from "./question-status.module.scss";
 
-import { capitalizeFirstLetter } from "../../../utils/utils.strings";
 import { getCurrentUser } from "../../../local-storage/current-user";
 
-import { ReactComponent as ArrowRightIcon } from "../../../assets/icons/arrow-right.svg";
+import Button from "../../../components/button/button";
 
-const StatusItem = ({ children, btnTexts = [] }) => {
+const StatusItem = ({ text, children, btnTexts = [] }) => {
 	return (
 		<div className={styles.questionStatus}>
+			{text}
 			{children}
-
-			{btnTexts.map((btnText) => {
-				if (btnText) {
-					return (
-						<button className={styles.statusButton} key={btnText}>
-							{capitalizeFirstLetter(btnText)} <ArrowRightIcon />
-						</button>
-					);
-				}
-
-				return null;
-			})}
 		</div>
 	);
 };
 
-const QuestionStatus = ({ solution, proposedSolutions, groupID, owner }) => {
+const StatusButton = ({ children, clickHandler }) => {
+	return (
+		<div className={styles.statusButton}>
+			<Button type="tertiary" clickHandler={clickHandler}>
+				{children}
+			</Button>
+		</div>
+	);
+};
+
+const QuestionStatus = ({
+	solution,
+	proposedSolutions,
+	owner,
+	scrollToSolution,
+}) => {
+	const { groupID, questionID } = useParams();
+	const history = useHistory();
+
 	const currentUser = getCurrentUser();
 
 	const [isOwner, setIsOwner] = useState(currentUser._id === owner._id);
@@ -38,26 +45,59 @@ const QuestionStatus = ({ solution, proposedSolutions, groupID, owner }) => {
 
 		return (
 			<StatusItem
-				btnTexts={[
-					proposedSolutionsExist &&
-						`view proposed ${onlyOne ? "solution" : "solutions"}`,
-					!isOwner && "propose solution",
-				]}
-			>
-				{`there ${onlyOne ? "is" : "are"} ${
+				text={`there ${onlyOne ? "is" : "are"} ${
 					proposedSolutions.length || "no"
 				} proposed ${onlyOne ? "solution" : "solutions"}`}
+			>
+				{proposedSolutionsExist && (
+					<StatusButton
+						clickHandler={() =>
+							history.push(
+								`/group/${groupID}/question/${questionID}/proposed-solutions`
+							)
+						}
+					>
+						view proposed {onlyOne ? "solution" : "solutions"}
+					</StatusButton>
+				)}
+				{!isOwner && (
+					<StatusButton
+						clickHandler={() =>
+							history.push(
+								`/group/${groupID}/question/${questionID}/propose`
+							)
+						}
+					>
+						propose solution
+					</StatusButton>
+				)}
+			</StatusItem>
+		);
+	};
+
+	const renderSolutionStatus = () => {
+		return !solution ? (
+			<StatusItem
+				text="this question has not been solved yet"
+				btnTexts={isOwner ? ["solve question"] : []}
+			>
+				{isOwner && <StatusButton>solve question</StatusButton>}
+			</StatusItem>
+		) : (
+			<StatusItem
+				text="this question has been solved"
+				btnTexts={["view solution"]}
+			>
+				<StatusButton clickHandler={scrollToSolution}>
+					view solution
+				</StatusButton>
 			</StatusItem>
 		);
 	};
 
 	return (
 		<div className={styles.container}>
-			{!solution && (
-				<StatusItem btnTexts={isOwner ? ["solve question"] : []}>
-					this question has not been solved yet
-				</StatusItem>
-			)}
+			{renderSolutionStatus()}
 
 			{renderProposedSolutionStatus()}
 		</div>

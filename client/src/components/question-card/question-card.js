@@ -12,19 +12,20 @@ import UserPreview from "../user-preview/user-preview";
 import VoteContainer from "../vote-container/vote-container";
 import Tag from "../tag/tag";
 
-const QuestionCard = ({
-	questionID,
-	author,
-	createdAt,
-	title,
-	description,
-	votes,
-	votesNumber,
-	sortBy,
-	solution,
-	proposedSolutions,
-	images,
-}) => {
+const QuestionCard = (props) => {
+	const {
+		questionID,
+		author,
+		createdAt,
+		title,
+		description,
+		votes,
+		votesNumber,
+		sortBy,
+		solution,
+		proposedSolutions,
+	} = props;
+
 	const dispatch = useDispatch();
 
 	const history = useHistory();
@@ -35,22 +36,8 @@ const QuestionCard = ({
 	const { username, _id: authorID, avatar } = author;
 
 	const handleContainerClick = () => {
-		dispatch(
-			setActiveQuestion({
-				questionID,
-				author,
-				createdAt,
-				title,
-				description,
-				votes,
-				votesNumber,
-				sortBy,
-				solution,
-				proposedSolutions,
-				images,
-			})
-		);
-		history.push(`/group/${groupID}/question/${questionID}/details`);
+		dispatch(setActiveQuestion(props));
+		history.push(`/group/${groupID}/question/${questionID}`);
 	};
 
 	const renderVoteContainer = () => {
@@ -74,15 +61,20 @@ const QuestionCard = ({
 		if (solution) {
 			tags = [...tags, { text: "solved" }];
 		} else {
-			tags = [...tags, { text: "unsolved", color: "red" }];
+			tags = [
+				...tags,
+				{ text: "unsolved", color: "red", type: "failure" },
+			];
 		}
 
 		if (proposedSolutions.length > 0) {
 			tags = [
 				...tags,
-				`${
-					proposedSolutions.length > 1 ? "solutions" : "solution"
-				} proposed`,
+				{
+					text: "proposed",
+					color: "grey",
+					type: "progress",
+				},
 			];
 		}
 
@@ -90,7 +82,12 @@ const QuestionCard = ({
 			<div className={styles.tags}>
 				{tags.map((tag) => {
 					return (
-						<Tag text={tag.text} color={tag.color} key={tag.text} />
+						<Tag
+							text={tag.text}
+							color={tag.color}
+							type={tag.type}
+							key={tag.text}
+						/>
 					);
 				})}
 			</div>

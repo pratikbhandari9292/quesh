@@ -12,4 +12,6 @@ const getImageError = (error, fileSizeLimit, maxImages) => {
 	return errorMessage;
 };
 
+const setImages = (images, field, fieldID) => {};
+
 module.exports = { getImageError };

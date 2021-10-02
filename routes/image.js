@@ -10,6 +10,7 @@ router.get("/:randomString", async (request, response) => {
 
 	const userID = request.query.userID;
 	const questionID = request.query.questionID;
+	const solutionID = request.query.solutionID;
 
 	if (userID) {
 		options = { user: userID };
@@ -18,6 +19,13 @@ router.get("/:randomString", async (request, response) => {
 	if (questionID) {
 		options = {
 			question: questionID,
+			randomStr: request.params.randomString,
+		};
+	}
+
+	if (solutionID) {
+		options = {
+			solution: solutionID,
 			randomStr: request.params.randomString,
 		};
 	}

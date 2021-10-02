@@ -6,10 +6,11 @@ const solutionSchema = new mongoose.Schema(
 		description: String,
 		author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 		approved: { type: Boolean, default: false },
-		image: { type: Boolean, default: false },
+		images: { type: Array, default: [] },
 		question: { type: mongoose.Schema.Types.ObjectId, ref: "Question" },
 	},
-	{ timestamps: true }
+	{ timestamps: true },
+	{ _id: false }
 );
 
 module.exports = mongoose.model("Solution", solutionSchema);

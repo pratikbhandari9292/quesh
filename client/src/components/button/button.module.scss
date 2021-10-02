@@ -88,6 +88,35 @@
 	}
 }
 
+.buttonTertiary {
+	@extend .buttonPrimary;
+
+	font-family: inherit;
+	padding: 0.4rem 0.5rem;
+	border: none;
+	border-radius: 2px;
+	color: $color-blue;
+	font-weight: 500;
+	background-color: transparent;
+
+	svg {
+		@extend .icon;
+		@extend .iconSmallest;
+		@extend .iconBlue;
+
+		margin-left: 0.75rem;
+	}
+
+	&:hover {
+		background-color: $color-grey-lightest;
+		color: $color-blue;
+	}
+
+	&:active {
+		background-color: $color-grey-lighter-more;
+	}
+}
+
 .buttonFull {
 	width: 100%;
 }

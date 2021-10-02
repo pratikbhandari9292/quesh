@@ -7,6 +7,7 @@ const imageSchema = new mongoose.Schema({
 	},
 	user: mongoose.Schema.Types.ObjectId,
 	question: mongoose.Schema.Types.ObjectId,
+	solution: mongoose.Schema.Types.ObjectId,
 	randomStr: {
 		type: String,
 	},

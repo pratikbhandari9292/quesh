@@ -44,6 +44,8 @@ import QuestionHeader from "./components/question-header/question-header";
 import UserProfile from "./pages/user-profile/user-profile";
 import EditProfile from "./pages/edit-profile/edit-profile";
 import ImageViewer from "./components/image-viewer/image-viewer";
+import SolveQuestion from "./pages/solve-question/solve-question";
+import ProposedSolutions from "./pages/proposed-solutions/proposed-solutions";
 
 const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 	const dispatch = useDispatch();
@@ -198,12 +200,19 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 						<Route path="/group/:id/search">
 							<QuestionSearch />
 						</Route>
-						<Route path="/group/:groupID/question/:questionID">
+						<Route path="/group/:groupID/question/:questionID/">
 							{currentUserRedux ? (
-								<React.Fragment>
-									<QuestionHeader />
-									<QuestionDetails />
-								</React.Fragment>
+								<QuestionHeader />
+							) : (
+								<Redirect to="/signin" />
+							)}
+						</Route>
+						<Route
+							path="/group/:groupID/question/:questionID"
+							exact
+						>
+							{currentUserRedux ? (
+								<QuestionDetails />
 							) : (
 								<Redirect to="/signin" />
 							)}
@@ -213,6 +222,27 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 						</Route>
 						<Route path="/profile/edit">
 							<EditProfile />
+						</Route>
+						<Route path="/group/:groupID/question/:questionID/solve">
+							{currentUserRedux ? (
+								<SolveQuestion type="solve" />
+							) : (
+								<Redirect to="/signin" />
+							)}
+						</Route>
+						<Route path="/group/:groupID/question/:questionID/propose">
+							{currentUserRedux ? (
+								<SolveQuestion type="propose" />
+							) : (
+								<Redirect to="/signin" />
+							)}
+						</Route>
+						<Route path="/group/:groupID/question/:questionID/proposed-solutions">
+							{currentUserRedux ? (
+								<ProposedSolutions />
+							) : (
+								<Redirect to="/signin" />
+							)}
 						</Route>
 					</section>
 				</Switch>

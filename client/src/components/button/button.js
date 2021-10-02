@@ -2,6 +2,11 @@ import React from "react";
 
 import styles from "./button.module.scss";
 
+import { ReactComponent as ArrowLeftIcon } from "../../assets/icons/arrow-left.svg";
+import { ReactComponent as ArrowRightIcon } from "../../assets/icons/arrow-right.svg";
+import { ReactComponent as ArrowUpIcon } from "../../assets/icons/arrow-up.svg";
+import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-down.svg";
+
 import Spinner from "../spinner/spinner";
 
 const Button = ({
@@ -11,6 +16,7 @@ const Button = ({
 	size,
 	loading,
 	disabled,
+	arrowDirection = "right",
 	clickHandler,
 }) => {
 	const getClassName = () => {
@@ -40,6 +46,10 @@ const Button = ({
 			}
 		}
 
+		if (type === "tertiary") {
+			className += `${styles.buttonTertiary}`;
+		}
+
 		if (disabled) {
 			className = `${styles.buttonDisabled}`;
 		}
@@ -47,9 +57,25 @@ const Button = ({
 		return className;
 	};
 
+	const renderArrowIcon = () => {
+		switch (arrowDirection) {
+			case "up":
+				return <ArrowUpIcon />;
+			case "down":
+				return <ArrowDownIcon />;
+			case "left":
+				return <ArrowLeftIcon />;
+			case "right":
+				return <ArrowRightIcon />;
+			default:
+				return;
+		}
+	};
+
 	return (
 		<button className={getClassName()} onClick={clickHandler}>
 			{children} {loading && <Spinner />}
+			{type === "tertiary" && renderArrowIcon()}
 		</button>
 	);
 };

@@ -1,39 +1,23 @@
 @import "../../styles/variables.module.scss";
-
-.questionTitle,
-.postInfo,
-.questionDescription,
-.previewUsername {
-	&::first-letter {
-		text-transform: uppercase;
-	}
-}
+@import "../../styles/utils.module.scss";
 
 .container {
-	margin-top: -1rem;
 }
 
-.userPreview {
-	display: flex;
-	margin-bottom: 1.5rem;
-	padding-bottom: 0.5rem;
-	width: fit-content;
-	border-bottom: 1px solid $color-grey-lighter-more;
-}
+.detailsMain {
+	display: grid;
+	grid-template-columns: repeat(2, auto);
+	grid-gap: 2rem;
+	justify-content: start;
+	margin-bottom: 2rem;
 
-.userPostInfo {
-	margin-left: 1rem;
-}
+	& > *:first-child {
+		margin-right: 4rem;
+	}
 
-.previewUsername {
-	font-weight: 500;
-	margin-bottom: 0.5rem;
-	color: $color-grey-light;
-}
-
-.postInfo {
-	color: $color-grey-lighter;
-	font-size: 1.4rem;
+	& > * {
+		width: fit-content;
+	}
 }
 
 .questionTitle {
@@ -41,20 +25,16 @@
 	font-weight: 500;
 	color: $color-grey-light;
 	margin-bottom: 0.5rem;
+
+	&::first-letter {
+		text-transform: uppercase;
+	}
 }
 
-.questionDescription {
-	color: $color-grey-light;
-	width: fit-content;
-	border: 1px solid $color-grey-lighter-more;
-	padding: 1rem 0.75rem;
-	border-radius: 3px;
-	white-space: pre-wrap;
-	background-color: $color-grey-lightest;
-	position: relative;
-	max-width: 35rem;
+.buttonContainer {
+	@extend .cornerButton;
 }
 
 .divider {
-	margin-bottom: 1.5rem;
+	margin-bottom: 2rem;
 }

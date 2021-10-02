@@ -21,10 +21,12 @@
 }
 
 .container {
-	height: 90%;
+	height: 85%;
 	min-width: 15rem;
+	max-width: 80%;
 	background-color: transparent;
 	position: relative;
+	margin-top: -3rem;
 }
 
 .image {
@@ -63,10 +65,10 @@
 
 .indicatorLeft {
 	@extend .indicator;
-	left: 20%;
+	left: 5rem;
 }
 
 .indicatorRight {
 	@extend .indicator;
-	right: 20%;
+	right: 5rem;
 }

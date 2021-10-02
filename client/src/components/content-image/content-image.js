@@ -7,7 +7,7 @@ import { setImageViewer } from "../../redux/image-viewer/image-viewer.action";
 
 import { ReactComponent as BackgroundImage } from "../../assets/icons/background-image.svg";
 
-const ContentImage = ({ src, activeQuestion, fullScreen }) => {
+const ContentImage = ({ src, index, activeQuestion, fullScreen }) => {
 	const dispatch = useDispatch();
 
 	const handleContainerClick = () => {
@@ -15,7 +15,7 @@ const ContentImage = ({ src, activeQuestion, fullScreen }) => {
 			return;
 		}
 
-		dispatch(setImageViewer(true, activeQuestion.images));
+		dispatch(setImageViewer(true, activeQuestion.images, index));
 	};
 
 	return (

@@ -2,7 +2,6 @@
 @import "../../../styles/utils.module.scss";
 
 .container {
-	margin-top: 1.5rem;
 }
 
 .questionStatus {
@@ -20,34 +19,5 @@
 }
 
 .statusButton {
-	border: none;
-	outline: none;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 1.7rem;
-	font-family: inherit;
-	padding: 0.4rem 0.5rem;
-	margin-top: 0.75rem;
-	border-radius: 2px;
-	color: $color-blue;
-	font-weight: 500;
-	cursor: pointer;
-	background-color: transparent;
-
-	svg {
-		@extend .icon;
-		@extend .iconSmallest;
-		@extend .iconBlue;
-
-		margin-left: 0.75rem;
-	}
-
-	&:hover {
-		background-color: $color-grey-lightest;
-	}
-
-	&:active {
-		background-color: $color-grey-lighter-more;
-	}
+	margin-top: 0.5rem;
 }

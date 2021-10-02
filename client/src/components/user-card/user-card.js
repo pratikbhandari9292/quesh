@@ -101,7 +101,7 @@ const UserCard = ({
 		return (
 			<div className={styles.tags}>
 				{tags.map((tag) => {
-					return <Tag text={tag} key={tag} />;
+					return <Tag text={tag} key={tag} type="none" />;
 				})}
 			</div>
 		);
