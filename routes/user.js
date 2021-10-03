@@ -77,6 +77,8 @@ router.patch(
 
 		if (request.file) {
 			image = await Image.findOne({ user: userID });
+			const randomString = uniqid();
+			const src = `/api/image/${randomString}?userID=${userID}`;
 
 			if (image) {
 				image.binary = request.file.buffer;
@@ -84,14 +86,14 @@ router.patch(
 				image = new Image({
 					binary: request.file.buffer,
 					user: userID,
+					src,
 				});
 			}
 
 			savedImage = await image.save();
 
-			const randomString = uniqid();
 			imageOption = {
-				avatar: `/api/image/${randomString}?userID=${userID}`,
+				avatar: src,
 			};
 		}
 
@@ -112,28 +114,5 @@ router.patch(
 			.send({ error: getImageError(error, fileSizeLimit) });
 	}
 );
-
-//remove avatar
-router.delete("/avatar/:userID", auth, async (request, response) => {
-	if (request.user != request.params.userID) {
-		return response.status(400).send({ error: "not authorized" });
-	}
-
-	const user = await User.findById(request.params.userID);
-
-	if (!user) {
-		return response.status(400).send({ error: "user not found" });
-	}
-
-	user.avatar = `https://avatars.dicebear.com/api/initials/${user.username}.svg`;
-
-	try {
-		const savedUser = await user.save();
-
-		response.send({ user: savedUser });
-	} catch (error) {
-		response.status(500).send({ error: error.message });
-	}
-});
 
 module.exports = router;

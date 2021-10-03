@@ -52,6 +52,7 @@ router.post(
 			if (request.files.length > 0) {
 				request.files.forEach((file) => {
 					const randomString = uniqid();
+					const src = `/api/image/${randomString}/?questionID=${questionID}`;
 
 					images = [
 						...images,
@@ -59,13 +60,11 @@ router.post(
 							binary: file.buffer,
 							question: questionID,
 							randomStr: randomString,
+							src,
 						}),
 					];
 
-					question.images = [
-						...question.images,
-						`/api/image/${randomString}/?questionID=${questionID}`,
-					];
+					question.images = [...question.images, src];
 				});
 			}
 
@@ -117,9 +116,13 @@ router.patch("/:questionID", auth, questionAuth, async (request, response) => {
 	const updateInfo = request.body;
 
 	try {
-		await Question.findByIdAndUpdate(request.params.questionID, updateInfo);
+		const updatedQuestion = await Question.findByIdAndUpdate(
+			request.params.questionID,
+			updateInfo,
+			{ new: true }
+		);
 
-		response.send({ message: "updated" });
+		response.send({ question: updatedQuestion });
 	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}

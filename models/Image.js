@@ -11,6 +11,7 @@ const imageSchema = new mongoose.Schema({
 	randomStr: {
 		type: String,
 	},
+	src: String,
 });
 
 module.exports = mongoose.model("Image", imageSchema);

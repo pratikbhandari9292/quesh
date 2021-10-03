@@ -4,7 +4,10 @@ import { useHistory } from "react-router-dom";
 
 import styles from "./profile-preview.module.scss";
 
-import { resetCurrentUser } from "../../redux/current-user/current-user.actions";
+import {
+	resetCurrentUser,
+	setActiveUser,
+} from "../../redux/current-user/current-user.actions";
 import { setGroups, setNeedToFetch } from "../../redux/groups/groups.actions";
 import { resetAddMembers } from "../../redux/add-members/add-members.actions";
 import {
@@ -12,7 +15,10 @@ import {
 	resetModal,
 } from "../../redux/modal/modal.actions";
 
-import { setCurrentUser } from "../../local-storage/current-user";
+import {
+	getCurrentUser,
+	setCurrentUser,
+} from "../../local-storage/current-user";
 
 import { ReactComponent as ChevronDownIcon } from "../../assets/icons/chevron-down.svg";
 import { ReactComponent as SignOutIcon } from "../../assets/icons/sign-out.svg";
@@ -28,6 +34,8 @@ const ProfilePreview = ({ username, email, avatar }) => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
+
+	const currentUser = getCurrentUser();
 
 	const toggleDropdown = () => {
 		setShowDropdown(!showDropdown);
@@ -53,6 +61,11 @@ const ProfilePreview = ({ username, email, avatar }) => {
 		history.push("/signin");
 	};
 
+	const handleViewProfileClick = () => {
+		dispatch(setActiveUser(currentUser));
+		history.push("/profile/me");
+	};
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.preview} onClick={toggleDropdown}>
@@ -62,7 +75,7 @@ const ProfilePreview = ({ username, email, avatar }) => {
 			</div>
 
 			<DropdownMenu show={showDropdown} clickHandler={toggleDropdown}>
-				<DropdownItem clickHandler={() => history.push("/profile/me")}>
+				<DropdownItem clickHandler={handleViewProfileClick}>
 					<UserIcon /> view profile
 				</DropdownItem>
 				<DropdownItem

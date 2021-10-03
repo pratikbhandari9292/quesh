@@ -19,6 +19,10 @@ const OptionsToggle = ({ options, selectHandler, type = "display", size }) => {
 		setShowDropdown(!showDropdown);
 	};
 
+	const handleOptionClick = (option) => {
+		selectHandler(option);
+	};
+
 	return (
 		<div
 			className={`${styles.container} ${
@@ -38,7 +42,9 @@ const OptionsToggle = ({ options, selectHandler, type = "display", size }) => {
 						<DropdownItem
 							key={option.option}
 							active={option.active}
-							clickHandler={() => selectHandler(option.option)}
+							clickHandler={() =>
+								handleOptionClick(option.option)
+							}
 						>
 							{option.title}
 						</DropdownItem>

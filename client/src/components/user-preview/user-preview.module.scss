@@ -8,6 +8,7 @@
 .username {
 	margin-left: 0.75rem;
 	color: $color-grey-light;
+	font-weight: 500;
 
 	&::first-letter {
 		text-transform: uppercase;

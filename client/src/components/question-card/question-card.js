@@ -98,11 +98,7 @@ const QuestionCard = (props) => {
 		<div className={styles.container} onClick={handleContainerClick}>
 			<div className={styles.question}>
 				<div className={styles.header}>
-					<UserPreview
-						username={username}
-						avatar={avatar}
-						profileSize="smaller"
-					/>
+					<UserPreview username={username} avatar={avatar} />
 					<p className={styles.date}>{getHowLongAgo(createdAt)}</p>
 				</div>
 

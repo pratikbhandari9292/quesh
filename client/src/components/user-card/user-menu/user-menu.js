@@ -10,10 +10,7 @@ import {
 	setClosable,
 	setModal,
 } from "../../../redux/modal/modal.actions";
-import {
-	removeGroupMember as removeGroupMemberRedux,
-	resetGroupMembers,
-} from "../../../redux/group-members/group-members.actions";
+import { removeGroupMember as removeGroupMemberRedux } from "../../../redux/group-members/group-members.actions";
 import { updateGroup } from "../../../redux/groups/groups.actions";
 
 import { removeGroupMember } from "../../../api/api.group";

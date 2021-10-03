@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useParams, useLocation, useHistory } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
 
 import styles from "./user-card.module.scss";
+
+import { setActiveUser } from "../../redux/current-user/current-user.actions";
 
 import { getCurrentUser } from "../../local-storage/current-user";
 
@@ -24,6 +26,9 @@ const UserCard = ({
 }) => {
 	const params = useParams();
 	const location = useLocation();
+	const history = useHistory();
+
+	const dispatch = useDispatch();
 
 	const groupID = params.id;
 
@@ -107,9 +112,21 @@ const UserCard = ({
 		);
 	};
 
+	const handleUserClick = () => {
+		// const currentUserCard = currentUser._id === userID;
+		// dispatch(
+		// 	setActiveUser(
+		// 		currentUserCard
+		// 			? currentUser
+		// 			: { username, email, avatar, groups }
+		// 	)
+		// );
+		// history.push(`/profile/${currentUserCard ? "me" : userID}`);
+	};
+
 	return (
-		<div className={styles.userCard}>
-			<div className={styles.user}>
+		<div className={styles.userCard} id="container">
+			<div className={styles.user} onClick={handleUserClick}>
 				<ProfilePicture username={username} avatar={avatar} />
 				<div className={styles.userInfo}>
 					<p className={styles.username}>{username}</p>

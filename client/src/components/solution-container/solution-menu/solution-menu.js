@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, useParams } from "react-router-dom";
 
 import styles from "./solution-menu.module.scss";
 
@@ -14,6 +14,7 @@ import {
 	updateActiveQuestion,
 } from "../../../redux/group-questions/group-questions.actions";
 import { displayAlert } from "../../../redux/alert/alert.actions";
+import { setActiveSolution } from "../../../redux/solution/solution.actions";
 
 import { approveSolution, deleteSolution } from "../../../api/api.solution";
 import { getCurrentUser } from "../../../local-storage/current-user";
@@ -26,6 +27,7 @@ const SolutionMenu = ({ solutionID, isOwner, solution }) => {
 
 	const location = useLocation();
 	const history = useHistory();
+	const { groupID, questionID } = useParams();
 
 	const currentUser = getCurrentUser();
 
@@ -101,6 +103,13 @@ const SolutionMenu = ({ solutionID, isOwner, solution }) => {
 		}
 	};
 
+	const handleEditClick = () => {
+		dispatch(setActiveSolution(solution));
+		history.push(
+			`/group/${groupID}/question/${questionID}/solution/${solutionID}/edit`
+		);
+	};
+
 	return (
 		<div className={styles.container}>
 			<DotMenu indicator="right">
@@ -109,6 +118,10 @@ const SolutionMenu = ({ solutionID, isOwner, solution }) => {
 						approve solution
 					</DropdownItem>
 				)}
+
+				<DropdownItem clickHandler={handleEditClick}>
+					edit solution
+				</DropdownItem>
 
 				<DropdownItem type="danger" clickHandler={handleDeleteClick}>
 					delete solution

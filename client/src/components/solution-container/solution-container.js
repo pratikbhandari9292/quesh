@@ -32,8 +32,6 @@ const SolutionContainer = ({
 
 	const { owner } = activeGroup;
 
-	const { solution: questionSolution } = activeQuestion;
-
 	const currentUser = getCurrentUser();
 
 	const imageListAnimation = {
@@ -89,7 +87,7 @@ const SolutionContainer = ({
 						<SolutionMenu
 							solutionID={solutionID}
 							isOwner={currentUser._id === owner._id}
-							solution={questionSolution}
+							solution={solution}
 						/>
 					),
 				}}

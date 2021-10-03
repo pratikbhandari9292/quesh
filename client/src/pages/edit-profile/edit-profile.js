@@ -16,7 +16,8 @@ import {
 	getCurrentUser,
 	updateCurrentUser,
 } from "../../local-storage/current-user";
-import { removeUserAvatar, updateUserProfile } from "../../api/api.user";
+import { updateUserProfile } from "../../api/api.user";
+import { deleteImage } from "../../api/api.image";
 
 import { ReactComponent as CrossIcon } from "../../assets/icons/cross.svg";
 
@@ -87,8 +88,10 @@ const EditProfile = ({ updates, selectedFiles }) => {
 		dispatch(setModal(true, "removing avatar...", <Spinner />, false));
 
 		try {
-			const result = await removeUserAvatar(
+			const result = await deleteImage(
 				currentUser._id,
+				"user",
+				currentUser.avatar,
 				currentUser.token
 			);
 
@@ -122,7 +125,7 @@ const EditProfile = ({ updates, selectedFiles }) => {
 				/>
 
 				<div className={styles.divider}></div>
-				<FileSelector error={avatarError} />
+				<FileSelector error={avatarError} noLimit />
 
 				<div className={styles.divider}></div>
 
@@ -144,7 +147,7 @@ const EditProfile = ({ updates, selectedFiles }) => {
 					error={usernameError}
 					changeHandler={setUsername}
 				/>
-				<Button>edit profile</Button>
+				<Button size="full">edit profile</Button>
 			</form>
 		</div>
 	);

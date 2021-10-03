@@ -14,6 +14,7 @@ const Button = ({
 	type = "primary",
 	color = "black",
 	size,
+	width,
 	loading,
 	disabled,
 	arrowDirection = "right",
@@ -22,12 +23,16 @@ const Button = ({
 	const getClassName = () => {
 		let className = "";
 
-		if (size === "full") {
+		if (size === "full" || width === "full") {
 			className += ` ${styles.buttonFull}`;
 		}
 
 		if (size === "smaller") {
 			className += `${styles.buttonSmaller}`;
+		}
+
+		if (size === "smallest") {
+			className += `${styles.buttonSmallest}`;
 		}
 
 		if (type === "primary") {

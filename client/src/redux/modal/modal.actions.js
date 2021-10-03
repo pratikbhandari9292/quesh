@@ -49,7 +49,7 @@ export const displayConfirmationModal = (
 
 export const displayLoadingModal = (message) => {
 	return (dispatch) => {
-		dispatch(setModal(true, message, <Spinner />, false));
+		dispatch(setModal(true, message, <Spinner />, false, null, false));
 	};
 };
 

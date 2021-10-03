@@ -42,6 +42,7 @@ const questionSchema = new mongoose.Schema(
 		},
 		votes: { type: Array, default: [] },
 		votesNumber: { type: Number, default: 0 },
+		solved: { type: Boolean, default: false },
 	},
 	{ timestamps: true },
 	{ _id: false }

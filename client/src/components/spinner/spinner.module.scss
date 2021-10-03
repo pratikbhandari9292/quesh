@@ -14,6 +14,11 @@
 	border-left-color: transparent;
 }
 
+.spinnerSmaller {
+	height: 1.85rem;
+	width: 1.85rem;
+}
+
 @keyframes spinnerAnimation {
 	from {
 		transform: rotate(0deg);

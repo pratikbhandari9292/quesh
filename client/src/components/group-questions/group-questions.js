@@ -4,14 +4,23 @@ import { connect, useDispatch } from "react-redux";
 
 import styles from "./group-questions.module.scss";
 
-import { setGroupQuestions } from "../../redux/group-questions/group-questions.actions";
+import {
+	setGroupQuestions,
+	setNeedToFetch,
+} from "../../redux/group-questions/group-questions.actions";
 
 import { getGroupQuestions } from "../../api/api.group";
 import { getCurrentUser } from "../../local-storage/current-user";
 
 import CardsList from "../cards-list/cards-list";
 
-const GroupQuestions = ({ questions, groupID, sortBy }) => {
+const GroupQuestions = ({
+	questions,
+	groupID,
+	sortBy,
+	displayType,
+	needToFetch,
+}) => {
 	const [loadingQuestions, setLoadingQuestions] = useState(false);
 	const [questionsMessage, setQuestionsMessage] = useState("");
 
@@ -22,8 +31,10 @@ const GroupQuestions = ({ questions, groupID, sortBy }) => {
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
-		fetchGroupQuestions();
-	}, [sortBy]);
+		if (needToFetch) {
+			fetchGroupQuestions();
+		}
+	}, [needToFetch]);
 
 	const fetchGroupQuestions = async () => {
 		if (loadingQuestions) {
@@ -36,12 +47,15 @@ const GroupQuestions = ({ questions, groupID, sortBy }) => {
 			const result = await getGroupQuestions(
 				params.id,
 				sortBy,
+				displayType,
 				currentUser.token
 			);
 
 			if (result.error) {
 				return;
 			}
+
+			dispatch(setNeedToFetch(false));
 
 			if (result.questions.length === 0) {
 				return setQuestionsMessage("no questions found");
@@ -72,6 +86,8 @@ const mapStateToProps = (state) => {
 		questions: state.groupQuestions.questions,
 		groupID: state.groupQuestions.groupID,
 		sortBy: state.groupQuestions.sortBy,
+		displayType: state.groupQuestions.displayType,
+		needToFetch: state.groupQuestions.needToFetch,
 	};
 };
 

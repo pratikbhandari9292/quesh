@@ -47,3 +47,18 @@ export const approveSolution = async (solutionID, token) => {
 
 	return data;
 };
+
+export const updateSolution = async (solutionID, updateInfo, token) => {
+	const result = await fetch(`${baseURL}/${solutionID}`, {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+			"auth-token": token,
+		},
+		body: JSON.stringify(updateInfo),
+	});
+
+	const data = await result.json();
+
+	return data;
+};

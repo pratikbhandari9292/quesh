@@ -61,6 +61,7 @@ router.post(
 			if (request.files.length > 0) {
 				request.files.forEach((file) => {
 					const randomString = uniqid();
+					const src = `/api/image/${randomString}/?solutionID=${solutionID}`;
 
 					images = [
 						...images,
@@ -68,18 +69,17 @@ router.post(
 							binary: file.buffer,
 							solution: solutionID,
 							randomStr: randomString,
+							src,
 						}),
 					];
 
-					solution.images = [
-						...solution.images,
-						`/api/image/${randomString}/?solutionID=${solutionID}`,
-					];
+					solution.images = [...solution.images, src];
 				});
 			}
 
 			if (type === "solve") {
 				question.solution = solutionID;
+				question.solved = true;
 			}
 
 			if (type === "propose") {
@@ -111,6 +111,35 @@ router.post(
 			.send({ error: getImageError(error, 5, maxImages) });
 	}
 );
+
+//update a solution
+router.patch("/:solutionID", auth, solutionAuth, async (request, response) => {
+	const solutionInfo = request.body;
+	const author = request.solution.author;
+	const group = request.solution.question.group;
+
+	const error = validateSolution(solutionInfo);
+
+	if (error) {
+		return response.status(400).send({ error });
+	}
+
+	if (!(request.user == author._id || request.user == group.owner)) {
+		return response.status(400).send({ error: "not authorized" });
+	}
+
+	try {
+		const savedSolution = await Solution.findByIdAndUpdate(
+			request.params.solutionID,
+			solutionInfo,
+			{ new: true }
+		);
+
+		response.send({ solution: savedSolution });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
 
 //approve a solution
 router.put(
@@ -206,6 +235,7 @@ router.delete("/:solutionID", auth, solutionAuth, async (request, response) => {
 
 		if (type === "solution") {
 			question.solution = null;
+			question.solved = false;
 		}
 
 		if (type === "proposal") {

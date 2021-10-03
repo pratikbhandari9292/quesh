@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { connect } from "react-redux";
 
 import styles from "./user-profile.module.scss";
 
-import { getCurrentUser } from "../../local-storage/current-user";
+import { capitalizeFirstLetter } from "../../utils/utils.strings";
 
 import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg";
 
@@ -12,18 +13,25 @@ import ProfilePicture from "../../components/profile-picture/profile-picture";
 import Button from "../../components/button/button";
 import Tag from "../../components/tag/tag";
 
-const UserProfile = () => {
+const UserProfile = ({ activeUser }) => {
 	const history = useHistory();
+	const { userID } = useParams();
 
-	const { username, email, avatar, groups } = getCurrentUser();
+	const currentUserProfile = userID === "me";
+
+	const { username, email, avatar, groups } = activeUser;
+
+	const title = currentUserProfile
+		? "Your profile"
+		: `${capitalizeFirstLetter(username)}'s profile`;
 
 	useEffect(() => {
-		document.title = "Your profile";
+		document.title = title;
 	}, []);
 
 	return (
 		<div>
-			<PageHeader title="your profile" capitalize={true} />
+			<PageHeader title={title} capFirst />
 
 			<div className={styles.profileMain}>
 				<div className={styles.avatarContainer}>
@@ -49,17 +57,27 @@ const UserProfile = () => {
 
 					<div className={styles.divider}></div>
 
-					<Button
-						size="smaller"
-						type="secondary"
-						clickHandler={() => history.push("/profile/edit")}
-					>
-						<EditIcon /> edit profile
-					</Button>
+					{currentUserProfile && (
+						<Button
+							size="smaller"
+							type="secondary"
+							clickHandler={() =>
+								history.push("/profile/edit/me")
+							}
+						>
+							<EditIcon /> edit profile
+						</Button>
+					)}
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export default UserProfile;
+const mapStateToProps = (state) => {
+	return {
+		activeUser: state.currentUser.activeUser,
+	};
+};
+
+export default connect(mapStateToProps)(UserProfile);

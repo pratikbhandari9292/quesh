@@ -26,10 +26,24 @@ export const setSortType = (sortType) => {
 	};
 };
 
+export const setDisplayType = (displayType) => {
+	return {
+		type: "SET_DISPLAY_TYPE",
+		payload: displayType,
+	};
+};
+
 export const setEditingQuestion = (editing) => {
 	return {
 		type: "SET_EDITING_QUESTION",
 		payload: editing,
+	};
+};
+
+export const setNeedToFetch = (needToFetch) => {
+	return {
+		type: "SET_NEED_TO_FETCH",
+		payload: needToFetch,
 	};
 };
 

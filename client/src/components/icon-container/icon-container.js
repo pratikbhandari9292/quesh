@@ -19,7 +19,8 @@ const IconContainer = ({ text, active, linkTo, children }) => {
 			}`}
 			onClick={handleContainerClick}
 		>
-			{children} {text && <span>{text}</span>}
+			{children}{" "}
+			{text && <p className={styles.text}>{text <= 99 ? text : "99+"}</p>}
 		</div>
 	);
 };

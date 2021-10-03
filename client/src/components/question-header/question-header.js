@@ -53,6 +53,9 @@ const QuestionHeader = ({ activeQuestion }) => {
 		}
 
 		if (location.pathname.includes("edit")) {
+			if (location.pathname.includes("solution")) {
+				return "Edit solution";
+			}
 			return "Edit question";
 		}
 

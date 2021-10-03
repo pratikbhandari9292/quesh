@@ -2,6 +2,8 @@ const INITIAL_STATE = {
 	questions: [],
 	sortBy: "time",
 	editingQuestion: false,
+	displayType: "all",
+	needToFetch: true,
 
 	searchedQuestions: [],
 
@@ -19,7 +21,7 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 		case "ADD_GROUP_QUESTION":
 			return {
 				...state,
-				questions: [action.payload, ...state.questions],
+				questions: [...state.questions, action.payload],
 			};
 		case "UPDATE_GROUP_QUESTION":
 			return {
@@ -28,8 +30,12 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 			};
 		case "SET_SORT_TYPE":
 			return { ...state, sortBy: action.payload };
+		case "SET_DISPLAY_TYPE":
+			return { ...state, displayType: action.payload };
 		case "SET_EDITING_QUESTION":
 			return { ...state, editingQuestion: action.payload };
+		case "SET_NEED_TO_FETCH":
+			return { ...state, needToFetch: action.payload };
 		case "SET_ACTIVE_QUESTION":
 			return { ...state, activeQuestion: action.payload };
 		case "UPDATE_ACTIVE_QUESTION":

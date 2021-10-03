@@ -7,6 +7,7 @@ import {
 	resetGroupQuestions,
 	updateGroupQuestion,
 	updateSearchedQuestion,
+	updateActiveQuestion,
 } from "./redux/group-questions/group-questions.actions";
 import { resetGroupMembers } from "./redux/group-members/group-members.actions";
 
@@ -32,7 +33,7 @@ import Alert from "./components/alert/alert";
 import GroupDetails from "./pages/group-details/group-details";
 import SearchResults from "./pages/search-results/search-results";
 import GroupExplore from "./pages/group-explore/group-explore";
-import AskQuestion from "./pages/ask-question/ask-question";
+import PostQuestion from "./pages/post-question/post-question";
 import GroupHeader from "./components/group-header/group-header";
 import JoinRequests from "./pages/join-requests/join-requests";
 import SelectUsers from "./pages/add-members/select-users/select-users";
@@ -44,10 +45,16 @@ import QuestionHeader from "./components/question-header/question-header";
 import UserProfile from "./pages/user-profile/user-profile";
 import EditProfile from "./pages/edit-profile/edit-profile";
 import ImageViewer from "./components/image-viewer/image-viewer";
-import SolveQuestion from "./pages/solve-question/solve-question";
+import PostSolution from "./pages/post-solution/post-solution";
 import ProposedSolutions from "./pages/proposed-solutions/proposed-solutions";
 
-const App = ({ currentUserRedux, activeQuestion, location, history }) => {
+const App = ({
+	currentUserRedux,
+	activeQuestion,
+	location,
+	history,
+	activeSolution,
+}) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -107,6 +114,30 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 			updateSearchedQuestion(activeQuestion.questionID, activeQuestion)
 		);
 	}, [activeQuestion]);
+
+	useEffect(() => {
+		if (!activeSolution) {
+			return;
+		}
+
+		if (activeSolution._id === activeQuestion.solution?._id) {
+			return dispatch(updateActiveQuestion({ solution: activeSolution }));
+		}
+
+		dispatch(
+			updateActiveQuestion({
+				proposedSolutions: activeQuestion.proposedSolutions.map(
+					(proposedSolution) => {
+						if (proposedSolution._id === activeSolution._id) {
+							return { ...proposedSolution, ...activeSolution };
+						}
+
+						return proposedSolution;
+					}
+				),
+			})
+		);
+	}, [activeSolution]);
 
 	const renderSideBar = () => {
 		if (notInsideApp()) {
@@ -176,7 +207,7 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 							<SearchResults />
 						</Route>
 						<Route path="/group/:id/ask">
-							<AskQuestion />
+							<PostQuestion />
 						</Route>
 						<Route path="/group/:id/join-requests">
 							{currentUserRedux ? (
@@ -217,22 +248,22 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 								<Redirect to="/signin" />
 							)}
 						</Route>
-						<Route path="/profile/me">
+						<Route path="/profile/:userID" exact>
 							<UserProfile />
 						</Route>
-						<Route path="/profile/edit">
+						<Route path="/profile/edit/me">
 							<EditProfile />
 						</Route>
 						<Route path="/group/:groupID/question/:questionID/solve">
 							{currentUserRedux ? (
-								<SolveQuestion type="solve" />
+								<PostSolution type="solve" />
 							) : (
 								<Redirect to="/signin" />
 							)}
 						</Route>
 						<Route path="/group/:groupID/question/:questionID/propose">
 							{currentUserRedux ? (
-								<SolveQuestion type="propose" />
+								<PostSolution type="propose" />
 							) : (
 								<Redirect to="/signin" />
 							)}
@@ -246,7 +277,14 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 						</Route>
 						<Route path="/group/:groupID/question/:questionID/edit">
 							{currentUserRedux ? (
-								<AskQuestion />
+								<PostQuestion />
+							) : (
+								<Redirect to="/signin" />
+							)}
+						</Route>
+						<Route path="/group/:groupID/question/:questionID/solution/:solutionID/edit">
+							{currentUserRedux ? (
+								<PostSolution type="edit" />
 							) : (
 								<Redirect to="/signin" />
 							)}
@@ -263,6 +301,7 @@ const mapStateToProps = (state) => {
 		currentUserRedux: state.currentUser.currentUser,
 		showMenu: state.menu.showMenu,
 		activeQuestion: state.groupQuestions.activeQuestion,
+		activeSolution: state.solution.activeSolution,
 	};
 };
 

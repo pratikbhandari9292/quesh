@@ -72,3 +72,10 @@
 	@extend .indicator;
 	right: 5rem;
 }
+
+.imagesPreview {
+	position: absolute;
+	left: 50%;
+	bottom: 0.5rem;
+	transform: translateX(-50%);
+}

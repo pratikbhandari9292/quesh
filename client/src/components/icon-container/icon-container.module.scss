@@ -1,8 +1,14 @@
 @import "../../styles/utils.module.scss";
+@import "../../styles/variables.module.scss";
+
+.container,
+.text {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
 
 .container {
-	position: relative;
-
 	svg {
 		@extend .iconSecondary;
 		height: 1.85rem;
@@ -14,4 +20,15 @@
 	svg {
 		background-color: $color-grey-lightest;
 	}
+}
+
+.text {
+	justify-content: center;
+	height: 2rem;
+	width: 2rem;
+	border-radius: 50%;
+	background-color: $color-grey-lighter-more;
+	font-size: 1.35rem;
+	font-weight: 500;
+	color: $color-grey-light;
 }

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams, useLocation } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
-import { setSortType } from "../../redux/group-questions/group-questions.actions";
+import {
+	setNeedToFetch,
+	setSortType,
+} from "../../redux/group-questions/group-questions.actions";
 
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
 import { activateOption } from "../../utils/utils.options-toggle";
@@ -138,7 +141,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 			return setGroupSubtitle("delegate ownership");
 		}
 
-		if (pathname.includes("question/search")) {
+		if (pathname.includes("search")) {
 			return setGroupSubtitle("search question");
 		}
 	}, [location]);
@@ -165,6 +168,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 
 	const sortOptionSelectHandler = (option) => {
 		dispatch(setSortType(option));
+		dispatch(setNeedToFetch(true));
 	};
 
 	const renderOptionsToggle = () => {
@@ -195,6 +199,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 					<IconContainer
 						linkTo={icon.linkTo}
 						active={icon.active}
+						text={icon.text}
 						key={icon.title}
 					>
 						{icon.icon}

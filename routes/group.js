@@ -489,11 +489,26 @@ router.get(
 	async (request, response) => {
 		const sortBy = request.query.sortBy;
 		const order = sortBy === "createdAt" ? "asc" : "desc";
+		const displayType = request.query.displayType;
+		let filter = {};
+
+		switch (displayType) {
+			case "all":
+				filter = {};
+				break;
+			case "unsolved":
+				filter = { solved: false };
+				break;
+			case "solved":
+				filter = { solved: true };
+				break;
+		}
 
 		try {
 			//getting the questions belonging to the group of the given id
 			const questions = await Question.find({
 				group: request.params.groupID,
+				...filter,
 			})
 				.populate(questionPopulate)
 				.sort({ [sortBy]: order });

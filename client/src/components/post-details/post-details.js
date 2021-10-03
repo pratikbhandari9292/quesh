@@ -19,11 +19,7 @@ const PostDetails = ({
 	return (
 		<div className={styles.container}>
 			<div className={styles.userPreview}>
-				<ProfilePicture
-					username={username}
-					avatar={avatar}
-					size="smaller"
-				/>
+				<ProfilePicture username={username} avatar={avatar} />
 				<div className={styles.userPostInfo}>
 					<p className={styles.previewUsername}>{username}</p>
 					<p className={styles.postInfo}>

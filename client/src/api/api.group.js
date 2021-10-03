@@ -101,11 +101,16 @@ export const searchGroup = async (searchTerm, token) => {
 	return data;
 };
 
-export const getGroupQuestions = async (groupID, sortBy, token) => {
+export const getGroupQuestions = async (
+	groupID,
+	sortBy,
+	displayType,
+	token
+) => {
 	const result = await fetch(
 		`${baseURL}/${groupID}/questions/?sortBy=${
 			sortBy === "time" ? "createdAt" : "votesNumber"
-		}`,
+		}&displayType=${displayType}`,
 		{
 			headers: {
 				"auth-token": token,

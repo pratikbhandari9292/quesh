@@ -1,19 +1,23 @@
 @import "../../../styles/variables.module.scss";
 @import "../../../styles/box-shadows.module.scss";
+@import "../../../styles/utils.module.scss";
 
 .container {
+	&:not(:first-child) {
+		margin-left: 1.5rem;
+	}
+}
+
+.imageContainer {
 	height: 5rem;
 	width: 5rem;
 	border-radius: 3px;
 	cursor: pointer;
 	transition: transform 100ms ease-in;
+	position: relative;
 
 	img {
 		border-radius: 3px;
-	}
-
-	&:not(:first-child) {
-		margin-left: 1.5rem;
 	}
 
 	&:active {
@@ -21,10 +25,31 @@
 	}
 }
 
-.containerActive {
+.imageContainerActive {
 	box-shadow: $box-shadow-two;
 
 	img {
 		border: 2px solid $color-blue;
 	}
+}
+
+.iconContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 0.5rem;
+	border: 1px solid $color-grey-lighter;
+	border-radius: 3px;
+	padding: 0.3rem 0;
+	cursor: pointer;
+	transition: border 100ms ease-in, background-color 100ms ease-in;
+
+	&:active {
+		border: 1px solid $color-grey-lighter-more;
+		background-color: $color-grey-lightest;
+	}
+}
+
+.icon {
+	@extend .iconSmaller;
 }

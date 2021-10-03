@@ -15,6 +15,9 @@ const FileSelector = ({
 	text = "select image",
 	selectedFiles = [],
 	error,
+	maxFiles,
+	sizeLimit = 5,
+	noLimit,
 }) => {
 	const fileSelectorRef = useRef();
 
@@ -39,20 +42,35 @@ const FileSelector = ({
 	return (
 		<div>
 			{label && <p className={styles.label}>{label}</p>}
-			<input
-				type="file"
-				className={styles.fileSelector}
-				ref={fileSelectorRef}
-				onChange={handleFileChange}
-			/>
-			<Button
-				size="smaller"
-				type="secondary"
-				color="blue"
-				clickHandler={handleSelectButtonClick}
-			>
-				<ImageIcon /> {text}
-			</Button>
+
+			{!noLimit &&
+				(maxFiles ? (
+					<p className={styles.label}>
+						{maxFiles} {maxFiles > 1 ? "files" : "file"} remaining,
+						max {sizeLimit}mb {maxFiles > 1 && "each"}
+					</p>
+				) : (
+					<p className={styles.label}>maximum files selected</p>
+				))}
+
+			{(maxFiles > 0 || noLimit) && (
+				<React.Fragment>
+					<input
+						type="file"
+						className={styles.fileSelector}
+						ref={fileSelectorRef}
+						onChange={handleFileChange}
+					/>
+					<Button
+						size="smaller"
+						type="secondary"
+						color="blue"
+						clickHandler={handleSelectButtonClick}
+					>
+						<ImageIcon /> {text}
+					</Button>
+				</React.Fragment>
+			)}
 
 			<div className={styles.divider}></div>
 

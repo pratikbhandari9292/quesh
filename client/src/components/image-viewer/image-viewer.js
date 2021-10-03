@@ -138,10 +138,12 @@ const ImageViewer = ({ show, images, currentlyDisplayed, imageSize }) => {
 					</motion.div>
 
 					{images.length > 1 && (
-						<PreviewContainer
-							images={images}
-							currentlyDisplayed={currentlyDisplayed}
-						/>
+						<div className={styles.imagesPreview}>
+							<PreviewContainer
+								images={images}
+								currentlyDisplayed={currentlyDisplayed}
+							/>
+						</div>
 					)}
 				</motion.div>
 			)}

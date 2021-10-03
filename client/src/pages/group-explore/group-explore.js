@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 
 import styles from "./group-explore.module.scss";
+
+import {
+	setDisplayType,
+	setNeedToFetch,
+} from "../../redux/group-questions/group-questions.actions";
+
+import { activateOption } from "../../utils/utils.options-toggle";
 
 import OptionsToggle from "../../components/options-toggle/options-toggle";
 import Button from "../../components/button/button";
 import GroupQuestions from "../../components/group-questions/group-questions";
 
-const GroupExplore = ({ groupQuestions }) => {
-	const [toggleOptions, setToggleOptions] = useState([
+const GroupExplore = ({ groupQuestions, displayType }) => {
+	const [displayOptions, setDisplayOptions] = useState([
 		{
 			option: "unsolved",
 			title: "unsolved",
@@ -30,10 +37,21 @@ const GroupExplore = ({ groupQuestions }) => {
 	const params = useParams();
 	const history = useHistory();
 
+	const dispatch = useDispatch();
+
 	const groupID = params.id;
+
+	useEffect(() => {
+		setDisplayOptions(activateOption(displayOptions, displayType));
+	}, [displayType]);
 
 	const handleAskButtonClick = () => {
 		history.push(`/group/${groupID}/ask`);
+	};
+
+	const handleOptionSelect = (option) => {
+		dispatch(setDisplayType(option));
+		dispatch(setNeedToFetch(true));
 	};
 
 	return (
@@ -41,8 +59,8 @@ const GroupExplore = ({ groupQuestions }) => {
 			{groupQuestions.length > 0 && (
 				<div className={styles.optionsToggle}>
 					<OptionsToggle
-						options={toggleOptions}
-						setOptions={setToggleOptions}
+						options={displayOptions}
+						selectHandler={handleOptionSelect}
 					/>
 				</div>
 			)}
@@ -61,6 +79,7 @@ const GroupExplore = ({ groupQuestions }) => {
 const mapStateToProps = (state) => {
 	return {
 		groupQuestions: state.groupQuestions.questions,
+		displayType: state.groupQuestions.displayType,
 	};
 };
 
