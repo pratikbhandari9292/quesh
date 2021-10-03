@@ -52,6 +52,10 @@ const QuestionHeader = ({ activeQuestion }) => {
 			return "Proposed solutions";
 		}
 
+		if (location.pathname.includes("edit")) {
+			return "Edit question";
+		}
+
 		return "Question";
 	};
 
@@ -59,7 +63,6 @@ const QuestionHeader = ({ activeQuestion }) => {
 		<ContentHeader title={questionTitle}>
 			<IconContainer>
 				<QuestionMenu
-					questionID={questionID}
 					authorID={authorID}
 					currentUserID={currentUser._id}
 					token={currentUser.token}

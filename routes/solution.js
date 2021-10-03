@@ -11,6 +11,7 @@ const { getUpload } = require("../middleware/multer");
 const { getImageError } = require("../utils/utils.files");
 const Image = require("../models/Image");
 const User = require("../models/User");
+const { questionPopulate } = require("../utils/utils.populate");
 
 const router = express.Router();
 
@@ -113,46 +114,52 @@ router.post(
 
 //approve a solution
 router.put(
-	"/:questionID/approve/:solutionID",
+	"/approve/:solutionID",
 	auth,
-	questionAuth,
+	solutionAuth,
 	async (request, response) => {
-		const question = request.question;
+		const solution = request.solution;
+		const question = solution.question;
+		const group = question.group;
 
 		try {
-			//getting the group the question belongs to
-			const group = await Group.findById(question.group);
-
 			//checking to see if the requesting user is the owner of the group
 			if (request.user != group.owner) {
-				return response
-					.status(400)
-					.send({ error: "not authorized to approve solution" });
+				return response.status(400).send({ error: "not authorized" });
 			}
 
-			//checking to see if the solution to the given id exists
-			const solution = await Solution.findById(request.params.solutionID);
-
-			if (!solution) {
-				return response
-					.status(400)
-					.send({ error: "solution not found" });
-			}
-
-			//deleting the existing solution of the question
+			//making the existing solution a proposed solution
 			if (question.solution) {
-				await Solution.findByIdAndDelete(question.solution);
+				question.proposedSolutions = [
+					...question.proposedSolutions,
+					question.solution._id,
+				];
 			}
 
 			question.solution = request.params.solutionID;
+
+			question.proposedSolutions = question.proposedSolutions.filter(
+				(proposedSolution) =>
+					proposedSolution != request.params.solutionID
+			);
 
 			//updating the solution to be approved
 			solution.approved = true;
 
 			//saving the question and the solution to the database
-			await Promise.all([question.save(), solution.save()]);
+			const [savedQuestion, savedSolution] = await Promise.all([
+				question.save(),
+				solution.save(),
+			]);
 
-			response.send({ message: "solution approved" });
+			const populatedQuestion = await Question.findById(
+				question._id
+			).populate(questionPopulate);
+
+			response.send({
+				solution: populatedQuestion.solution,
+				proposedSolutions: populatedQuestion.proposedSolutions,
+			});
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}
@@ -185,10 +192,15 @@ router.get(
 router.delete("/:solutionID", auth, solutionAuth, async (request, response) => {
 	const type = request.query.type;
 	const solution = request.solution;
+	const group = solution.question.group;
+
+	if (!(request.user == solution.author || request.user == group.owner)) {
+		return response.status(400).send({ error: "not authorized" });
+	}
 
 	try {
 		const [question] = await Promise.all([
-			Question.findById(solution.question),
+			Question.findById(solution.question._id),
 			Solution.findByIdAndDelete(request.params.solutionID),
 		]);
 
@@ -232,7 +244,21 @@ async function questionAuth(request, response, next) {
 
 async function solutionAuth(request, response, next) {
 	try {
-		const solution = await Solution.findById(request.params.solutionID);
+		const solution = await Solution.findById(
+			request.params.solutionID
+		).populate([
+			{
+				path: "question",
+				populate: [
+					{
+						path: "group",
+					},
+				],
+			},
+			{
+				path: "author",
+			},
+		]);
 
 		if (!solution) {
 			return response.status(400).send({ error: "solution not found" });

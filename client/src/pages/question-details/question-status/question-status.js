@@ -81,7 +81,17 @@ const QuestionStatus = ({
 				text="this question has not been solved yet"
 				btnTexts={isOwner ? ["solve question"] : []}
 			>
-				{isOwner && <StatusButton>solve question</StatusButton>}
+				{isOwner && (
+					<StatusButton
+						clickHandler={() =>
+							history.push(
+								`/group/${groupID}/question/${questionID}/solve`
+							)
+						}
+					>
+						solve question
+					</StatusButton>
+				)}
 			</StatusItem>
 		) : (
 			<StatusItem

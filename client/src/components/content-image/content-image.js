@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import styles from "./content-image.module.scss";
 
@@ -7,7 +7,7 @@ import { setImageViewer } from "../../redux/image-viewer/image-viewer.action";
 
 import { ReactComponent as BackgroundImage } from "../../assets/icons/background-image.svg";
 
-const ContentImage = ({ src, index, activeQuestion, fullScreen }) => {
+const ContentImage = ({ src, index, images, fullScreen }) => {
 	const dispatch = useDispatch();
 
 	const handleContainerClick = () => {
@@ -15,7 +15,7 @@ const ContentImage = ({ src, index, activeQuestion, fullScreen }) => {
 			return;
 		}
 
-		dispatch(setImageViewer(true, activeQuestion.images, index));
+		dispatch(setImageViewer(true, images, index));
 	};
 
 	return (
@@ -26,10 +26,4 @@ const ContentImage = ({ src, index, activeQuestion, fullScreen }) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return {
-		activeQuestion: state.groupQuestions.activeQuestion,
-	};
-};
-
-export default connect(mapStateToProps)(ContentImage);
+export default ContentImage;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { connect } from "react-redux";
 
 import styles from "./solution-container.module.scss";
 
@@ -15,6 +16,9 @@ const SolutionContainer = ({
 	solution,
 	title = true,
 	showContentToggler = false,
+	border,
+	activeGroup,
+	activeQuestion,
 }) => {
 	const [showImages, setShowImages] = useState(!showContentToggler);
 
@@ -25,6 +29,10 @@ const SolutionContainer = ({
 		description,
 		images,
 	} = solution;
+
+	const { owner } = activeGroup;
+
+	const { solution: questionSolution } = activeQuestion;
 
 	const currentUser = getCurrentUser();
 
@@ -57,7 +65,11 @@ const SolutionContainer = ({
 	};
 
 	return (
-		<div>
+		<div
+			className={`${styles.container} ${
+				border && styles.containerBordered
+			}`}
+		>
 			{title && (
 				<PageHeader
 					title="solution to the question"
@@ -72,8 +84,13 @@ const SolutionContainer = ({
 					author,
 					createdAt,
 					description,
-					menu: currentUser._id === author._id && (
-						<SolutionMenu solutionID={solutionID} />
+					menu: (currentUser._id === author._id ||
+						owner._id === currentUser._id) && (
+						<SolutionMenu
+							solutionID={solutionID}
+							isOwner={currentUser._id === owner._id}
+							solution={questionSolution}
+						/>
 					),
 				}}
 			/>
@@ -106,4 +123,11 @@ const SolutionContainer = ({
 	);
 };
 
-export default SolutionContainer;
+const mapStateToProps = (state) => {
+	return {
+		activeGroup: state.groups.activeGroup,
+		activeQuestion: state.groupQuestions.activeQuestion,
+	};
+};
+
+export default connect(mapStateToProps)(SolutionContainer);

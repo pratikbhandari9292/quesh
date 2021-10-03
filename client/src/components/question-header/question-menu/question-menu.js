@@ -1,6 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useDispatch, connect } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 
 import {
 	displayConfirmationModal,
@@ -12,7 +12,10 @@ import {
 	displayAlert,
 	displayErrorAlert,
 } from "../../../redux/alert/alert.actions";
-import { removeGroupQuestion } from "../../../redux/group-questions/group-questions.actions";
+import {
+	removeGroupQuestion,
+	setEditingQuestion,
+} from "../../../redux/group-questions/group-questions.actions";
 
 import { deleteQuestion } from "../../../api/api.question";
 
@@ -20,10 +23,11 @@ import DotMenu from "../../dot-menu/dot-menu";
 import DropdownItem from "../../dropdown-item/dropdown-item";
 import Spinner from "../../spinner/spinner";
 
-const QuestionMenu = ({ questionID, authorID, currentUserID, token }) => {
+const QuestionMenu = ({ authorID, currentUserID, token, activeGroup }) => {
 	const dispatch = useDispatch();
 
 	const history = useHistory();
+	const { groupID, questionID } = useParams();
 
 	const handleDeleteClick = () => {
 		dispatch(
@@ -54,13 +58,24 @@ const QuestionMenu = ({ questionID, authorID, currentUserID, token }) => {
 		}
 	};
 
-	if (authorID !== currentUserID) {
+	const handleEditClick = () => {
+		dispatch(setEditingQuestion(true));
+		history.push(`/group/${groupID}/question/${questionID}/edit`);
+	};
+
+	//only the author of the question or the owner of the group has control
+	//over the question
+	if (
+		!(authorID === currentUserID || activeGroup.owner._id === currentUserID)
+	) {
 		return null;
 	}
 
 	return (
 		<DotMenu indicator="right">
-			<DropdownItem>edit question</DropdownItem>
+			<DropdownItem clickHandler={handleEditClick}>
+				edit question
+			</DropdownItem>
 			<DropdownItem type="danger" clickHandler={handleDeleteClick}>
 				delete question
 			</DropdownItem>
@@ -68,4 +83,10 @@ const QuestionMenu = ({ questionID, authorID, currentUserID, token }) => {
 	);
 };
 
-export default QuestionMenu;
+const mapStateToProps = (state) => {
+	return {
+		activeGroup: state.groups.activeGroup,
+	};
+};
+
+export default connect(mapStateToProps)(QuestionMenu);

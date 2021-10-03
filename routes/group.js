@@ -7,6 +7,7 @@ const { validateGroup } = require("../validation/group.validation");
 const Group = require("../models/Group");
 const Question = require("../models/Question");
 const User = require("../models/User");
+const { questionPopulate } = require("../utils/utils.populate");
 
 const router = express.Router();
 
@@ -494,23 +495,7 @@ router.get(
 			const questions = await Question.find({
 				group: request.params.groupID,
 			})
-				.populate([
-					{
-						path: "author",
-					},
-					{
-						path: "solution",
-						populate: {
-							path: "author",
-						},
-					},
-					{
-						path: "proposedSolutions",
-						populate: {
-							path: "author",
-						},
-					},
-				])
+				.populate(questionPopulate)
 				.sort({ [sortBy]: order });
 
 			response.status(200).send({ questions });

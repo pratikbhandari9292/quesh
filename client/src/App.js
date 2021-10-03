@@ -244,6 +244,13 @@ const App = ({ currentUserRedux, activeQuestion, location, history }) => {
 								<Redirect to="/signin" />
 							)}
 						</Route>
+						<Route path="/group/:groupID/question/:questionID/edit">
+							{currentUserRedux ? (
+								<AskQuestion />
+							) : (
+								<Redirect to="/signin" />
+							)}
+						</Route>
 					</section>
 				</Switch>
 			</div>

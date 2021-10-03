@@ -26,6 +26,13 @@ export const setSortType = (sortType) => {
 	};
 };
 
+export const setEditingQuestion = (editing) => {
+	return {
+		type: "SET_EDITING_QUESTION",
+		payload: editing,
+	};
+};
+
 export const setActiveQuestion = (question) => {
 	return {
 		type: "SET_ACTIVE_QUESTION",
@@ -50,6 +57,13 @@ export const deleteSolution = (type, solutionID) => {
 	return {
 		type: "DELETE_PROPOSED_SOLUTION",
 		payload: solutionID,
+	};
+};
+
+export const addSolution = (type, solution) => {
+	return {
+		type: type === "solution" ? "ADD_SOLUTION" : "ADD_PROPOSED_SOLUTION",
+		payload: solution,
 	};
 };
 

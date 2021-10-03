@@ -34,3 +34,16 @@ export const deleteSolution = async (solutionID, type, token) => {
 
 	return data;
 };
+
+export const approveSolution = async (solutionID, token) => {
+	const result = await fetch(`${baseURL}/approve/${solutionID}`, {
+		method: "PUT",
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};

@@ -4,7 +4,11 @@ import { useHistory, useParams } from "react-router-dom";
 
 import formStyles from "../../styles/form.module.scss";
 
-import { resetModal, setModal } from "../../redux/modal/modal.actions";
+import {
+	resetModal,
+	displayConfirmationModal,
+	displayLoadingModal,
+} from "../../redux/modal/modal.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 import { updateActiveQuestion } from "../../redux/group-questions/group-questions.actions";
 
@@ -16,7 +20,6 @@ import FormHeader from "../../components/form-header/form-header";
 import InputGroup from "../../components/input-group/input-group";
 import FileSelector from "../../components/file-selector/file-selector";
 import Button from "../../components/button/button";
-import Spinner from "../../components/spinner/spinner";
 
 const SolveQuestion = ({ type, activeQuestion, selectedFiles }) => {
 	const [description, setDescription] = useState("");
@@ -33,17 +36,27 @@ const SolveQuestion = ({ type, activeQuestion, selectedFiles }) => {
 
 	const currentUser = getCurrentUser();
 
-	const handleFormSubmit = async (event) => {
+	const handleFormSubmit = (event) => {
 		event.preventDefault();
 
+		if (type === "solve" && activeQuestion.solution) {
+			return dispatch(
+				displayConfirmationModal(
+					"this solution will replace the current solution. Do you want to continue ?",
+					solutionHandler
+				)
+			);
+		}
+
+		solutionHandler();
+	};
+
+	const solutionHandler = async () => {
 		dispatch(
-			setModal(
-				true,
+			displayLoadingModal(
 				type === "solve"
 					? "solving question..."
-					: "proposing solution...",
-				<Spinner />,
-				false
+					: "proposing solution..."
 			)
 		);
 

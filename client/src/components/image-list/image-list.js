@@ -26,7 +26,12 @@ const ImageList = ({ list, title }) => {
 			<div className={styles.container} style={listStyles}>
 				{list.map((image, index) => {
 					return (
-						<ContentImage src={image} index={index} key={image} />
+						<ContentImage
+							src={image}
+							index={index}
+							images={list}
+							key={image}
+						/>
 					);
 				})}
 			</div>

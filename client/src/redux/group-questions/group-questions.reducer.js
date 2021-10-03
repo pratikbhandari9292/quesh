@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
 	questions: [],
 	sortBy: "time",
+	editingQuestion: false,
 
 	searchedQuestions: [],
 
@@ -27,6 +28,8 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 			};
 		case "SET_SORT_TYPE":
 			return { ...state, sortBy: action.payload };
+		case "SET_EDITING_QUESTION":
+			return { ...state, editingQuestion: action.payload };
 		case "SET_ACTIVE_QUESTION":
 			return { ...state, activeQuestion: action.payload };
 		case "UPDATE_ACTIVE_QUESTION":
@@ -49,6 +52,25 @@ export const groupQuestionsReducer = (state = INITIAL_STATE, action) => {
 							(proposedSolution) =>
 								proposedSolution._id !== action.payload
 						),
+				},
+			};
+		case "ADD_SOLUTION":
+			return {
+				...state,
+				activeQuestion: {
+					...state.activeQuestion,
+					solution: action.payload,
+				},
+			};
+		case "ADD_PROPOSED_SOLUTION":
+			return {
+				...state,
+				activeQuestion: {
+					...state.activeQuestion,
+					proposedSolutions: [
+						...state.activeQuestion.proposedSolutions,
+						action.payload,
+					],
 				},
 			};
 		case "SET_SEARCHED_QUESTIONS":
