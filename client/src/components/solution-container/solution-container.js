@@ -19,6 +19,7 @@ const SolutionContainer = ({
 	border,
 	activeGroup,
 	activeQuestion,
+	approvedSolution,
 }) => {
 	const [showImages, setShowImages] = useState(!showContentToggler);
 
@@ -30,7 +31,9 @@ const SolutionContainer = ({
 		images,
 	} = solution;
 
-	const { owner } = activeGroup;
+	const {
+		group: { owner },
+	} = activeQuestion;
 
 	const currentUser = getCurrentUser();
 
@@ -88,6 +91,7 @@ const SolutionContainer = ({
 							solutionID={solutionID}
 							isOwner={currentUser._id === owner._id}
 							solution={solution}
+							approvedSolution={approvedSolution}
 						/>
 					),
 				}}

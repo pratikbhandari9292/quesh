@@ -10,6 +10,8 @@ const User = require("../models/User");
 const { getUpload } = require("../middleware/multer");
 const Image = require("../models/Image");
 const { getImageError } = require("../utils/utils.files");
+const { questionPopulate } = require("../utils/utils.populate");
+const { sendNewQuestionEmail } = require("../emails/account");
 
 const router = express.Router();
 
@@ -35,7 +37,10 @@ router.post(
 
 		try {
 			//getting the group of the given id
-			const questionGroup = await Group.findById(request.params.groupID);
+			const [questionGroup, requestingUser] = await Promise.all([
+				Group.findById(request.params.groupID).populate("owner"),
+				User.findById(request.user),
+			]);
 
 			if (!questionGroup) {
 				return response.status(400).send({ error: "group not found" });
@@ -69,16 +74,21 @@ router.post(
 			}
 
 			//saving the question and images to the database
-			const [savedQuestion, savedImages, requestingUser] =
-				await Promise.all([
-					question.save(),
-					Image.insertMany(images),
-					User.findById(request.user),
-				]);
+			const [savedQuestion, savedImages] = await Promise.all([
+				question.save(),
+				Image.insertMany(images),
+			]);
+
+			sendNewQuestionEmail(
+				questionGroup.title,
+				requestingUser.username,
+				questionGroup.owner.email
+			);
 
 			response.status(201).send({
 				question: savedQuestion,
 				author: requestingUser,
+				group: questionGroup,
 			});
 		} catch (error) {
 			response.status(500).send({ error: error.message });
@@ -95,17 +105,6 @@ router.post(
 router.get("/:questionID", auth, questionAuth, async (request, response) => {
 	try {
 		response.send({ question });
-	} catch (error) {
-		response.status(500).send({ error: error.message });
-	}
-});
-
-//delete a question
-router.delete("/:questionID", auth, questionAuth, async (request, response) => {
-	try {
-		await Question.findByIdAndDelete(request.params.questionID);
-
-		response.send({ message: "deleted" });
 	} catch (error) {
 		response.status(500).send({ error: error.message });
 	}
@@ -128,16 +127,43 @@ router.patch("/:questionID", auth, questionAuth, async (request, response) => {
 	}
 });
 
+//delete a question
+router.delete("/:questionID", auth, questionAuth, async (request, response) => {
+	try {
+		await Question.findByIdAndDelete(request.params.questionID);
+
+		response.send({ message: "deleted" });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
+
+//get the questions asked by a user
+router.get("/user/:userID", auth, async (request, response) => {
+	try {
+		const questions = await Question.find({
+			author: request.params.userID,
+		}).populate(questionPopulate);
+
+		response.send({ questions });
+	} catch (error) {
+		response.status(500).send({ error: error.message });
+	}
+});
+
 //search question
 router.get("/search/:searchTerm", auth, async (request, response) => {
 	const searchTermRegularExpression = new RegExp(
 		request.params.searchTerm,
 		"i"
 	);
-
 	const groupID = request.query.groupID;
-
-	const groupFilter = groupID ? { ["group"]: groupID } : {};
+	const userID = request.query.userID;
+	const questionFilter = groupID
+		? { ["group"]: groupID }
+		: userID
+		? { ["author"]: userID }
+		: {};
 
 	try {
 		const questions = await Question.find({
@@ -145,8 +171,8 @@ router.get("/search/:searchTerm", auth, async (request, response) => {
 				{ title: { $regex: searchTermRegularExpression } },
 				{ description: { $regex: searchTermRegularExpression } },
 			],
-			...groupFilter,
-		}).populate("author");
+			...questionFilter,
+		}).populate(questionPopulate);
 
 		response.send({ questions });
 	} catch (error) {

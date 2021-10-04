@@ -106,8 +106,6 @@ const PostSolution = ({
 				);
 			}
 
-			console.log(result);
-
 			if (result.error) {
 				return setFieldErrors(result.error);
 			}
@@ -157,31 +155,33 @@ const PostSolution = ({
 	};
 
 	return (
-		<div className={formStyles.container}>
-			<FormHeader heading={formHeadings[type]} />
+		<div>
+			<div className={formStyles.container}>
+				<FormHeader heading={formHeadings[type]} />
 
-			<form className={formStyles.form} onSubmit={handleFormSubmit}>
-				<InputGroup
-					label="description"
-					displayType="textarea"
-					placeholder="maximum 250 characters"
-					value={description}
-					error={descriptionError}
-					changeHandler={setDescription}
-				/>
-
-				{type === "edit" && renderSolutionImages()}
-
-				{type !== "edit" && (
-					<FileSelector
-						maxFiles={5 - selectedFiles.length}
-						text="select images"
-						error={filesError}
+				<form className={formStyles.form} onSubmit={handleFormSubmit}>
+					<InputGroup
+						label="description"
+						displayType="textarea"
+						placeholder="maximum 250 characters"
+						value={description}
+						error={descriptionError}
+						changeHandler={setDescription}
 					/>
-				)}
 
-				<Button size="full">{formHeadings[type]}</Button>
-			</form>
+					{type === "edit" && renderSolutionImages()}
+
+					{type !== "edit" && (
+						<FileSelector
+							maxFiles={5 - selectedFiles.length}
+							text="select images"
+							error={filesError}
+						/>
+					)}
+
+					<Button size="full">{formHeadings[type]}</Button>
+				</form>
+			</div>
 		</div>
 	);
 };

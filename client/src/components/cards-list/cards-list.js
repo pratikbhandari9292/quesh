@@ -15,6 +15,7 @@ const CardsList = ({
 	type = "group",
 	userCardType,
 	messageAlign,
+	selfContent,
 }) => {
 	if (loadingList) {
 		return <CardsSkeleton type={type} />;
@@ -65,6 +66,7 @@ const CardsList = ({
 						<QuestionCard
 							{...listItem}
 							questionID={listItem._id}
+							selfContent={selfContent}
 							key={listItem._id}
 						/>
 					);

@@ -16,21 +16,21 @@
 	}
 }
 
-.containerGrey,
-.containerRed {
-	svg {
-		path {
-			fill: $color-grey-lighter-more;
-		}
-	}
-}
-
-.containerRed {
-	background-color: $color-red-lighter;
-}
+// .containerGrey,
+// .containerRed {
+// 	svg {
+// 		path {
+// 			fill: $color-grey-lighter-more;
+// 		}
+// 	}
+// }
 
 .containerGrey {
-	background-color: $color-grey-lighter;
+	background-color: lighten($color-grey-lighter, 15%);
+}
+
+.containerLightBlue {
+	background-color: lighten($color-blue, 7%);
 }
 
 .containerMuted {

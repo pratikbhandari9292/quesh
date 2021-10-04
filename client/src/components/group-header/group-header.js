@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 
 import {
@@ -10,15 +10,11 @@ import {
 import { capitalizeFirstLetter } from "../../utils/utils.strings";
 import { activateOption } from "../../utils/utils.options-toggle";
 
-import { ReactComponent as SearchIcon } from "../../assets/icons/search-secondary.svg";
-import { ReactComponent as UsersIcon } from "../../assets/icons/users.svg";
-import { ReactComponent as NotificationOutlineIcon } from "../../assets/icons/notification-outlined.svg";
-import { ReactComponent as UserAddIcon } from "../../assets/icons/user-add.svg";
-
 import OptionsToggle from "../options-toggle/options-toggle";
 import GroupMenu from "./group-menu/group-menu";
 import IconContainer from "../icon-container/icon-container";
 import ContentHeader from "../content-header/content-header";
+import GroupLinks from "./group-links/group-links";
 
 const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 	const [sortOptions, setSortOptions] = useState([
@@ -40,46 +36,6 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 	const params = useParams();
 	const groupID = params.id;
 
-	const [icons, setIcons] = useState([
-		{
-			icon: <NotificationOutlineIcon />,
-			linkTo: null,
-			active: false,
-			activeLinks: ["notifications"],
-			title: "notifications",
-		},
-		{
-			icon: <SearchIcon />,
-			linkTo: `/group/${groupID}/search`,
-			active: false,
-			activeLinks: ["search"],
-			title: "search",
-		},
-		{
-			icon: <UsersIcon />,
-			linkTo: `/group/${groupID}/join-requests`,
-			active: false,
-			activeLinks: ["join-requests"],
-			title: "join-requests",
-		},
-		{
-			icon: (
-				<UserAddIcon
-					onClick={() => {
-						return history.push(
-							`/group/${groupID}/add-members/select`
-						);
-					}}
-				/>
-			),
-			linkTo: `/group/${groupID}/add-members/select`,
-			active: false,
-			activeLinks: ["select", "finalize"],
-			title: "add-members",
-		},
-	]);
-
-	const history = useHistory();
 	const location = useLocation();
 
 	const dispatch = useDispatch();
@@ -147,22 +103,6 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 	}, [location]);
 
 	useEffect(() => {
-		setIcons(
-			icons.map((icon) => {
-				if (
-					icon.activeLinks.find((activeLink) =>
-						location.pathname.includes(activeLink)
-					)
-				) {
-					return { ...icon, active: true };
-				}
-
-				return { ...icon, active: false };
-			})
-		);
-	}, [location]);
-
-	useEffect(() => {
 		setActiveGroup(groups.find((group) => group._id === groupID));
 	}, []);
 
@@ -194,18 +134,7 @@ const GroupHeader = ({ groups, searchResults, sortBy, groupQuestions }) => {
 		>
 			{renderOptionsToggle()}
 
-			{icons.map((icon) => {
-				return (
-					<IconContainer
-						linkTo={icon.linkTo}
-						active={icon.active}
-						text={icon.text}
-						key={icon.title}
-					>
-						{icon.icon}
-					</IconContainer>
-				);
-			})}
+			<GroupLinks groupID={groupID} />
 
 			<IconContainer>
 				<GroupMenu owner={activeGroup?.owner._id} />

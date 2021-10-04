@@ -12,6 +12,7 @@ const { getImageError } = require("../utils/utils.files");
 const Image = require("../models/Image");
 const User = require("../models/User");
 const { questionPopulate } = require("../utils/utils.populate");
+const { sendQuestionSolvedEmail } = require("../emails/account");
 
 const router = express.Router();
 
@@ -39,8 +40,11 @@ router.post(
 		}
 
 		try {
-			//getting the group the question belongs to
-			const group = await Group.findById(question.group);
+			//getting the group the question belongs to and the requesting user
+			const [group, requestingUser] = await Promise.all([
+				Group.findById(question.group),
+				User.findById(request.user),
+			]);
 
 			//checking to see if the requesting user is the owner of the group
 			if (
@@ -90,18 +94,27 @@ router.post(
 			}
 
 			//saving the solution, question and images to the database
-			const [savedSolution, savedQuestion, savedImages, requestingUser] =
+			const [savedSolution, savedQuestion, savedImages] =
 				await Promise.all([
 					solution.save(),
 					question.save(),
 					Image.insertMany(images),
-					User.findById(request.user),
 				]);
+
+			if (type === "solve") {
+				sendQuestionSolvedEmail(
+					group.title,
+					question.title,
+					requestingUser.username,
+					question.author.email
+				);
+			}
 
 			response
 				.status(201)
 				.send({ solution: savedSolution, author: requestingUser });
 		} catch (error) {
+			console.log(error);
 			response.status(500).send({ error: error.message });
 		}
 	},
@@ -166,6 +179,7 @@ router.put(
 			}
 
 			question.solution = request.params.solutionID;
+			question.solved = true;
 
 			question.proposedSolutions = question.proposedSolutions.filter(
 				(proposedSolution) =>
@@ -257,7 +271,9 @@ router.delete("/:solutionID", auth, solutionAuth, async (request, response) => {
 async function questionAuth(request, response, next) {
 	try {
 		//getting the question with the given id
-		const question = await Question.findById(request.params.questionID);
+		const question = await Question.findById(
+			request.params.questionID
+		).populate("author");
 
 		//checking to see if the question exists
 		if (!question) {

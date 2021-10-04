@@ -39,21 +39,6 @@ export const updateQuestion = async (questionID, updateInfo, token) => {
 	return data;
 };
 
-export const searchQuestion = async (searchTerm, groupID, token) => {
-	const result = await fetch(
-		`${baseURL}/search/${searchTerm}/?groupID=${groupID}`,
-		{
-			headers: {
-				"auth-token": token,
-			},
-		}
-	);
-
-	const data = await result.json();
-
-	return data;
-};
-
 export const deleteQuestion = async (questionID, token) => {
 	const result = await fetch(`${baseURL}/${questionID}`, {
 		method: "DELETE",
@@ -61,6 +46,33 @@ export const deleteQuestion = async (questionID, token) => {
 			"auth-token": token,
 		},
 	});
+
+	const data = await result.json();
+
+	return data;
+};
+
+export const getUserQuestions = async (userID, token) => {
+	const result = await fetch(`${baseURL}/user/${userID}`, {
+		headers: {
+			"auth-token": token,
+		},
+	});
+
+	const data = await result.json();
+
+	return data;
+};
+
+export const searchQuestion = async (searchTerm, type, id, token) => {
+	const result = await fetch(
+		`${baseURL}/search/${searchTerm}/?${type}ID=${id}`,
+		{
+			headers: {
+				"auth-token": token,
+			},
+		}
+	);
 
 	const data = await result.json();
 

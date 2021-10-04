@@ -16,6 +16,7 @@ import {
 	removeGroupQuestion,
 	setEditingQuestion,
 } from "../../../redux/group-questions/group-questions.actions";
+import { removeUserQuestion } from "../../../redux/user-questions/user-questions.actions";
 
 import { deleteQuestion } from "../../../api/api.question";
 
@@ -49,9 +50,10 @@ const QuestionMenu = ({ authorID, currentUserID, token, activeGroup }) => {
 				return dispatch(displayErrorAlert());
 			}
 
-			history.goBack();
 			dispatch(removeGroupQuestion(questionID));
+			dispatch(removeUserQuestion(questionID));
 			dispatch(displayAlert("question deleted"));
+			history.goBack();
 		} catch (error) {
 		} finally {
 			dispatch(resetModal());

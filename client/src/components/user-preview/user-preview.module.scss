@@ -3,14 +3,24 @@
 .container {
 	display: flex;
 	align-items: center;
+	padding-bottom: 0.5rem;
+	position: relative;
+}
+
+.userInfo {
+	margin-left: 0.75rem;
 }
 
 .username {
-	margin-left: 0.75rem;
 	color: $color-grey-light;
 	font-weight: 500;
 
 	&::first-letter {
 		text-transform: uppercase;
 	}
+}
+
+.subInfo {
+	color: $color-grey-lighter;
+	font-size: 1.5rem;
 }

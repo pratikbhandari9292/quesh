@@ -33,7 +33,7 @@ const Tag = ({
 				color === "grey" && styles.containerGrey
 			} ${color === "muted" && styles.containerMuted} ${
 				transparent && styles.containerTransparent
-			} ${color === "red" && styles.containerRed} ${
+			} ${color === "light-blue" && styles.containerLightBlue} ${
 				size === "bigger" && styles.containerBigger
 			} ${capitalize && styles.textCapitalized}`}
 		>

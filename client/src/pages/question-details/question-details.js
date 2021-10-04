@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import * as Scroll from "react-scroll";
 
 import styles from "./question-details.module.scss";
 
@@ -31,22 +30,12 @@ const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 		solution,
 		proposedSolutions,
 		images,
+		group,
 	} = activeQuestion;
 
-	const { groupID, owner } = activeGroup;
+	const { _id: groupID, owner } = group;
 
 	const currentUser = getCurrentUser();
-
-	const Element = Scroll.Element;
-	const scroller = Scroll.scroller;
-
-	useEffect(() => {
-		scroller.scrollTo("scrollSection", {
-			duration: 100,
-			smooth: true,
-			containerID: "scrollSectionContainer",
-		});
-	}, [showSolution]);
 
 	const renderCornerButton = () => {
 		return (
@@ -116,12 +105,9 @@ const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 			<ImageList list={images} title="question images" />
 
 			<div className={styles.divider} ref={dividerRef}></div>
-			<div id="scrollSectionContainer">
-				<Element name="scrollSection"></Element>
-			</div>
 
 			{solution && showSolution && (
-				<SolutionContainer solution={solution} />
+				<SolutionContainer solution={solution} approvedSolution />
 			)}
 
 			{renderCornerButton()}

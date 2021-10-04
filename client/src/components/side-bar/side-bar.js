@@ -18,7 +18,7 @@ const SideBar = () => {
 		},
 		{
 			title: "questions",
-			linkTo: "/questions",
+			linkTo: "/questions/me",
 			icon: <PaperPlaneIcon />,
 			active: false,
 		},

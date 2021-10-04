@@ -12,7 +12,7 @@ import { getCurrentUser } from "../../local-storage/current-user";
 import GenericSearch from "../../components/generic-search/generic-search";
 import CardsList from "../../components/cards-list/cards-list";
 
-const QuestionSearch = ({ searchedQuestions }) => {
+const QuestionSearch = ({ searchedQuestions, searchType }) => {
 	const [searchMessage, setSearchMessage] = useState(false);
 	const [searching, setSearching] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -23,7 +23,7 @@ const QuestionSearch = ({ searchedQuestions }) => {
 
 	const groupID = params.id;
 
-	const currentUser = getCurrentUser();
+	const { _id: currentUserID, token } = getCurrentUser();
 
 	useEffect(() => {
 		return () => {
@@ -38,8 +38,9 @@ const QuestionSearch = ({ searchedQuestions }) => {
 		try {
 			const result = await searchQuestion(
 				searchTerm,
-				groupID,
-				currentUser.token
+				searchType,
+				searchType === "group" ? groupID : currentUserID,
+				token
 			);
 
 			if (result.error) {

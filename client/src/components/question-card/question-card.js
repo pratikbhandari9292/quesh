@@ -7,6 +7,7 @@ import styles from "./question-card.module.scss";
 import { setActiveQuestion } from "../../redux/group-questions/group-questions.actions";
 
 import { getHowLongAgo } from "../../utils/utils.date-time";
+import { getCurrentUser } from "../../local-storage/current-user";
 
 import UserPreview from "../user-preview/user-preview";
 import VoteContainer from "../vote-container/vote-container";
@@ -24,20 +25,22 @@ const QuestionCard = (props) => {
 		sortBy,
 		solution,
 		proposedSolutions,
+		group,
 	} = props;
+
+	console.log(group);
 
 	const dispatch = useDispatch();
 
 	const history = useHistory();
-	const params = useParams();
-
-	const groupID = params.id;
 
 	const { username, _id: authorID, avatar } = author;
 
+	const { _id: currentUserID } = getCurrentUser();
+
 	const handleContainerClick = () => {
 		dispatch(setActiveQuestion(props));
-		history.push(`/group/${groupID}/question/${questionID}`);
+		history.push(`/group/${group._id}/question/${questionID}`);
 	};
 
 	const renderVoteContainer = () => {
@@ -63,7 +66,7 @@ const QuestionCard = (props) => {
 		} else {
 			tags = [
 				...tags,
-				{ text: "unsolved", color: "red", type: "failure" },
+				{ text: "unsolved", color: "grey", type: "failure" },
 			];
 		}
 
@@ -72,7 +75,7 @@ const QuestionCard = (props) => {
 				...tags,
 				{
 					text: "proposed",
-					color: "grey",
+					color: "light-blue",
 					type: "progress",
 				},
 			];
@@ -98,7 +101,11 @@ const QuestionCard = (props) => {
 		<div className={styles.container} onClick={handleContainerClick}>
 			<div className={styles.question}>
 				<div className={styles.header}>
-					<UserPreview username={username} avatar={avatar} />
+					<UserPreview
+						username={username}
+						userID={authorID}
+						avatar={avatar}
+					/>
 					<p className={styles.date}>{getHowLongAgo(createdAt)}</p>
 				</div>
 

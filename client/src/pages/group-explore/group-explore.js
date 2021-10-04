@@ -18,8 +18,8 @@ import GroupQuestions from "../../components/group-questions/group-questions";
 const GroupExplore = ({ groupQuestions, displayType }) => {
 	const [displayOptions, setDisplayOptions] = useState([
 		{
-			option: "unsolved",
-			title: "unsolved",
+			option: "all",
+			title: "all",
 			active: true,
 		},
 		{
@@ -28,8 +28,13 @@ const GroupExplore = ({ groupQuestions, displayType }) => {
 			active: false,
 		},
 		{
-			option: "all",
-			title: "all",
+			option: "unsolved",
+			title: "unsolved",
+			active: false,
+		},
+		{
+			option: "mine",
+			title: "mine",
 			active: false,
 		},
 	]);

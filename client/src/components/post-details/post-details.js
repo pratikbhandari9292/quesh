@@ -5,6 +5,7 @@ import styles from "./post-details.module.scss";
 import { getDate, getHowLongAgo } from "../../utils/utils.date-time";
 
 import ProfilePicture from "../profile-picture/profile-picture";
+import UserPreview from "../user-preview/user-preview";
 
 const PostDetails = ({
 	author,
@@ -14,19 +15,18 @@ const PostDetails = ({
 	type = "solution",
 	menu,
 }) => {
-	const { username, avatar } = author;
+	const { username, avatar, _id: authorID } = author;
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.userPreview}>
-				<ProfilePicture username={username} avatar={avatar} />
-				<div className={styles.userPostInfo}>
-					<p className={styles.previewUsername}>{username}</p>
-					<p className={styles.postInfo}>
-						posted {getHowLongAgo(createdAt)} ago on{" "}
-						{getDate(createdAt)}
-					</p>
-				</div>
+			<div className={styles.previewContainer}>
+				<UserPreview
+					username={username}
+					subInfo={`posted ${getHowLongAgo(createdAt)} ago on
+						${getDate(createdAt)}`}
+					userID={authorID}
+					avatar={avatar}
+				/>
 
 				{menu}
 			</div>

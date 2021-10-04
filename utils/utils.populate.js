@@ -14,6 +14,12 @@ const questionPopulate = [
 			path: "author",
 		},
 	},
+	{
+		path: "group",
+		populate: {
+			path: "owner",
+		},
+	},
 ];
 
 module.exports = { questionPopulate };

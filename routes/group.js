@@ -502,6 +502,11 @@ router.get(
 			case "solved":
 				filter = { solved: true };
 				break;
+			case "mine":
+				filter = { author: request.user };
+				break;
+			default:
+				break;
 		}
 
 		try {

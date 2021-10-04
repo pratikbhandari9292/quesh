@@ -1,7 +1,7 @@
 @import "../../styles/variables.module.scss";
 
 .container {
-	height: calc(100vh - 5rem - 3rem - 1rem);
+	// height: calc(100vh - 5rem - 3rem - 1rem);
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;

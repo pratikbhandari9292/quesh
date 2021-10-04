@@ -14,6 +14,7 @@ import {
 	displayConfirmationModal,
 	resetModal,
 } from "../../redux/modal/modal.actions";
+import { resetUserQuestions } from "../../redux/user-questions/user-questions.actions";
 
 import {
 	getCurrentUser,
@@ -57,6 +58,7 @@ const ProfilePreview = ({ username, email, avatar }) => {
 		dispatch(setNeedToFetch(true));
 		dispatch(resetCurrentUser());
 		dispatch(resetAddMembers());
+		dispatch(resetUserQuestions());
 		setCurrentUser(null);
 		history.push("/signin");
 	};

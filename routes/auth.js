@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const { sendSignedUpEmail } = require("../emails/account");
 
 const {
 	validateUserRegistration,
@@ -44,6 +45,8 @@ router.post("/register", async (request, response) => {
 	try {
 		//saving the user to the database
 		const savedUser = user.save();
+
+		sendSignedUpEmail(userInfo.username, userInfo.email);
 
 		response.status(201).send({ message: "user created" });
 	} catch (error) {

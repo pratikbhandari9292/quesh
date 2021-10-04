@@ -47,6 +47,7 @@ import EditProfile from "./pages/edit-profile/edit-profile";
 import ImageViewer from "./components/image-viewer/image-viewer";
 import PostSolution from "./pages/post-solution/post-solution";
 import ProposedSolutions from "./pages/proposed-solutions/proposed-solutions";
+import UserQuestions from "./pages/user-questions/user-questions";
 
 const App = ({
 	currentUserRedux,
@@ -201,7 +202,11 @@ const App = ({
 								)}
 						</Route>
 						<Route path="/group/:id/explore">
-							<GroupExplore />
+							{currentUserRedux ? (
+								<GroupExplore />
+							) : (
+								<Redirect to="/signin" />
+							)}
 						</Route>
 						<Route path="/search">
 							<SearchResults />
@@ -229,7 +234,7 @@ const App = ({
 							<GroupMembers />
 						</Route>
 						<Route path="/group/:id/search">
-							<QuestionSearch />
+							<QuestionSearch searchType="group" />
 						</Route>
 						<Route path="/group/:groupID/question/:questionID/">
 							{currentUserRedux ? (
@@ -288,6 +293,13 @@ const App = ({
 							) : (
 								<Redirect to="/signin" />
 							)}
+						</Route>
+
+						<Route path="/questions/:userID">
+							<UserQuestions />
+						</Route>
+						<Route path="/questions/:userID/search">
+							<QuestionSearch searchType="user" />
 						</Route>
 					</section>
 				</Switch>

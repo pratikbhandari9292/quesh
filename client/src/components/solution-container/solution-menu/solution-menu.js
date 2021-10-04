@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import { useLocation, useHistory, useParams } from "react-router-dom";
 
 import styles from "./solution-menu.module.scss";
@@ -22,7 +22,13 @@ import { getCurrentUser } from "../../../local-storage/current-user";
 import DotMenu from "../../dot-menu/dot-menu";
 import DropdownItem from "../../dropdown-item/dropdown-item";
 
-const SolutionMenu = ({ solutionID, isOwner, solution }) => {
+const SolutionMenu = ({
+	solutionID,
+	isOwner,
+	solution,
+	approvedSolution,
+	activeQuestion,
+}) => {
 	const dispatch = useDispatch();
 
 	const location = useLocation();
@@ -72,7 +78,7 @@ const SolutionMenu = ({ solutionID, isOwner, solution }) => {
 	};
 
 	const handleApproveClick = () => {
-		const confirmationMessage = solution
+		const confirmationMessage = activeQuestion.solution
 			? "this proposed solution will replace the current solution"
 			: "this proposed solution will be the main solution";
 
@@ -113,7 +119,7 @@ const SolutionMenu = ({ solutionID, isOwner, solution }) => {
 	return (
 		<div className={styles.container}>
 			<DotMenu indicator="right">
-				{isOwner && solutionID !== solution._id && (
+				{isOwner && !approvedSolution && (
 					<DropdownItem clickHandler={handleApproveClick}>
 						approve solution
 					</DropdownItem>
@@ -131,4 +137,10 @@ const SolutionMenu = ({ solutionID, isOwner, solution }) => {
 	);
 };
 
-export default SolutionMenu;
+const mapStateToProps = (state) => {
+	return {
+		activeQuestion: state.groupQuestions.activeQuestion,
+	};
+};
+
+export default connect(mapStateToProps)(SolutionMenu);

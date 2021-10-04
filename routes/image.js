@@ -64,6 +64,10 @@ router.delete("/:contentID", auth, async (request, response) => {
 		content = await Solution.findById(contentID);
 	}
 
+	if (contentType === "question" || contentType === "solution") {
+		content.images = content.images.filter((image) => image != src);
+	}
+
 	if (contentType === "user") {
 		content = await User.findById(contentID);
 		content.avatar = `https://avatars.dicebear.com/api/initials/${content.username}.svg`;

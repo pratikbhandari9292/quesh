@@ -11,6 +11,7 @@ import {
 } from "../../redux/group-questions/group-questions.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 import { resetModal, setModal } from "../../redux/modal/modal.actions";
+import { addUserQuestion } from "../../redux/user-questions/user-questions.actions";
 
 import { askQuestion, updateQuestion } from "../../api/api.question";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -99,12 +100,14 @@ const PostQuestion = ({ selectedFiles, editingQuestion, activeQuestion }) => {
 			}
 
 			if (postType === "ask") {
-				dispatch(
-					addGroupQuestion({
-						...result.question,
-						author: result.author,
-					})
-				);
+				const question = {
+					...result.question,
+					author: result.author,
+					group: result.group,
+				};
+
+				dispatch(addGroupQuestion(question));
+				dispatch(addUserQuestion(question));
 			} else {
 				const { title, description } = result.question;
 

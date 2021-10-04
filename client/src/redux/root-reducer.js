@@ -12,6 +12,7 @@ import { menuReducer } from "./menu/menu.reducer";
 import { imageViewerReducer } from "./image-viewer/image-viewer.reducer";
 import { filesReducer } from "./files/files.reducer";
 import { solutionReducer } from "./solution/solution.reducer";
+import { userQuestionsReducer } from "./user-questions/user-questions.reducer";
 
 export default combineReducers({
 	currentUser: currentUserReducer,
@@ -26,4 +27,5 @@ export default combineReducers({
 	imageViewer: imageViewerReducer,
 	files: filesReducer,
 	solution: solutionReducer,
+	userQuestions: userQuestionsReducer,
 });
