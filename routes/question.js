@@ -12,6 +12,7 @@ const Image = require("../models/Image");
 const { getImageError } = require("../utils/utils.files");
 const { questionPopulate } = require("../utils/utils.populate");
 const { sendNewQuestionEmail } = require("../emails/account");
+const Solution = require("../models/Solution");
 
 const router = express.Router();
 
@@ -127,17 +128,6 @@ router.patch("/:questionID", auth, questionAuth, async (request, response) => {
 	}
 });
 
-//delete a question
-router.delete("/:questionID", auth, questionAuth, async (request, response) => {
-	try {
-		await Question.findByIdAndDelete(request.params.questionID);
-
-		response.send({ message: "deleted" });
-	} catch (error) {
-		response.status(500).send({ error: error.message });
-	}
-});
-
 //get the questions asked by a user
 router.get("/user/:userID", auth, async (request, response) => {
 	try {
@@ -190,7 +180,11 @@ router.delete("/:questionID", auth, questionAuth, async (request, response) => {
 	}
 
 	try {
-		await Question.findByIdAndDelete(request.params.questionID);
+		await Promise.all([
+			Question.findByIdAndDelete(request.params.questionID),
+			Solution.deleteMany({ question: request.params.questionID }),
+			Image.deleteMany({ question: request.params.questionID }),
+		]);
 
 		response.send({ message: "deleted" });
 	} catch (error) {

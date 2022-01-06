@@ -88,7 +88,6 @@ const PostSolution = ({
 			let result = {};
 			const solutionInfo = {
 				description,
-				images: selectedFiles,
 			};
 
 			if (type === "edit") {
@@ -99,7 +98,7 @@ const PostSolution = ({
 				);
 			} else {
 				result = await solveOrPropose(
-					solutionInfo,
+					{ ...solutionInfo, images: selectedFiles },
 					questionID,
 					type,
 					currentUser.token

@@ -11,7 +11,7 @@ const welcomeTemplate = getTemplate("welcome");
 const newQuestionTemplate = getTemplate("new-question");
 const questionSolvedTemplate = getTemplate("question-solved");
 
-const emailApiKey = process.env.MONGO_URL;
+const emailApiKey = process.env.EMAIL_API;
 
 sgMail.setApiKey(emailApiKey);
 sgMail.setSubstitutionWrappers("{{", "}}");

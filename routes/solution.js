@@ -245,6 +245,7 @@ router.delete("/:solutionID", auth, solutionAuth, async (request, response) => {
 		const [question] = await Promise.all([
 			Question.findById(solution.question._id),
 			Solution.findByIdAndDelete(request.params.solutionID),
+			Image.deleteMany({ solution: request.params.solutionID }),
 		]);
 
 		if (type === "solution") {

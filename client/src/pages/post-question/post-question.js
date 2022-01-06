@@ -78,12 +78,11 @@ const PostQuestion = ({ selectedFiles, editingQuestion, activeQuestion }) => {
 			const questionInfo = {
 				title: title.trim(),
 				description: description.trim(),
-				images: selectedFiles,
 			};
 
 			if (postType === "ask") {
 				result = await askQuestion(
-					questionInfo,
+					{ ...questionInfo, images: selectedFiles },
 					groupID,
 					currentUser.token
 				);

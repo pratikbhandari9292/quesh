@@ -28,8 +28,6 @@ const QuestionCard = (props) => {
 		group,
 	} = props;
 
-	console.log(group);
-
 	const dispatch = useDispatch();
 
 	const history = useHistory();

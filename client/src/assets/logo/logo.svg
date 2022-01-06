@@ -1,5 +1,5 @@
 <svg width="424" height="477" viewBox="0 0 424 477" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M76.6728 185.447C77.279 184.123 78.4324 183.129 79.8315 182.724L389.091 93.3876C391.744 92.6212 394.516 94.1506 395.282 96.8036L416.126 168.961C416.881 171.573 415.41 174.309 412.814 175.121L36.7685 292.655C32.638 293.946 28.9293 289.736 30.7306 285.801L76.6728 185.447Z" fill="#111111"/>
+<path d="M76.6728 185.447C77.279 184.123 78.4324 183.129 79.8315 182.724L389.091 93.3876C391.744 92.6212 394.516 94.1506 395.282 96.8036L416.126 168.961C416.881 171.573 415.41 174.309 412.814 175.121L36.7685 292.655C32.638 293.946 28.9293 289.736 30.7306 285.801L76.6728 185.447Z" fill="#444444"/>
 <g filter="url(#filter0_d)">
 <path d="M335 9.15051C335 5.1963 339.373 2.80679 342.701 4.94266L417.701 53.0807C419.134 54.0004 420 55.5859 420 57.2885V405C420 407.761 417.761 410 415 410H340C337.239 410 335 407.761 335 405V9.15051Z" fill="#4285F4"/>
 </g>
@@ -9,16 +9,16 @@
 <defs>
 <filter id="filter0_d" x="331" y="4.14233" width="93" height="413.858" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
 <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
 </filter>
-<filter id="filter1_d" x="76.0011" y="129.242" width="345.244" height="346.857" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter1_d" x="78.0743" y="160.47" width="341.097" height="287.389" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
 <feGaussianBlur stdDeviation="2"/>
 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
