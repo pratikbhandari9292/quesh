@@ -4,16 +4,16 @@ import { connect, useDispatch } from "react-redux";
 
 import { setCurrentUser as setCurrentUserRedux } from "./redux/current-user/current-user.actions";
 import {
-	resetGroupQuestions,
-	updateGroupQuestion,
-	updateSearchedQuestion,
-	updateActiveQuestion,
+  resetGroupQuestions,
+  updateGroupQuestion,
+  updateSearchedQuestion,
+  updateActiveQuestion,
 } from "./redux/group-questions/group-questions.actions";
 import { resetGroupMembers } from "./redux/group-members/group-members.actions";
 
 import {
-	getCurrentUser,
-	updateCurrentUser,
+  getCurrentUser,
+  updateCurrentUser,
 } from "./local-storage/current-user";
 import { getUserDetails } from "./api/api.user";
 
@@ -48,273 +48,253 @@ import ImageViewer from "./components/image-viewer/image-viewer";
 import PostSolution from "./pages/post-solution/post-solution";
 import ProposedSolutions from "./pages/proposed-solutions/proposed-solutions";
 import UserQuestions from "./pages/user-questions/user-questions";
+import UserNotifications from "./pages/user-notifications/user-notifications";
+import SolutionPage from "./pages/solution/solution";
 
 const App = ({
-	currentUserRedux,
-	activeQuestion,
-	location,
-	history,
-	activeSolution,
+  currentUserRedux,
+  activeQuestion,
+  location,
+  history,
+  activeSolution,
 }) => {
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-	useEffect(() => {
-		//getting the currentUser from the local storage
-		const currentUser = getCurrentUser();
+  useEffect(() => {
+    //getting the currentUser from the local storage
+    const currentUser = getCurrentUser();
 
-		if (currentUser) {
-			fetchUserDetails(currentUser._id, currentUser.token);
-			return dispatch(setCurrentUserRedux(true));
-		}
+    if (currentUser) {
+      fetchUserDetails(currentUser._id, currentUser.token);
+      return dispatch(setCurrentUserRedux(true));
+    }
 
-		dispatch(setCurrentUserRedux(false));
-	}, []);
+    dispatch(setCurrentUserRedux(false));
+  }, []);
 
-	const fetchUserDetails = async (userID, token) => {
-		try {
-			const result = await getUserDetails(userID, token);
+  const fetchUserDetails = async (userID, token) => {
+    try {
+      const result = await getUserDetails(userID, token);
 
-			updateCurrentUser(result.user);
-		} catch (error) {}
-	};
+      updateCurrentUser(result.user);
+    } catch (error) {}
+  };
 
-	useEffect(() => {
-		if (notInsideApp()) {
-			if (currentUserRedux) {
-				history.push("/groups/me");
-			}
-			return;
-		}
+  useEffect(() => {
+    if (notInsideApp()) {
+      if (currentUserRedux) {
+        history.push("/groups/me");
+      }
+      return;
+    }
 
-		if (!currentUserRedux) {
-			history.push("/signin");
-		}
-	}, [location, currentUserRedux]);
+    if (!currentUserRedux) {
+      history.push("/signin");
+    }
+  }, [location, currentUserRedux]);
 
-	useEffect(() => {
-		if (
-			location.pathname.includes("group") &&
-			!location.pathname.includes("groups")
-		) {
-			return;
-		}
+  useEffect(() => {
+    if (
+      location.pathname.includes("group") &&
+      !location.pathname.includes("groups")
+    ) {
+      return;
+    }
 
-		dispatch(resetGroupQuestions());
-		dispatch(resetGroupMembers());
-	}, [location]);
+    dispatch(resetGroupQuestions());
+    dispatch(resetGroupMembers());
+  }, [location]);
 
-	useEffect(() => {
-		if (!activeQuestion) {
-			return;
-		}
+  useEffect(() => {
+    if (!activeQuestion) {
+      return;
+    }
 
-		dispatch(
-			updateGroupQuestion(activeQuestion.questionID, activeQuestion)
-		);
-		dispatch(
-			updateSearchedQuestion(activeQuestion.questionID, activeQuestion)
-		);
-	}, [activeQuestion]);
+    dispatch(updateGroupQuestion(activeQuestion.questionID, activeQuestion));
+    dispatch(updateSearchedQuestion(activeQuestion.questionID, activeQuestion));
+  }, [activeQuestion]);
 
-	useEffect(() => {
-		if (!activeSolution) {
-			return;
-		}
+  useEffect(() => {
+    if (!activeSolution) {
+      return;
+    }
 
-		if (activeSolution._id === activeQuestion.solution?._id) {
-			return dispatch(updateActiveQuestion({ solution: activeSolution }));
-		}
+    if (activeSolution._id === activeQuestion.solution?._id) {
+      return dispatch(updateActiveQuestion({ solution: activeSolution }));
+    }
 
-		dispatch(
-			updateActiveQuestion({
-				proposedSolutions: activeQuestion.proposedSolutions.map(
-					(proposedSolution) => {
-						if (proposedSolution._id === activeSolution._id) {
-							return { ...proposedSolution, ...activeSolution };
-						}
+    dispatch(
+      updateActiveQuestion({
+        proposedSolutions: activeQuestion.proposedSolutions.map(
+          (proposedSolution) => {
+            if (proposedSolution._id === activeSolution._id) {
+              return { ...proposedSolution, ...activeSolution };
+            }
 
-						return proposedSolution;
-					}
-				),
-			})
-		);
-	}, [activeSolution]);
+            return proposedSolution;
+          }
+        ),
+      })
+    );
+  }, [activeSolution]);
 
-	const renderSideBar = () => {
-		if (notInsideApp()) {
-			return null;
-		}
+  const renderSideBar = () => {
+    if (notInsideApp()) {
+      return null;
+    }
 
-		return <SideBar />;
-	};
+    return <SideBar />;
+  };
 
-	const notInsideApp = () => {
-		return (
-			location.pathname.includes("signin") ||
-			location.pathname.includes("register") ||
-			location.pathname === "/"
-		);
-	};
+  const notInsideApp = () => {
+    return (
+      location.pathname.includes("signin") ||
+      location.pathname.includes("register") ||
+      location.pathname === "/"
+    );
+  };
 
-	return (
-		<div className={styles.app}>
-			<Header />
-			<Modal key="modal" />
-			<Alert />
-			<ImageViewer />
-			<div className={notInsideApp() ? styles.mainWhole : styles.main}>
-				{renderSideBar()}
-				<Switch>
-					<section
-						className={`${
-							notInsideApp()
-								? wrapperStyles.wrapper
-								: styles.content
-						}`}
-					>
-						<Route path="/" exact>
-							<Welcome />
-						</Route>
-						<Route path="/signin">
-							<SignIn />
-						</Route>
-						<Route path="/register">
-							<Register />
-						</Route>
-						<Route path="/groups/:id">
-							{currentUserRedux ? (
-								<Groups />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/group/create" exact>
-							<CreateGroup />
-						</Route>
-						<Route path="/group/:id/details">
-							<GroupDetails />
-						</Route>
-						<Route path="/group/:id/">
-							{!location.pathname.includes("details") &&
-								!location.pathname.includes("create") &&
-								!location.pathname.includes("/question/") && (
-									<GroupHeader />
-								)}
-						</Route>
-						<Route path="/group/:id/explore">
-							{currentUserRedux ? (
-								<GroupExplore />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/search">
-							<SearchResults />
-						</Route>
-						<Route path="/group/:id/ask">
-							<PostQuestion />
-						</Route>
-						<Route path="/group/:id/join-requests">
-							{currentUserRedux ? (
-								<JoinRequests />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/group/:id/add-members/select">
-							<SelectUsers />
-						</Route>
-						<Route path="/group/:id/add-members/finalize">
-							<FinalizeSelect />
-						</Route>
-						<Route path="/group/:id/members">
-							<GroupMembers />
-						</Route>
-						<Route path="/group/:id/delegate-ownership">
-							<GroupMembers />
-						</Route>
-						<Route path="/group/:id/search">
-							<QuestionSearch searchType="group" />
-						</Route>
-						<Route path="/group/:groupID/question/:questionID/">
-							{currentUserRedux ? (
-								<QuestionHeader />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route
-							path="/group/:groupID/question/:questionID"
-							exact
-						>
-							{currentUserRedux ? (
-								<QuestionDetails />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/profile/:userID" exact>
-							<UserProfile />
-						</Route>
-						<Route path="/profile/edit/me">
-							<EditProfile />
-						</Route>
-						<Route path="/group/:groupID/question/:questionID/solve">
-							{currentUserRedux ? (
-								<PostSolution type="solve" />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/group/:groupID/question/:questionID/propose">
-							{currentUserRedux ? (
-								<PostSolution type="propose" />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/group/:groupID/question/:questionID/proposed-solutions">
-							{currentUserRedux ? (
-								<ProposedSolutions />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/group/:groupID/question/:questionID/edit">
-							{currentUserRedux ? (
-								<PostQuestion />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-						<Route path="/group/:groupID/question/:questionID/solution/:solutionID/edit">
-							{currentUserRedux ? (
-								<PostSolution type="edit" />
-							) : (
-								<Redirect to="/signin" />
-							)}
-						</Route>
-
-						<Route path="/questions/:userID">
-							<UserQuestions />
-						</Route>
-						<Route path="/questions/:userID/search">
-							<QuestionSearch searchType="user" />
-						</Route>
-					</section>
-				</Switch>
-			</div>
-		</div>
-	);
+  return (
+    <div className={styles.app}>
+      <Header />
+      <Modal key="modal" />
+      <Alert />
+      <ImageViewer />
+      <div className={notInsideApp() ? styles.mainWhole : styles.main}>
+        {renderSideBar()}
+        <Switch>
+          <section
+            className={`${
+              notInsideApp() ? wrapperStyles.wrapper : styles.content
+            }`}
+          >
+            <Route path="/" exact>
+              <Welcome />
+            </Route>
+            <Route path="/signin">
+              <SignIn />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/groups/:id">
+              {currentUserRedux ? <Groups /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/group/create" exact>
+              <CreateGroup />
+            </Route>
+            <Route path="/group/:id/details">
+              <GroupDetails />
+            </Route>
+            <Route path="/group/:id/">
+              {!location.pathname.includes("details") &&
+                !location.pathname.includes("create") &&
+                !location.pathname.includes("/question/") && <GroupHeader />}
+            </Route>
+            <Route path="/group/:id/explore">
+              {currentUserRedux ? <GroupExplore /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/search">
+              <SearchResults />
+            </Route>
+            <Route path="/group/:id/ask">
+              <PostQuestion />
+            </Route>
+            <Route path="/group/:id/join-requests">
+              {currentUserRedux ? <JoinRequests /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/group/:id/add-members/select">
+              <SelectUsers />
+            </Route>
+            <Route path="/group/:id/add-members/finalize">
+              <FinalizeSelect />
+            </Route>
+            <Route path="/group/:id/members">
+              <GroupMembers />
+            </Route>
+            <Route path="/group/:id/delegate-ownership">
+              <GroupMembers />
+            </Route>
+            <Route path="/group/:id/search">
+              <QuestionSearch searchType="group" />
+            </Route>
+            <Route path="/group/:groupID/question/:questionID/">
+              {currentUserRedux ? (
+                <QuestionHeader />
+              ) : (
+                <Redirect to="/signin" />
+              )}
+            </Route>
+            <Route path="/group/:groupID/question/:questionID" exact>
+              {currentUserRedux ? (
+                <QuestionDetails />
+              ) : (
+                <Redirect to="/signin" />
+              )}
+            </Route>
+            <Route path="/profile/:userID" exact>
+              <UserProfile />
+            </Route>
+            <Route path="/profile/edit/me">
+              <EditProfile />
+            </Route>
+            <Route path="/group/:groupID/question/:questionID/solve" exact>
+              {currentUserRedux ? (
+                <PostSolution type="solve" />
+              ) : (
+                <Redirect to="/signin" />
+              )}
+            </Route>
+            <Route path="/group/:groupID/question/:questionID/propose" exact>
+              {currentUserRedux ? (
+                <PostSolution type="propose" />
+              ) : (
+                <Redirect to="/signin" />
+              )}
+            </Route>
+            <Route path="/group/:groupID/question/:questionID/proposed-solutions" exact>
+              {currentUserRedux ? (
+                <ProposedSolutions />
+              ) : (
+                <Redirect to="/signin" />
+              )}
+            </Route>
+            <Route path="/group/:groupID/question/:questionID/edit" exact>
+              {currentUserRedux ? <PostQuestion /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/group/:groupID/question/:questionID/solution/:solutionID/edit" exact>
+              {currentUserRedux ? (
+                <PostSolution type="edit" />
+              ) : (
+                <Redirect to="/signin" />
+              )}
+            </Route>
+            <Route path="/questions/:userID">
+              <UserQuestions />
+            </Route>
+            <Route path="/questions/:userID/search">
+              <QuestionSearch searchType="user" />
+            </Route>
+            <Route path="/notifications">
+              <UserNotifications />
+            </Route>
+			<Route path = "/group/:groupID/question/:questionID/solution" exact>
+				<SolutionPage />
+			</Route>
+          </section>
+        </Switch>
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {
-	return {
-		currentUserRedux: state.currentUser.currentUser,
-		showMenu: state.menu.showMenu,
-		activeQuestion: state.groupQuestions.activeQuestion,
-		activeSolution: state.solution.activeSolution,
-	};
+  return {
+    currentUserRedux: state.currentUser.currentUser,
+    showMenu: state.menu.showMenu,
+    activeQuestion: state.groupQuestions.activeQuestion,
+    activeSolution: state.solution.activeSolution,
+  };
 };
 
 export default connect(mapStateToProps)(withRouter(App));

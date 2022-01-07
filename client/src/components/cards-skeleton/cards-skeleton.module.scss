@@ -54,6 +54,16 @@
 	height: fit-content;
 }
 
+.notificationSkeleton {
+	@extend .skeletonStyles;
+
+	width: 50rem;
+	background-color: transparent;
+	border-bottom: 1px solid $color-grey-lightest;
+	box-shadow: none;
+	margin-bottom: 1.5rem;
+}
+
 .title,
 .subInfo {
 	// animation: textAnimation 1000ms ease-in infinite alternate;

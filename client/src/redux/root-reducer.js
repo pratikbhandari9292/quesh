@@ -13,6 +13,7 @@ import { imageViewerReducer } from "./image-viewer/image-viewer.reducer";
 import { filesReducer } from "./files/files.reducer";
 import { solutionReducer } from "./solution/solution.reducer";
 import { userQuestionsReducer } from "./user-questions/user-questions.reducer";
+import { userNotificationsReducer } from "./user-notifications/user-notifications.reducer";
 
 export default combineReducers({
 	currentUser: currentUserReducer,
@@ -28,4 +29,5 @@ export default combineReducers({
 	files: filesReducer,
 	solution: solutionReducer,
 	userQuestions: userQuestionsReducer,
+	userNotifications: userNotificationsReducer
 });

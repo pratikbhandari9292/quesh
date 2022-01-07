@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import styles from "./question-details.module.scss";
 
 import { getCurrentUser } from "../../local-storage/current-user";
+import { getQuestionDetails } from "../../api/api.question";
 
 import VoteContainer from "../../components/vote-container/vote-container";
 import QuestionStatus from "./question-status/question-status";
@@ -15,27 +16,36 @@ import SolutionContainer from "../../components/solution-container/solution-cont
 
 const QuestionDetails = ({ activeQuestion, activeGroup }) => {
 	const [showSolution, setShowSolution] = useState(false);
+	const [questionDetails, setQuestionDetails] = useState(null);
 
 	const dividerRef = useRef();
-
 	const history = useHistory();
-
+	const { questionID } = useParams();
 	const {
 		description,
 		author,
 		createdAt,
 		votes,
 		votesNumber,
-		questionID,
 		solution,
 		proposedSolutions,
 		images,
 		group,
 	} = activeQuestion;
-
 	const { _id: groupID, owner } = group;
-
 	const currentUser = getCurrentUser();
+
+	useEffect(() => {
+		fetchQuestionDetails();
+	}, [])
+
+	const fetchQuestionDetails = async () => {
+		const result = await getQuestionDetails(questionID, currentUser.token);
+
+		if (result.question) {
+			return setQuestionDetails(result.question);
+		}
+	}
 
 	const renderCornerButton = () => {
 		return (

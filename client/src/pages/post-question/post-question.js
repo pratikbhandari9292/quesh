@@ -5,9 +5,9 @@ import { useDispatch, connect } from "react-redux";
 import styles from "./post-question.module.scss";
 
 import {
-	addGroupQuestion,
-	setEditingQuestion,
-	updateActiveQuestion,
+    addGroupQuestion,
+    setEditingQuestion,
+    updateActiveQuestion,
 } from "../../redux/group-questions/group-questions.actions";
 import { displayAlert } from "../../redux/alert/alert.actions";
 import { resetModal, setModal } from "../../redux/modal/modal.actions";
@@ -17,6 +17,7 @@ import { askQuestion, updateQuestion } from "../../api/api.question";
 import { getCurrentUser } from "../../local-storage/current-user";
 import { setFilesErrorExternal } from "../../utils/utils.files";
 import { renderPostImages } from "../../utils/utils.posts";
+import { sendNotification } from "../../api/api.notification";
 
 import FormHeader from "../../components/form-header/form-header";
 import InputGroup from "../../components/input-group/input-group";
@@ -25,168 +26,182 @@ import FileSelector from "../../components/file-selector/file-selector";
 import Spinner from "../../components/spinner/spinner";
 
 const PostQuestion = ({ selectedFiles, editingQuestion, activeQuestion }) => {
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [descriptionError, setDescriptionError] = useState("");
-	const [filesError, setFilesError] = useState("");
-	const [postType, setPostType] = useState("ask");
-	const [activeImages, setActiveImages] = useState([]);
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [descriptionError, setDescriptionError] = useState("");
+    const [filesError, setFilesError] = useState("");
+    const [postType, setPostType] = useState("ask");
+    const [activeImages, setActiveImages] = useState([]);
 
-	const params = useParams();
-	const history = useHistory();
-	const location = useLocation();
+    const params = useParams();
+    const history = useHistory();
+    const location = useLocation();
 
-	const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-	const groupID = params.id;
-	const questionID = params.questionID;
+    const groupID = params.id;
+    const questionID = params.questionID;
 
-	const currentUser = getCurrentUser();
+    const currentUser = getCurrentUser();
 
-	useEffect(() => {
-		if (location.pathname.includes("edit")) {
-			setPostType("edit");
-		}
-	}, [location]);
+    useEffect(() => {
+        if (location.pathname.includes("edit")) {
+            setPostType("edit");
+        }
+    }, [location]);
 
-	useEffect(() => {
-		if (editingQuestion && activeQuestion) {
-			const { title, description, images } = activeQuestion;
+    useEffect(() => {
+        if (editingQuestion && activeQuestion) {
+            const { title, description, images } = activeQuestion;
 
-			setTitle(title);
-			setDescription(description);
-			setActiveImages(images.length > 0 ? images : []);
-		}
-	}, [editingQuestion, activeQuestion]);
+            setTitle(title);
+            setDescription(description);
+            setActiveImages(images.length > 0 ? images : []);
+        }
+    }, [editingQuestion, activeQuestion]);
 
-	useEffect(() => {
-		return () => {
-			dispatch(setEditingQuestion(false));
-		};
-	}, []);
+    useEffect(() => {
+        return () => {
+            dispatch(setEditingQuestion(false));
+        };
+    }, []);
 
-	const handleFormSubmit = async (event) => {
-		event.preventDefault();
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
 
-		clearFieldErrors();
-		dispatch(
-			setModal(true, `${postType}ing question...`, <Spinner />, false)
-		);
+        clearFieldErrors();
+        dispatch(
+            setModal(true, `${postType}ing question...`, <Spinner />, false)
+        );
 
-		try {
-			let result = {};
-			const questionInfo = {
-				title: title.trim(),
-				description: description.trim(),
-			};
+        try {
+            let result = {};
+            const questionInfo = {
+                title: title.trim(),
+                description: description.trim(),
+            };
 
-			if (postType === "ask") {
-				result = await askQuestion(
-					{ ...questionInfo, images: selectedFiles },
-					groupID,
-					currentUser.token
-				);
-			} else {
-				result = await updateQuestion(
-					questionID,
-					questionInfo,
-					currentUser.token
-				);
-			}
+            if (postType === "ask") {
+                result = await askQuestion(
+                    { ...questionInfo, images: selectedFiles },
+                    groupID,
+                    currentUser.token
+                );
+            } else {
+                result = await updateQuestion(
+                    questionID,
+                    questionInfo,
+                    currentUser.token
+                );
+            }
 
-			if (result.error) {
-				return setFieldErrors(result.error);
-			}
+            if (result.error) {
+                return setFieldErrors(result.error);
+            }
 
-			if (postType === "ask") {
-				const question = {
-					...result.question,
-					author: result.author,
-					group: result.group,
-				};
+            if (postType === "ask") {
+                const question = {
+                    ...result.question,
+                    author: result.author,
+                    group: result.group,
+                };
 
-				dispatch(addGroupQuestion(question));
-				dispatch(addUserQuestion(question));
-			} else {
-				const { title, description } = result.question;
+                dispatch(addGroupQuestion(question));
+                dispatch(addUserQuestion(question));
 
-				dispatch(updateActiveQuestion({ title, description }));
-			}
+                //send notification to the owner of the group
+				if (currentUser._id !== result.group.owner._id) {
 
-			history.goBack();
-			dispatch(displayAlert(`question ${postType}ed`));
-		} catch (error) {
-		} finally {
-			dispatch(resetModal());
-		}
-	};
+					const notificationInfo = {
+						type: "user",
+						notifAction: "ask question",
+						origin: currentUser._id,
+						userDest: result.group.owner._id,
+						groupDest: result.group._id,
+						question: question._id
+					};
+					sendNotification(notificationInfo, currentUser.token);
+				}
+            } else {
+                const { title, description } = result.question;
 
-	const setFieldErrors = (error) => {
-		if (error.includes("description")) {
-			return setDescriptionError(error);
-		}
+                dispatch(updateActiveQuestion({ title, description }));
+            }
 
-		setFilesErrorExternal(error, setFilesError);
-	};
+            history.goBack();
+            dispatch(displayAlert(`question ${postType}ed`));
+        } catch (error) {
+        } finally {
+            dispatch(resetModal());
+        }
+    };
 
-	const clearFieldErrors = () => {
-		setDescriptionError("");
-		setFilesError("");
-	};
+    const setFieldErrors = (error) => {
+        if (error.includes("description")) {
+            return setDescriptionError(error);
+        }
 
-	const renderQuestionImages = () => {
-		return renderPostImages(
-			activeImages,
-			"question images",
-			"question",
-			questionID
-		);
-	};
+        setFilesErrorExternal(error, setFilesError);
+    };
 
-	return (
-		<div>
-			<div className={styles.formContainer}>
-				<FormHeader heading={`${postType} question`} />
-				<form className={styles.form} onSubmit={handleFormSubmit}>
-					<InputGroup
-						label="title"
-						placeholder="optional"
-						value={title}
-						changeHandler={setTitle}
-					/>
+    const clearFieldErrors = () => {
+        setDescriptionError("");
+        setFilesError("");
+    };
 
-					<InputGroup
-						label="description"
-						placeholder="decribe the problem in maximum 150 characters"
-						value={description}
-						displayType="textarea"
-						error={descriptionError}
-						changeHandler={setDescription}
-					/>
+    const renderQuestionImages = () => {
+        return renderPostImages(
+            activeImages,
+            "question images",
+            "question",
+            questionID
+        );
+    };
 
-					{postType === "edit" && renderQuestionImages()}
+    return (
+        <div>
+            <div className={styles.formContainer}>
+                <FormHeader heading={`${postType} question`} />
+                <form className={styles.form} onSubmit={handleFormSubmit}>
+                    <InputGroup
+                        label="title"
+                        placeholder="optional"
+                        value={title}
+                        changeHandler={setTitle}
+                    />
 
-					{postType === "ask" && (
-						<FileSelector
-							text="select images"
-							maxFiles={3 - selectedFiles.length}
-							error={filesError}
-						/>
-					)}
+                    <InputGroup
+                        label="description"
+                        placeholder="decribe the problem in maximum 150 characters"
+                        value={description}
+                        displayType="textarea"
+                        error={descriptionError}
+                        changeHandler={setDescription}
+                    />
 
-					<Button size="full">{postType} question</Button>
-				</form>
-			</div>
-		</div>
-	);
+                    {postType === "edit" && renderQuestionImages()}
+
+                    {postType === "ask" && (
+                        <FileSelector
+                            text="select images"
+                            maxFiles={3 - selectedFiles.length}
+                            error={filesError}
+                        />
+                    )}
+
+                    <Button size="full">{postType} question</Button>
+                </form>
+            </div>
+        </div>
+    );
 };
 
 const mapStateToProps = (state) => {
-	return {
-		selectedFiles: state.files.selectedFiles,
-		editingQuestion: state.groupQuestions.editingQuestion,
-		activeQuestion: state.groupQuestions.activeQuestion,
-	};
+    return {
+        selectedFiles: state.files.selectedFiles,
+        editingQuestion: state.groupQuestions.editingQuestion,
+        activeQuestion: state.groupQuestions.activeQuestion,
+    };
 };
 
 export default connect(mapStateToProps)(PostQuestion);

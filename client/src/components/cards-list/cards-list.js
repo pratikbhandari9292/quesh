@@ -7,6 +7,7 @@ import StatusMessage from "../status-message/status-message";
 import CardsSkeleton from "../cards-skeleton/cards-skeleton";
 import QuestionCard from "../question-card/question-card";
 import UserCard from "../user-card/user-card";
+import NotificationCard from "../notification-card/notification-card";
 
 const CardsList = ({
 	list,
@@ -79,6 +80,8 @@ const CardsList = ({
 							type={userCardType}
 						/>
 					);
+				case "notification":
+					return <NotificationCard { ...listItem } />
 				default:
 					return null;
 			}

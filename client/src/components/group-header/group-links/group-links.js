@@ -18,7 +18,7 @@ const GroupLinks = ({ groupID, activeGroup }) => {
 	const [icons, setIcons] = useState([
 		{
 			icon: <NotificationOutlineIcon />,
-			linkTo: null,
+			linkTo: `/group/${groupID}/notifications`,
 			active: false,
 			activeLinks: ["notifications"],
 			title: "notifications",

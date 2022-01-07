@@ -1,0 +1,35 @@
+@import "../../styles/variables.module.scss";
+
+.notification {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid $color-grey-lightest;
+    max-width: 50rem;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    color: $color-grey-light;
+    
+    &:hover {
+        color: $color-black;
+        border-bottom: 1px solid $color-grey-lighter-more;
+        font-weight: 500;
+    }
+
+    &:active {
+        color: $color-grey-light;
+        border-bottom: 1px solid $color-grey-lightest;
+    }
+}
+
+.divider {
+    margin-left: 1rem;
+}
+
+p {
+    max-width: calc(100% - 4rem);
+}
+
+small, span {
+    margin-left: 1rem;
+}

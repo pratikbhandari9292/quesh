@@ -26,6 +26,8 @@ app.use("/api/question", require("./routes/question"));
 app.use("/api/solution", require("./routes/solution"));
 app.use("/api/user", require("./routes/user"));
 app.use("/api/image", require("./routes/image"));
+app.use("/api/notification", require("./routes/notification"));
+
 
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static("client/build"));

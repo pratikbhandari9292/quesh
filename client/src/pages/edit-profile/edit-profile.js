@@ -62,7 +62,7 @@ const EditProfile = ({ updates, selectedFiles }) => {
 			}
 
 			updateUser(result.user, "profile edited");
-			history.goBack();
+			history.push("/groups/me");
 		} catch (error) {
 		} finally {
 			dispatch(resetModal());
