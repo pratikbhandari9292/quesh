@@ -222,9 +222,9 @@ router.get(
 			const proposedSolutions = await Solution.find({
 				question: request.params.questionID,
 				approved: false,
-			});
+			}).populate("author").populate("question");
 
-			response.send({ proposedSolutions });
+			response.send({ solutions: proposedSolutions });
 		} catch (error) {
 			response.status(500).send({ error: error.message });
 		}

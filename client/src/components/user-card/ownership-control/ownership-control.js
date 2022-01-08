@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import userCardStyles from "../user-card.module.scss";
 
@@ -14,16 +14,16 @@ import { displayAlert } from "../../../redux/alert/alert.actions";
 
 import { delegateOwnership } from "../../../api/api.group";
 import { getCurrentUser } from "../../../local-storage/current-user";
+import { sendNotification } from "../../../api/api.notification";
 
 import Button from "../../button/button";
 import Spinner from "../../spinner/spinner";
 
 const OwnershipControl = ({ userID, username, currentGroup }) => {
 	const dispatch = useDispatch();
-
 	const currentUser = getCurrentUser();
-
 	const history = useHistory();
+	const { id: groupID } = useParams();
 
 	const handleMakeOwnerClick = () => {
 		dispatch(
@@ -50,6 +50,16 @@ const OwnershipControl = ({ userID, username, currentGroup }) => {
 
 			dispatch(updateGroup(currentGroup._id, { owner: result.owner }));
 			dispatch(displayAlert("ownership delegated"));
+
+			//send a notification to the delegated owner
+			const notificationInfo = {
+				type: "user",
+				notifAction: "delegate ownership",
+				userDests: [userID],
+				groupDest: groupID
+			}
+			sendNotification(notificationInfo, currentUser.token)
+
 			history.push("/groups/me");
 		} catch (error) {
 		} finally {

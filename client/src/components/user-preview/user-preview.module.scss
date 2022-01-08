@@ -14,6 +14,7 @@
 .username {
 	color: $color-grey-light;
 	font-weight: 500;
+	max-width: 25rem;
 
 	&::first-letter {
 		text-transform: uppercase;

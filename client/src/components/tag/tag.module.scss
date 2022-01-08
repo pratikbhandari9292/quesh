@@ -9,10 +9,14 @@
 	padding: 0.1rem 0.35rem;
 	border-radius: 5px;
 	color: $color-grey-lightest;
-
+	
 	svg {
 		@extend .iconSmaller;
 		margin-right: 0.5rem;
+
+		path {
+			fill: $color-grey-lightest;
+		}
 	}
 }
 

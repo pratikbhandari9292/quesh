@@ -110,18 +110,17 @@ const PostQuestion = ({ selectedFiles, editingQuestion, activeQuestion }) => {
                 dispatch(addUserQuestion(question));
 
                 //send notification to the owner of the group
-				if (currentUser._id !== result.group.owner._id) {
-
-					const notificationInfo = {
-						type: "user",
-						notifAction: "ask question",
-						origin: currentUser._id,
-						userDest: result.group.owner._id,
-						groupDest: result.group._id,
-						question: question._id
-					};
-					sendNotification(notificationInfo, currentUser.token);
-				}
+                if (currentUser._id !== result.group.owner._id) {
+                    const notificationInfo = {
+                        type: "user",
+                        notifAction: "ask question",
+                        origin: currentUser._id,
+                        userDests: [result.group.owner._id],
+                        groupDest: result.group._id,
+                        question: question._id,
+                    };
+                    sendNotification(notificationInfo, currentUser.token);
+                }
             } else {
                 const { title, description } = result.question;
 

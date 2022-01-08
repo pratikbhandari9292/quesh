@@ -105,7 +105,16 @@ router.post(
 //get the details of a question
 router.get("/:questionID", auth, questionAuth, async (request, response) => {
     try {
-        question = await Question.findById(request.params.questionID);
+        question = await Question.findById(request.params.questionID)
+            .populate({
+                path: "group",
+                select: ["_id", "owner"],
+            })
+            .populate({
+                path: "author",
+                select: ["username", "_id", "avatar"],
+            })
+            .populate("solution");
         response.send({ question });
     } catch (error) {
         response.status(500).send({ error: error.message });
@@ -176,7 +185,7 @@ router.delete("/:questionID", auth, questionAuth, async (request, response) => {
     const question = request.question;
     const requestingUser = request.user;
 
-    if (question.author != requestingUser) {
+    if (question.author != requestingUser && question.group.owner != requestingUser) {
         return response.status(400).send({ error: "not authorized" });
     }
 
@@ -195,7 +204,7 @@ router.delete("/:questionID", auth, questionAuth, async (request, response) => {
 
 //middlewares
 async function questionAuth(request, response, next) {
-    const question = await Question.findById(request.params.questionID);
+    const question = await Question.findById(request.params.questionID).populate("group");
 
     if (!question) {
         return response.send({ error: "question not found" });

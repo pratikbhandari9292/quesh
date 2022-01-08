@@ -81,7 +81,7 @@ const CardsList = ({
 						/>
 					);
 				case "notification":
-					return <NotificationCard { ...listItem } />
+					return <NotificationCard { ...listItem } key = { listItem._id } />
 				default:
 					return null;
 			}

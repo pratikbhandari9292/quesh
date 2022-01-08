@@ -21,3 +21,8 @@
 		text-transform: uppercase;
 	}
 }
+
+.containerMarginTop {
+	@extend .container;
+	margin-top: 1.5rem;
+}

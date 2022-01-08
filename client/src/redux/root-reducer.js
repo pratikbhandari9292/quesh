@@ -14,6 +14,7 @@ import { filesReducer } from "./files/files.reducer";
 import { solutionReducer } from "./solution/solution.reducer";
 import { userQuestionsReducer } from "./user-questions/user-questions.reducer";
 import { userNotificationsReducer } from "./user-notifications/user-notifications.reducer";
+import { activeContentReducer } from "./active-content/active-content.reducer";
 
 export default combineReducers({
 	currentUser: currentUserReducer,
@@ -29,5 +30,6 @@ export default combineReducers({
 	files: filesReducer,
 	solution: solutionReducer,
 	userQuestions: userQuestionsReducer,
-	userNotifications: userNotificationsReducer
+	userNotifications: userNotificationsReducer,
+	activeContent: activeContentReducer,
 });

@@ -76,6 +76,8 @@ const VoteContainer = ({
 		}
 	};
 
+	console.log(voted);
+
 	return (
 		<div className={styles.voteContainer}>
 			<UpvoteIcon

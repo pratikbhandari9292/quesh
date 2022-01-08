@@ -14,6 +14,7 @@ import {
 
 import { addGroupMembers } from "../../../api/api.group";
 import { getCurrentUser } from "../../../local-storage/current-user";
+import { sendNotification } from "../../../api/api.notification";
 
 import CardsList from "../../../components/cards-list/cards-list";
 import AddControls from "../add-controls/add-controls";
@@ -21,12 +22,9 @@ import Spinner from "../../../components/spinner/spinner";
 
 const FinalizeSelect = ({ selectedUsers }) => {
 	const history = useHistory();
-	const params = useParams();
-
-	const groupID = params.id;
-
 	const dispatch = useDispatch();
-
+	const params = useParams();
+	const groupID = params.id;
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
@@ -45,11 +43,12 @@ const FinalizeSelect = ({ selectedUsers }) => {
 				setModal(true, `adding ${getTerm()}...`, <Spinner />, false)
 			);
 
+			const selectedUserIDs = selectedUsers.map((selectedUser) => {
+				return selectedUser.userID;
+			})
 			const result = await addGroupMembers(
 				groupID,
-				selectedUsers.map((selectedUser) => {
-					return selectedUser.userID;
-				}),
+				selectedUserIDs,
 				currentUser.token
 			);
 
@@ -69,6 +68,17 @@ const FinalizeSelect = ({ selectedUsers }) => {
 			dispatch(resetAddMembers());
 			dispatch(resetGroupMembers());
 			dispatch(displayAlert(`${getTerm()} added`));
+
+			//send a notification to the added user
+			const notificationInfo = {
+				type: "user",
+				notifAction: "add member",
+				userDests: selectedUserIDs,
+				groupDest: groupID,
+				origin: currentUser._id
+			}
+			sendNotification(notificationInfo, currentUser.token);
+
 			history.push(`/group/${groupID}/explore`);
 		} catch (error) {
 			console.log(error);

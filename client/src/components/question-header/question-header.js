@@ -11,18 +11,14 @@ import QuestionMenu from "./question-menu/question-menu";
 
 const QuestionHeader = ({ activeQuestion }) => {
 	const [questionTitle, setQuestionTitle] = useState("");
-
 	const location = useLocation();
-
 	const currentUser = getCurrentUser();
 
-	const {
-		questionID,
-		title,
-		author: { username, _id: authorID },
-	} = activeQuestion;
-
 	useEffect(() => {
+		if (!activeQuestion) {
+			return;
+		}
+
 		const titleSection = getTitleSection();
 
 		setQuestionTitle(
@@ -30,7 +26,7 @@ const QuestionHeader = ({ activeQuestion }) => {
 				title || `${username}'s question`
 			)}`
 		);
-	}, [location]);
+	}, [location, activeQuestion]);
 
 	useEffect(() => {
 		document.title = questionTitle;
@@ -45,7 +41,7 @@ const QuestionHeader = ({ activeQuestion }) => {
 			location.pathname.includes("propose") &&
 			!location.pathname.includes("proposed-solutions")
 		) {
-			return "Propose";
+			return "Propose solution";
 		}
 
 		if (location.pathname.includes("proposed-solutions")) {
@@ -62,6 +58,17 @@ const QuestionHeader = ({ activeQuestion }) => {
 		return "Question";
 	};
 
+	if (!activeQuestion) {
+		return null;
+	}
+
+	const {
+		questionID,
+		title,
+		author: { username, _id: authorID },
+		group
+	} = activeQuestion;
+
 	return (
 		<ContentHeader title={questionTitle}>
 			<IconContainer>
@@ -69,6 +76,7 @@ const QuestionHeader = ({ activeQuestion }) => {
 					authorID={authorID}
 					currentUserID={currentUser._id}
 					token={currentUser.token}
+					groupOwnerID = { group.owner }
 				/>
 			</IconContainer>
 		</ContentHeader>
@@ -77,7 +85,7 @@ const QuestionHeader = ({ activeQuestion }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		activeQuestion: state.groupQuestions.activeQuestion,
+		activeQuestion: state.activeContent.activeQuestion,
 	};
 };
 

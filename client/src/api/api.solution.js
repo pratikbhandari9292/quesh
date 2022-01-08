@@ -62,3 +62,13 @@ export const updateSolution = async (solutionID, updateInfo, token) => {
 
 	return data;
 };
+
+export const getProposedSolutions = async (questionID, token) => {
+	const result = await fetch(`${baseURL}/proposed/${questionID}`, {
+		headers: {
+			"auth-token": token
+		}
+	})
+	const data = await result.json();
+	return data
+}

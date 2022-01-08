@@ -12,6 +12,10 @@ import {
 import { displayAlert } from "../../redux/alert/alert.actions";
 import { updateActiveQuestion } from "../../redux/group-questions/group-questions.actions";
 import { updateActiveSolution } from "../../redux/solution/solution.actions";
+import {
+    setActiveContent,
+    updateActiveContent,
+} from "../../redux/active-content/active-content.actions";
 
 import { solveOrPropose, updateSolution } from "../../api/api.solution";
 import { getCurrentUser } from "../../local-storage/current-user";
@@ -110,9 +114,18 @@ const PostSolution = ({
                 return setFieldErrors(result.error);
             }
 
+            const notificationInfo = {
+                type: "user",
+                userDests: [activeQuestion.author._id],
+                origin: currentUser._id,
+                groupDest: groupID,
+                question: activeQuestion._id,
+            };
+
             if (type === "edit") {
                 const { description } = result.solution;
                 dispatch(updateActiveSolution({ description }));
+                notificationInfo["notifAction"] = "update solution";
             } else {
                 const solution = { ...result.solution, author: result.author };
                 const updateInfo =
@@ -125,20 +138,18 @@ const PostSolution = ({
                               ],
                           };
 
-                dispatch(updateActiveQuestion(updateInfo));
-
-				//send notification to the author of the question
-                const notificationInfo = {
-                    type: "user",
-                    notifAction: "solve question",
-                    userDest: activeQuestion.author._id,
-					groupDest: groupID,
-                    question: activeQuestion._id,
-                };
-                sendNotification(notificationInfo, currentUser.token);
+                // dispatch(updateActiveQuestion(updateInfo));
+                dispatch(setActiveContent("Question", null));
+                // dispatch(updateActiveContent("Question", updateInfo));
+                notificationInfo["notifAction"] =
+                    type === "solve" ? "solve question" : "propose solution";
             }
 
             dispatch(displayAlert(alertMessages[type]));
+
+            //send notification to the author of the question
+            sendNotification(notificationInfo, currentUser.token);
+
             history.push(`/group/${groupID}/question/${questionID}`);
         } catch (error) {
         } finally {
@@ -197,7 +208,7 @@ const PostSolution = ({
 
 const mapStateToProps = (state) => {
     return {
-        activeQuestion: state.groupQuestions.activeQuestion,
+        activeQuestion: state.activeContent.activeQuestion,
         selectedFiles: state.files.selectedFiles,
         activeSolution: state.solution.activeSolution,
     };

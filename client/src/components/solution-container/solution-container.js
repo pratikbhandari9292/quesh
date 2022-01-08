@@ -17,7 +17,6 @@ const SolutionContainer = ({
 	title = true,
 	showContentToggler = false,
 	border,
-	activeGroup,
 	activeQuestion,
 	approvedSolution,
 }) => {
@@ -29,14 +28,13 @@ const SolutionContainer = ({
 		createdAt,
 		description,
 		images,
+		question
 	} = solution;
 
 	const {
 		group: { owner },
 	} = activeQuestion;
-
 	const currentUser = getCurrentUser();
-
 	const imageListAnimation = {
 		hidden: {
 			opacity: 0,
@@ -86,10 +84,10 @@ const SolutionContainer = ({
 					createdAt,
 					description,
 					menu: (currentUser._id === author._id ||
-						owner._id === currentUser._id) && (
+						owner === currentUser._id) && (
 						<SolutionMenu
 							solutionID={solutionID}
-							isOwner={currentUser._id === owner._id}
+							isOwner={currentUser._id === owner}
 							solution={solution}
 							approvedSolution={approvedSolution}
 						/>
@@ -128,7 +126,7 @@ const SolutionContainer = ({
 const mapStateToProps = (state) => {
 	return {
 		activeGroup: state.groups.activeGroup,
-		activeQuestion: state.groupQuestions.activeQuestion,
+		activeQuestion: state.activeContent.activeQuestion,
 	};
 };
 

@@ -18,8 +18,8 @@ const UserNotifications = ({ notifications, needToFetch }) => {
 
     useEffect(() => {
         if (needToFetch) {
+            dispatch(setUserNotifications([]));
             fetchNotifications();
-
         }
     }, []);
 
@@ -57,7 +57,7 @@ const UserNotifications = ({ notifications, needToFetch }) => {
 const mapStateToProps = (state) => {
     return {
         notifications: state.userNotifications.notifications,
-        needToFetch: state.userNotifications.needToFetch
+        needToFetch: state.userNotifications.needToFetch,
     };
 };
 

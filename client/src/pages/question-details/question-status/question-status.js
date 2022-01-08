@@ -37,7 +37,7 @@ const QuestionStatus = ({
 
     const currentUser = getCurrentUser();
 
-    const [isOwner, setIsOwner] = useState(currentUser._id === owner._id);
+    const [isOwner, setIsOwner] = useState(currentUser._id === owner);
 
     const renderProposedSolutionStatus = () => {
         const onlyOne = proposedSolutions.length === 1;
@@ -100,9 +100,10 @@ const QuestionStatus = ({
             >
                 <StatusButton
                     clickHandler={() =>
-                        history.push(
-                            `/group/${groupID}/question/${questionID}/solution`
-                        )
+                        // history.push(
+                        //     `/group/${groupID}/question/${questionID}/solution`
+                        // )
+                        scrollToSolution()
                     }
                 >
                     view solution

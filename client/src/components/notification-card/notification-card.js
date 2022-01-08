@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 import styles from "./notification-card.module.scss";
 
@@ -16,17 +17,31 @@ const NotificationCard = ({
     question,
     createdAt,
 }) => {
-    const { text } = getNotificationRenderInfo({
+    const { text, link, irrelavant } = getNotificationRenderInfo({
         type,
         notifAction,
         origin,
         groupDest,
         question,
     });
+    const history = useHistory();
+
+    const handleNotificationClick = () => {
+        if (link) {
+            history.push(link);
+        }
+    };
 
     return (
-        <div className={styles.notification}>
-            { origin && <ProfilePicture avatar={origin.avatar} size="smaller" />}
+        <div
+            className={`${styles.notification} ${
+                irrelavant && styles.notificationIrrelavant
+            }`}
+            onClick={handleNotificationClick}
+        >
+            {origin && !irrelavant && (
+                <ProfilePicture avatar={origin.avatar} size="smaller" />
+            )}
             <div className={styles.divider}></div>
             <p>
                 {capitalizeFirstLetter(text)}

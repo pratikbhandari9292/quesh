@@ -25,9 +25,7 @@ const GroupQuestions = ({
 	const [questionsMessage, setQuestionsMessage] = useState("");
 
 	const params = useParams();
-
 	const dispatch = useDispatch();
-
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {

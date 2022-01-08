@@ -2,94 +2,97 @@
 @import "../../styles/utils.module.scss";
 
 .container {
-	position: relative;
-	border: 1px solid $color-grey-lighter-more;
-	border-radius: 5px;
-	padding: 0.3rem 1rem;
-	cursor: pointer;
-	transition: background-color 100ms ease-in, color 100ms ease-in,
-		border 100ms ease-in;
+	display: flex;
+	justify-content: space-between;
+    position: relative;
+    border: 1px solid $color-grey-lighter-more;
+    border-radius: 5px;
+    padding: 0.3rem 1rem;
+    cursor: pointer;
+    transition: background-color 100ms ease-in, color 100ms ease-in,
+        border 100ms ease-in;
+    white-space: nowrap;
 
-	&:hover {
-		border: 1px solid $color-grey-lighter;
-		background-color: $color-grey-lightest;
+    &:hover {
+        border: 1px solid $color-grey-lighter;
+        background-color: $color-grey-lightest;
 
-		.optionSelected {
-			color: $color-black;
-		}
+        .optionSelected {
+            color: $color-black;
+        }
 
-		svg {
-			path {
-				fill: $color-black;
-			}
-		}
-	}
+        svg {
+            path {
+                fill: $color-black;
+            }
+        }
+    }
 
-	&:active {
-		background-color: $color-grey-lighter-more;
+    &:active {
+        background-color: $color-grey-lighter-more;
 
-		.optionSelected {
-			color: $color-grey-light;
-		}
+        .optionSelected {
+            color: $color-grey-light;
+        }
 
-		svg {
-			path {
-				fill: $color-grey-light;
-			}
-		}
-	}
+        svg {
+            path {
+                fill: $color-grey-light;
+            }
+        }
+    }
 }
 
 .containerSort {
-	border: none;
+    border: none;
 
-	&:hover {
-		border: none;
-	}
+    &:hover {
+        border: none;
+    }
 }
 
 .containerActive {
-	@extend .activeStyles;
-	border: 1px solid $color-grey-lighter;
+    @extend .activeStyles;
+    border: 1px solid $color-grey-lighter;
 }
 
 .containerSortActive {
-	@extend .activeStyles;
+    @extend .activeStyles;
 }
 
 .activeStyles {
-	background-color: $color-grey-lighter-more;
+    background-color: $color-grey-lighter-more;
 
-	.optionSelected {
-		color: $color-black;
-	}
+    .optionSelected {
+        color: $color-black;
+    }
 
-	svg {
-		path {
-			fill: $color-black;
-		}
-	}
+    svg {
+        path {
+            fill: $color-black;
+        }
+    }
 }
 
 .toggleBigger {
-	padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem;
 }
 
 .optionSelected {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: $color-grey-light;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $color-grey-light;
 
-	svg {
-		@extend .icon;
-		padding: 0;
-		margin-left: 0.5rem;
-	}
+    svg {
+        @extend .icon;
+        padding: 0;
+        margin-left: 1.25rem;
+    }
 }
 
 .text {
-	&::first-letter {
-		text-transform: uppercase;
-	}
+    &::first-letter {
+        text-transform: uppercase;
+    }
 }

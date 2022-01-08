@@ -22,13 +22,10 @@ import DotMenu from "../../dot-menu/dot-menu";
 
 const GroupMenu = ({ owner }) => {
 	const history = useHistory();
-	const params = useParams();
-
-	const groupID = params.id;
-
-	const currentUser = getCurrentUser();
-
 	const dispatch = useDispatch();
+	const params = useParams();
+	const groupID = params.id;
+	const currentUser = getCurrentUser();
 
 	const handleViewMembersClick = () => {
 		history.push(`/group/${groupID}/members`);
