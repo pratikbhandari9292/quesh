@@ -50,6 +50,7 @@ import ProposedSolutions from "./pages/proposed-solutions/proposed-solutions";
 import UserQuestions from "./pages/user-questions/user-questions";
 import UserNotifications from "./pages/user-notifications/user-notifications";
 import SolutionPage from "./pages/solution/solution";
+import GroupNotifications from "./pages/group-notifications/group-notifications";
 
 const App = ({
     currentUserRedux,
@@ -326,6 +327,9 @@ const App = ({
                         >
                             <SolutionPage />
                         </Route> */}
+                        <Route path = "/group/:groupID/notifications">
+                            <GroupNotifications />
+                        </Route>
                     </section>
                 </Switch>
             </div>

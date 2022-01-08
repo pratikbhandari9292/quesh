@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import styles from "./group-card.module.scss";
 
 import { setActiveGroup } from "../../redux/groups/groups.actions";
+import { setActiveContent } from "../../redux/active-content/active-content.actions";
 
 import { getCurrentUser } from "../../local-storage/current-user";
 import { getHowLongAgo } from "../../utils/utils.date-time";
@@ -28,6 +29,7 @@ const GroupCard = (props) => {
 	const handleGroupClick = () => {
 		if (currentUser.groups.find((group) => group._id === groupID)) {
 			dispatch(setActiveGroup({ ...props }));
+			dispatch(setActiveContent("Group", { ...props }));
 			return history.push(`/group/${groupID}/explore`);
 		}
 

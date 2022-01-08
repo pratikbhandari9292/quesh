@@ -1,5 +1,3 @@
-import { capitalizeFirstLetter } from "./utils.strings";
-
 export const getNotificationRenderInfo = (notifInfo) => {
     let text = "";
     let link = "";
@@ -17,6 +15,12 @@ export const getNotificationRenderInfo = (notifInfo) => {
     if (type === "user") {
         switch (action) {
             case "ask question":
+                if (!question) {
+                    text += deletedMessage;
+                    irrelavant = true;
+                    break;
+                }
+
                 text += `${origin.username} asked a new question in - ${group?.title}`;
                 link = `/group/${group?._id}/question/${question?._id}`;
                 break;
@@ -98,6 +102,18 @@ export const getNotificationRenderInfo = (notifInfo) => {
             case "delete question":
                 text += `your question in the group - ${group.title} has been deleted`;
                 link = `group/${group._id}/explore`;
+                break;
+        }
+    } else {
+        switch (action) {
+            case "join group":
+                text += `${origin.username} has joined the group`
+                break;
+            case "leave group":
+                text += `${origin.username} has left the group`
+                break;
+            case "delegate ownership":
+                text += `${origin.username} is the new owner of the group`
                 break;
         }
     }

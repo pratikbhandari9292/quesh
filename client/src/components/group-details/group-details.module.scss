@@ -1,0 +1,21 @@
+@import "../../styles/variables.module.scss";
+
+.title {
+    font-size: 2.5rem;
+    text-transform: capitalize;
+    margin-bottom: 1.5rem;
+}
+
+.infoItem {
+    padding: 1rem 0;
+    border-bottom: 1px solid $color-grey-lightest;
+}
+
+.infoTitle {
+    text-transform: capitalize;
+    color: $color-grey-light;
+}
+
+.infoContent {
+    font-weight: 500;
+}

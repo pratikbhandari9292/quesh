@@ -25,7 +25,7 @@ const UserNotifications = ({ notifications, needToFetch }) => {
 
     const fetchNotifications = async () => {
         setFetchingNotifs(true);
-        const result = await getNotifications("user", {}, currentUser.token);
+        const result = await getNotifications({}, currentUser.token);
         setFetchingNotifs(false);
 
         if (result.notifications) {

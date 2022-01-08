@@ -5,9 +5,9 @@ import { useHistory, useParams } from "react-router-dom";
 import userCardStyles from "../user-card.module.scss";
 
 import {
-	displayConfirmationModal,
-	resetModal,
-	setModal,
+    displayConfirmationModal,
+    resetModal,
+    setModal,
 } from "../../../redux/modal/modal.actions";
 import { updateGroup } from "../../../redux/groups/groups.actions";
 import { displayAlert } from "../../../redux/alert/alert.actions";
@@ -20,68 +20,77 @@ import Button from "../../button/button";
 import Spinner from "../../spinner/spinner";
 
 const OwnershipControl = ({ userID, username, currentGroup }) => {
-	const dispatch = useDispatch();
-	const currentUser = getCurrentUser();
-	const history = useHistory();
-	const { id: groupID } = useParams();
+    const dispatch = useDispatch();
+    const currentUser = getCurrentUser();
+    const history = useHistory();
+    const { id: groupID } = useParams();
 
-	const handleMakeOwnerClick = () => {
-		dispatch(
-			displayConfirmationModal(
-				`are you sure you want to delegate ownership to ${username} ?`,
-				handleOwnershipDelegation
-			)
-		);
-	};
+    const handleMakeOwnerClick = () => {
+        dispatch(
+            displayConfirmationModal(
+                `are you sure you want to delegate ownership to ${username} ?`,
+                handleOwnershipDelegation
+            )
+        );
+    };
 
-	const handleOwnershipDelegation = async () => {
-		dispatch(setModal(true, "delegating ownership...", <Spinner />, false));
+    const handleOwnershipDelegation = async () => {
+        dispatch(setModal(true, "delegating ownership...", <Spinner />, false));
 
-		try {
-			const result = await delegateOwnership(
-				currentGroup._id,
-				userID,
-				currentUser.token
-			);
+        try {
+            const result = await delegateOwnership(
+                currentGroup._id,
+                userID,
+                currentUser.token
+            );
 
-			if (result.error) {
-				return;
-			}
+            if (result.error) {
+                return;
+            }
 
-			dispatch(updateGroup(currentGroup._id, { owner: result.owner }));
-			dispatch(displayAlert("ownership delegated"));
+            dispatch(updateGroup(currentGroup._id, { owner: result.owner }));
+            dispatch(displayAlert("ownership delegated"));
 
-			//send a notification to the delegated owner
-			const notificationInfo = {
-				type: "user",
-				notifAction: "delegate ownership",
-				userDests: [userID],
-				groupDest: groupID
-			}
-			sendNotification(notificationInfo, currentUser.token)
+            //send a notification to the delegated owner
+            const toDelegatedOwner = {
+                type: "user",
+                notifAction: "delegate ownership",
+                userDests: [userID],
+                groupDest: groupID,
+            };
+            sendNotification(toDelegatedOwner, currentUser.token);
 
-			history.push("/groups/me");
-		} catch (error) {
-		} finally {
-			dispatch(resetModal());
-		}
-	};
+            //send a notification to the group
+            const toGroup = {
+                type: "group",
+                notifAction: "delegate ownership",
+                groupDest: groupID,
+				origin: userID,
+            };
+            sendNotification(toGroup, currentUser.token);
 
-	if (userID === currentGroup.owner._id) {
-		return null;
-	}
+            history.push("/groups/me");
+        } catch (error) {
+        } finally {
+            dispatch(resetModal());
+        }
+    };
 
-	return (
-		<div className={userCardStyles.controls}>
-			<Button
-				color="blue"
-				size="smaller"
-				clickHandler={handleMakeOwnerClick}
-			>
-				delegate
-			</Button>
-		</div>
-	);
+    if (userID === currentGroup.owner._id) {
+        return null;
+    }
+
+    return (
+        <div className={userCardStyles.controls}>
+            <Button
+                color="blue"
+                size="smaller"
+                clickHandler={handleMakeOwnerClick}
+            >
+                delegate
+            </Button>
+        </div>
+    );
 };
 
 export default OwnershipControl;

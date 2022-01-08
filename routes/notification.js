@@ -25,6 +25,7 @@ router.get("/", auth, async (request, response) => {
 
     if (groupID) {
         notifFilter["groupDest"] = groupID;
+        notifFilter["userDests"] = { $size: 0 };
     } else {
         notifFilter["userDests"] = request.user;
     }

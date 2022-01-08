@@ -13,7 +13,17 @@ export const updateActiveContent = (contentType, updateInfo) => {
         type: "UPDATE_ACTIVE_CONTENT",
         payload: {
             updateInfo,
-            contentType
-        }
-    }
-}
+            contentType,
+        },
+    };
+};
+
+export const setActiveGroupNotifications = (groupID, notifications) => {
+    return {
+        type: "SET_ACTIVE_GROUP_NOTIFICATIONS",
+        payload: {
+            groupID,
+            notifications,
+        },
+    };
+};

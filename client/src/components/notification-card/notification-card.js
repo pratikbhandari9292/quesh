@@ -35,7 +35,7 @@ const NotificationCard = ({
     return (
         <div
             className={`${styles.notification} ${
-                irrelavant && styles.notificationIrrelavant
+                !link && styles.notificationNoLink
             }`}
             onClick={handleNotificationClick}
         >

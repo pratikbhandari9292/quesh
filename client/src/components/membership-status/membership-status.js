@@ -9,6 +9,7 @@ import { addGroup } from "../../redux/groups/groups.actions";
 
 import { requestGroupJoin, joinGroup } from "../../api/api.group";
 import { addUserGroup, getCurrentUser } from "../../local-storage/current-user";
+import { sendNotification } from "../../api/api.notification"
 
 import { ReactComponent as TickIcon } from "../../assets/icons/tick.svg";
 
@@ -27,13 +28,10 @@ const MembershipStatus = ({ memberJoinRequests }) => {
 
 	const history = useHistory();
 	const params = useParams();
-
 	const groupID = params.id;
-
 	const currentUser = getCurrentUser();
 
 	useEffect(() => {
-		console.log(memberJoinRequests);
 		if (
 			memberJoinRequests.find(
 				(memberJoinRequest) => memberJoinRequest === currentUser._id
@@ -94,7 +92,17 @@ const MembershipStatus = ({ memberJoinRequests }) => {
 			addUserGroup(result.group);
 			dispatch(displayAlert("you have joined the group"));
 			dispatch(addGroup(result.group));
-			history.push("/groups/me");
+
+			//send a notification to the group
+			const notificationInfo = {
+				type: "group",
+				notifAction: "join group",
+				groupDest: result.group._id,
+				origin: currentUser._id
+			}
+			sendNotification(notificationInfo, currentUser.token);
+
+			history.push(`/group/${result.group._id}/explore`);
 		} catch (error) {
 			dispatch(displayAlert("something went wrong, try again"));
 			console.log(error);

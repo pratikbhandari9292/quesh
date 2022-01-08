@@ -15,7 +15,7 @@ export const sendNotification = async (notificationInfo, token) => {
     return data;
 };
 
-export const getNotifications = async (type, reqInfo, token) => {
+export const getNotifications = async (reqInfo, token) => {
     const result = await fetch(
         `${baseURL}/?group=${reqInfo.groupID || ""}`,
         {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom"
 
 import styles from "./group-join.module.scss";
 
@@ -9,6 +10,7 @@ import { displayAlert } from "../../redux/alert/alert.actions";
 
 import { joinGroup } from "../../api/api.group";
 import { getCurrentUser, addUserGroup } from "../../local-storage/current-user";
+import { sendNotification } from "../../api/api.notification";
 
 import InputGroup from "../input-group/input-group";
 import Button from "../button/button";
@@ -20,8 +22,8 @@ const GroupJoin = () => {
 	const [joining, setJoining] = useState(false);
 
 	const dispatch = useDispatch();
-
 	const currentUser = getCurrentUser();
+	const history = useHistory();
 
 	const handleFormSubmit = async (event) => {
 		event.preventDefault();
@@ -47,8 +49,18 @@ const GroupJoin = () => {
 			dispatch(setModal(false, ""));
 			dispatch(addGroup(result.group));
 			dispatch(displayAlert("you have joined the group"));
+
+			//send a notification to the group
+			const notificationInfo = {
+				type: "group",
+				notifAction: "join group",
+				groupDest: result.group._id,
+				origin: currentUser._id
+			}
+			sendNotification(notificationInfo, currentUser.token);
+
+			history.push(`/group/${result.group._id}/explore`);
 		} catch (error) {
-			console.log(error);
 			setError("something went wrong");
 		} finally {
 			//can close modal in case of errors, if joined successfully, modal will automatically close
